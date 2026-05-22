@@ -84,7 +84,10 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\general.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\system_section.cpp" />
+    <ClCompile Include="source\ytdlp_section.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ImGUI\ImGUI.vcxproj">
@@ -93,6 +96,11 @@
     <ProjectReference Include="..\KLibrary\KLibrary.vcxproj">
       <Project>{4cb918c1-cf55-4503-a8e5-8b5e8094808b}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\general.h" />
+    <ClInclude Include="source\system_section.h" />
+    <ClInclude Include="source\ytdlp_section.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
