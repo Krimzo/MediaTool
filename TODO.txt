@@ -8,3 +8,4 @@ default is basically custom without copy (remove "custom" and leave default)
 add framerate, video codec, audio codec, video bitrate, audio bitrate
 remove verbous output from ffmpeg
 add file input through argv
+dont remove whitespace from input/output paths

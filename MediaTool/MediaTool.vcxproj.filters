@@ -36,6 +36,12 @@
     <ClCompile Include="source\preview_tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\optimizer_section.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\concat_section.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\system_section.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\preview_tools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\optimizer_section.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\concat_section.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -48,8 +48,7 @@ struct CopyCodec
 struct FFMPEGSection
 {
     static constexpr float DEFAULT_BITRATE_M = 5.0f;
-    static constexpr kl::Int2 DEFAULT_FFMPEG_SCALE = { 1920, 1080 };
-    static constexpr kl::Int2 DEFAULT_OPTIMIZER_SCALE = { 1280, 720 };
+    static constexpr kl::Int2 DEFAULT_SCALE = { 1920, 1080 };
 
     static const kl::Float4 COLOR;
 

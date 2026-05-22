@@ -128,21 +128,15 @@ void mt::FFMPEGSection::display()
 
     bool has_default_codec = std::holds_alternative<DefaultCodec>( codec );
     if ( im::Checkbox( QNAME( "Default Codec" ), &has_default_codec ) )
-    {
-        if ( !std::holds_alternative<DefaultCodec>( codec ) )
-            codec.emplace<DefaultCodec>();
-    }
+        codec.emplace<DefaultCodec>();
 
     im::SameLine();
 
     bool has_copy_codec = std::holds_alternative<CopyCodec>( codec );
     if ( im::Checkbox( QNAME( "Copy Codec" ), &has_copy_codec ) )
-    {
-        if ( !std::holds_alternative<CopyCodec>( codec ) )
-            codec.emplace<CopyCodec>();
-    }
+        codec.emplace<CopyCodec>();
 
-    if ( has_default_codec )
+    if ( std::holds_alternative<DefaultCodec>( codec ) )
     {
         auto& codec = std::get<DefaultCodec>( this->codec );
 
@@ -150,7 +144,7 @@ void mt::FFMPEGSection::display()
         if ( im::Checkbox( QNAME( "Video Scale" ), &holds_video_scale ) )
         {
             if ( holds_video_scale )
-                codec.video_viewport.emplace<VideoScale>( DEFAULT_FFMPEG_SCALE );
+                codec.video_viewport.emplace<VideoScale>( DEFAULT_SCALE );
             else
                 codec.video_viewport.emplace<None>();
         }
