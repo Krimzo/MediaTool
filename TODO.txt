@@ -1,0 +1,9 @@
+concat "move up/down" buttons should always exist but be disabled if no function instead of being removed
+"system" section should have install instructions if user does not want to use automatic buttons
+console should be hidden and only show while an instruction is running (maybe "pause" after a command is done? and "cls" before each run?)
+tabs should be used instead of showing everything at once
+input and output strings should also be "string inputs" instead of pure text
+start and end time should be sliders which also show video frame instead of just a number
+default is basically custom without copy (remove "custom" and leave default)
+add framerate, video codec, audio codec, video bitrate, audio bitrate
+remove verbous output from ffmpeg
