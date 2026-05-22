@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="ImGUI/ImGUI.vcxproj" />
+  <Project Path="KLibrary/KLibrary.vcxproj" />
+  <Project Path="MediaTool/MediaTool.vcxproj" />
+</Solution>
