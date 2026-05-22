@@ -1,35 +1,10 @@
 #include "system_section.h"
 #include "ytdlp_section.h"
-//#include "ffmpeg_section.h"
+#include "ffmpeg_section.h"
 //#include "process_section.h"
 //#include "concat_section.h"
 
-//struct CopyCodec
-//{
-//    std::wstring produce() const;
-//};
-//
-//struct CustomCodec
-//{
-//    std::variant<Default, VideoScale, VideoCrop> video_viewport;
-//    std::optional<float> video_bitrate_m;
-//    std::optional<GPUEncoder> gpu_encoder;
-//
-//    std::wstring produce() const;
-//};
-//
-//struct FFMPEGData
-//{
-//    std::wstring input_file;
-//    std::wstring output_file;
-//    std::optional<Timestamp> start_time;
-//    std::optional<Timestamp> end_time;
-//    std::variant<Default, CopyCodec, CustomCodec> codec;
-//    std::wstring other_commands;
-//
-//    std::wstring produce() const;
-//};
-//
+
 //struct OptimizerData
 //{
 //    std::wstring input_file;
@@ -62,13 +37,6 @@
 //
 //    void concat() const;
 //};
-//
-//void preview_timestamp( std::wstring_view const& path, Timestamp timestamp );
-//void preview_crop( std::wstring_view const& path, Timestamp timestamp, VideoCrop& crop );
-//
-//static constexpr float DEFAULT_BITRATE_M = 5.0f;
-//static constexpr kl::Int2 DEFAULT_FFMPEG_SCALE = { 1920, 1080 };
-//static constexpr kl::Int2 DEFAULT_OPTIMIZER_SCALE = { 1280, 720 };
 
 namespace mt
 {
@@ -80,7 +48,7 @@ struct MediaTool
 
     SystemSection system_section{};
     YTDLPSection ytdlp_section{};
-    //FFMPEGData ffmpeg_data;
+    FFMPEGSection ffmpeg_section{ imgui_context };
     //OptimizerData optimizer_data;
     //ConcatData concat_data;
 
@@ -139,7 +107,6 @@ struct MediaTool
         ImGui::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
         if ( ImGui::Begin( "Main Window", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking ) )
         {
-            //static const kl::Float4 FFMPEG_COLOR = kl::RGB{ 118, 219, 192 };
             //static const kl::Float4 OPTIMIZER_COLOR = kl::RGB{ 227, 151, 93 };
             //static const kl::Float4 CONCAT_COLOR = kl::RGB{ 184, 108, 235 };
 
@@ -147,209 +114,8 @@ struct MediaTool
             im::Separator();
             ytdlp_section.display();
             im::Separator();
+            ffmpeg_section.display();
 
-            //{ // ffmpeg
-            //    im::TextColored( (ImVec4 const&) FFMPEG_COLOR, "FFMPEG" );
-            //
-            //    im::Text( "Input File: %s", kl::convert_string( ffmpeg_data.input_file ).c_str() );
-            //    im::SameLine();
-            //    if ( im::Button( "Browse##FFMPEGInputFileButton" ) )
-            //    {
-            //        if ( auto opt_path = kl::wchoose_file( false ) )
-            //            ffmpeg_data.input_file = std::filesystem::absolute( *opt_path ).wstring();
-            //    }
-            //
-            //    im::Text( "Output File: %s", kl::convert_string( ffmpeg_data.output_file ).c_str() );
-            //    im::SameLine();
-            //    if ( im::Button( "Browse##FFMPEGOutputFileButton" ) )
-            //    {
-            //        if ( auto opt_path = kl::wchoose_file( true ) )
-            //            ffmpeg_data.output_file = std::filesystem::absolute( *opt_path ).wstring();
-            //    }
-            //
-            //    bool has_start_time = ffmpeg_data.start_time.has_value();
-            //    if ( im::Checkbox( "Start Time##FFMPEG", &has_start_time ) )
-            //    {
-            //        if ( has_start_time )
-            //            ffmpeg_data.start_time.emplace();
-            //        else
-            //            ffmpeg_data.start_time.reset();
-            //    }
-            //    if ( ffmpeg_data.start_time )
-            //    {
-            //        im::SameLine();
-            //        im::SetNextItemWidth( 100.0f );
-            //        im::DragInt( "##FFMPEGStartTimeMinutes", &ffmpeg_data.start_time->minutes, 0.05f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
-            //        im::SameLine();
-            //        im::SetNextItemWidth( 100.0f );
-            //        im::DragFloat( "##FFMPEGStartTimeSeconds", &ffmpeg_data.start_time->seconds, 0.01f, 0.0f, 59.999f, "%.3f", ImGuiSliderFlags_AlwaysClamp );
-            //        if ( !ffmpeg_data.input_file.empty() )
-            //        {
-            //            im::SameLine();
-            //            if ( im::Button( "Preview##FFMPEGStartTime" ) )
-            //            {
-            //                preview_timestamp( ffmpeg_data.input_file, *ffmpeg_data.start_time );
-            //                im::SetCurrentContext( imgui_context );
-            //            }
-            //        }
-            //    }
-            //
-            //    bool has_end_time = ffmpeg_data.end_time.has_value();
-            //    if ( im::Checkbox( "End Time##FFMPEG", &has_end_time ) )
-            //    {
-            //        if ( has_end_time )
-            //            ffmpeg_data.end_time.emplace();
-            //        else
-            //            ffmpeg_data.end_time.reset();
-            //    }
-            //    if ( ffmpeg_data.end_time )
-            //    {
-            //        im::SameLine();
-            //        im::SetNextItemWidth( 100.0f );
-            //        im::DragInt( "##FFMPEGEndTimeMinutes", &ffmpeg_data.end_time->minutes, 0.05f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
-            //        im::SameLine();
-            //        im::SetNextItemWidth( 100.0f );
-            //        im::DragFloat( "##FFMPEGEndTimeSeconds", &ffmpeg_data.end_time->seconds, 0.01f, 0.0f, 59.999f, "%.3f", ImGuiSliderFlags_AlwaysClamp );
-            //        if ( !ffmpeg_data.input_file.empty() )
-            //        {
-            //            im::SameLine();
-            //            if ( im::Button( "Preview##FFMPEGEndTime" ) )
-            //            {
-            //                preview_timestamp( ffmpeg_data.input_file, *ffmpeg_data.end_time );
-            //                im::SetCurrentContext( imgui_context );
-            //            }
-            //        }
-            //    }
-            //
-            //    bool has_default_codec = std::holds_alternative<Default>( ffmpeg_data.codec );
-            //    if ( im::Checkbox( "Default Codec##FFMPEG", &has_default_codec ) )
-            //    {
-            //        if ( !std::holds_alternative<Default>( ffmpeg_data.codec ) )
-            //            ffmpeg_data.codec.emplace<Default>();
-            //    }
-            //
-            //    im::SameLine();
-            //
-            //    bool has_copy_codec = std::holds_alternative<CopyCodec>( ffmpeg_data.codec );
-            //    if ( im::Checkbox( "Copy Codec##FFMPEG", &has_copy_codec ) )
-            //    {
-            //        if ( !std::holds_alternative<CopyCodec>( ffmpeg_data.codec ) )
-            //            ffmpeg_data.codec.emplace<CopyCodec>();
-            //    }
-            //
-            //    im::SameLine();
-            //
-            //    bool has_custom_codec = std::holds_alternative<CustomCodec>( ffmpeg_data.codec );
-            //    if ( im::Checkbox( "Custom Codec##FFMPEG", &has_custom_codec ) )
-            //    {
-            //        if ( !std::holds_alternative<CustomCodec>( ffmpeg_data.codec ) )
-            //            ffmpeg_data.codec.emplace<CustomCodec>();
-            //    }
-            //
-            //    if ( has_custom_codec )
-            //    {
-            //        auto& codec = std::get<CustomCodec>( ffmpeg_data.codec );
-            //
-            //        bool holds_video_scale = std::holds_alternative<VideoScale>( codec.video_viewport );
-            //        if ( im::Checkbox( "Video Scale##FFMPEG", &holds_video_scale ) )
-            //        {
-            //            if ( holds_video_scale )
-            //                codec.video_viewport.emplace<VideoScale>( DEFAULT_FFMPEG_SCALE );
-            //            else
-            //                codec.video_viewport.emplace<Default>();
-            //        }
-            //
-            //        im::SameLine();
-            //
-            //        bool holds_video_crop = std::holds_alternative<VideoCrop>( codec.video_viewport );
-            //        if ( im::Checkbox( "Video Crop##FFMPEG", &holds_video_crop ) )
-            //        {
-            //            if ( holds_video_crop )
-            //                codec.video_viewport.emplace<VideoCrop>();
-            //            else
-            //                codec.video_viewport.emplace<Default>();
-            //        }
-            //
-            //        if ( VideoScale* video_scale = std::get_if<VideoScale>( &codec.video_viewport ) )
-            //        {
-            //            im::Text( "\t" );
-            //            im::SameLine();
-            //            im::SetNextItemWidth( 200.0f );
-            //            im::DragInt2( "Scale##FFMPEGVideoScale", &video_scale->scale.x, 1.0f, 1, 1'000'000 );
-            //        }
-            //        else if ( VideoCrop* video_crop = std::get_if<VideoCrop>( &codec.video_viewport ) )
-            //        {
-            //            im::Text( "\t" );
-            //            im::SameLine();
-            //            im::SetNextItemWidth( 200.0f );
-            //            im::DragInt2( "Position##FFMPEG", &video_crop->position.x, 1.0f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
-            //            im::Text( "\t" );
-            //            im::SameLine();
-            //            im::SetNextItemWidth( 200.0f );
-            //            im::DragInt2( "Size##FFMPEG", &video_crop->size.x, 1.0f, 1, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
-            //            if ( !ffmpeg_data.input_file.empty() )
-            //            {
-            //                im::SameLine();
-            //                if ( im::Button( "Preview##FFMPEGCrop" ) )
-            //                {
-            //                    auto timestamp = ffmpeg_data.start_time ? *ffmpeg_data.start_time : Timestamp{};
-            //                    preview_crop( ffmpeg_data.input_file, timestamp, *video_crop );
-            //                    im::SetCurrentContext( imgui_context );
-            //                }
-            //            }
-            //        }
-            //
-            //        bool has_video_bitrate_m = codec.video_bitrate_m.has_value();
-            //        if ( im::Checkbox( "Video Bitrate [Mb]##FFMPEG", &has_video_bitrate_m ) )
-            //        {
-            //            if ( has_video_bitrate_m )
-            //                codec.video_bitrate_m = DEFAULT_BITRATE_M;
-            //            else if ( !codec.gpu_encoder.has_value() )
-            //                codec.video_bitrate_m.reset();
-            //        }
-            //        if ( codec.video_bitrate_m )
-            //        {
-            //            im::SameLine();
-            //            im::SetNextItemWidth( 100.0f );
-            //            im::DragFloat( "##FFMPEGVideoBitrate", &*codec.video_bitrate_m, 0.01f, 0.0f, 1e6f );
-            //        }
-            //
-            //        bool has_gpu_encoder = codec.gpu_encoder.has_value();
-            //        if ( im::Checkbox( kl::format( "GPU Encoder (", kl::convert_string( GPUEncoder::ADAPTER_NAME ), ")##FFMPEG" ).c_str(), &has_gpu_encoder ) )
-            //        {
-            //            if ( has_gpu_encoder )
-            //                codec.gpu_encoder.emplace();
-            //            else
-            //                codec.gpu_encoder.reset();
-            //        }
-            //        if ( has_gpu_encoder )
-            //        {
-            //            if ( !codec.video_bitrate_m )
-            //                codec.video_bitrate_m = DEFAULT_BITRATE_M;
-            //            im::Text( "\t" );
-            //            im::SameLine();
-            //            codec.gpu_encoder->edit();
-            //        }
-            //    }
-            //
-            //    {
-            //        std::string temp = kl::convert_string( ffmpeg_data.other_commands );
-            //        if ( im::InputTextMultiline( "Custom##FFMPEG", &temp ) )
-            //            ffmpeg_data.other_commands = kl::convert_string( temp );
-            //    }
-            //
-            //    const std::wstring ffmpeg_full_command = ffmpeg_data.produce();
-            //    im::TextWrapped( "%s", kl::convert_string( ffmpeg_full_command ).c_str() );
-            //
-            //    if ( im::Button( "Produce##FFMPEG" ) )
-            //    {
-            //        if ( ffmpeg_data.input_file.empty() || ffmpeg_data.output_file.empty() )
-            //            kl::print( kl::colors::RED, "FFMPEG: Input and output files must be specified.", kl::colors::CONSOLE );
-            //        else
-            //            execute( ffmpeg_full_command );
-            //    }
-            //}
-            //
             //im::Separator();
             //
             //{ // optimizer
@@ -758,55 +524,6 @@ int wmain( int argc, wchar_t** argv )
 }
 
 /*
-std::wstring VideoScale::produce() const
-{
-    return kl::wformat( "-vf \"scale=", scale.x, ":", scale.y, "\"" );
-}
-
-std::wstring VideoCrop::produce() const
-{
-    return kl::wformat( "-vf \"crop=", size.x, ":", size.y, ":", position.x, ":", position.y, "\"" );
-}
-
-std::wstring CopyCodec::produce() const
-{
-    return L"-c copy";
-}
-
-std::wstring CustomCodec::produce() const
-{
-    std::wstringstream stream;
-    if ( VideoScale const* video_scale = std::get_if<VideoScale>( &video_viewport ) )
-        stream << video_scale->produce();
-    else if ( VideoCrop const* video_crop = std::get_if<VideoCrop>( &video_viewport ) )
-        stream << video_crop->produce();
-    if ( video_bitrate_m )
-        stream << " -vb " << video_bitrate_m.value() << "M";
-    if ( gpu_encoder )
-        stream << " -c:v " << gpu_encoder.value().produce();
-    return stream.str();
-}
-
-std::wstring FFMPEGData::produce() const
-{
-    std::wstringstream stream;
-    stream << "ffmpeg -y";
-    stream << " -i \"" << input_file << "\"";
-    if ( start_time )
-        stream << " -ss " << start_time->total_seconds();
-    if ( end_time )
-        stream << " -to " << end_time->total_seconds();
-    if ( auto* custom_codec = std::get_if<CustomCodec>( &codec ) )
-        stream << " " << custom_codec->produce();
-    else if ( auto* copy_codec = std::get_if<CopyCodec>( &codec ) )
-        stream << " " << copy_codec->produce();
-    stream << " " << other_commands;
-    stream << " \"" << output_file << "\"";
-    std::wstring result = stream.str();
-    clean_string( result );
-    return result;
-}
-
 void OptimizerData::optimize() const
 {
     static constexpr float COPY_TIME_PRECUT = 15.0f;
@@ -916,198 +633,5 @@ void ConcatData::concat() const
     for ( auto& new_input_file : new_input_files )
         std::filesystem::remove( new_input_file );
     std::filesystem::remove( list_file_name );
-}
-
-void preview_timestamp( std::wstring_view const& path, Timestamp timestamp )
-{
-    const std::filesystem::path p{ path };
-    const std::wstring preview_name = kl::wformat( "__vidhandle_preview_", kl::convert_string( kl::random::gen_string( 10 ) ), "_.png" );
-    std::wstring preview_path = kl::wformat( p.parent_path().wstring(), "/", preview_name );
-    preview_path = std::filesystem::absolute( preview_path ).wstring();
-
-    kl::Window window{ kl::format( "Video Handler Timestamp Preview ", p.filename(), " [", timestamp.minutes, ":", timestamp.seconds, "]" ) };
-    kl::GPU gpu{ window.ptr() };
-
-    FFMPEGData ffmpeg_data;
-    ffmpeg_data.input_file = path;
-    ffmpeg_data.output_file = preview_path;
-    ffmpeg_data.start_time.emplace( timestamp );
-    ffmpeg_data.codec.emplace<CustomCodec>();
-    ffmpeg_data.other_commands = L"-frames:v 1";
-    execute( ffmpeg_data.produce() );
-
-    kl::Image preview_image{ preview_path };
-    if ( preview_image.width() == 0 || preview_image.height() == 0 )
-        return;
-
-    kl::dx::Texture preview_texture = gpu.create_texture( preview_image );
-    kl::dx::ShaderView preview_view = gpu.create_shader_view( preview_texture, nullptr );
-    std::filesystem::remove( preview_path );
-
-    auto* imgui_context = im::CreateContext();
-    im::SetCurrentContext( imgui_context );
-
-    auto& imio = im::GetIO();
-    imio.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    imio.IniFilename = nullptr;
-
-    ImGui_ImplWin32_Init( window.ptr() );
-    ImGui_ImplDX11_Init( gpu.device().get(), gpu.context().get() );
-    im::StyleColorsDark();
-    load_theme( 1.35f );
-
-    window.set_dark_mode( true );
-    window.on_resize.emplace_back( [&]( kl::Int2 size )
-        {
-            gpu.resize_internal( size );
-            gpu.set_viewport_size( size );
-        } );
-    window.resize( gpu.texture_size( preview_texture ) );
-    window.set_position( kl::SCREEN_SIZE / 2 - window.size() / 2 );
-
-    while ( window.process() )
-    {
-        gpu.clear_internal( kl::colors::GRAY );
-        ImGui_ImplWin32_NewFrame();
-        ImGui_ImplDX11_NewFrame();
-        im::NewFrame();
-        ImGuizmo::BeginFrame();
-        im::DockSpaceOverViewport( 0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode );
-
-        ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos( viewport->WorkPos );
-        ImGui::SetNextWindowSize( viewport->WorkSize );
-        ImGui::SetNextWindowViewport( viewport->ID );
-
-        ImGui::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
-        if ( ImGui::Begin( "Main Window", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking ) )
-        {
-            ImVec2 view_size = im::GetContentRegionAvail();
-            im::Image( preview_view.get(), view_size );
-        }
-        ImGui::End();
-        ImGui::PopStyleVar( 1 );
-
-        im::Render();
-        ImGui_ImplDX11_RenderDrawData( im::GetDrawData() );
-        gpu.swap_buffers( true );
-    }
-
-    ImGui_ImplDX11_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    im::DestroyContext( imgui_context );
-}
-
-void preview_crop( std::wstring_view const& path, Timestamp timestamp, VideoCrop& crop )
-{
-    const std::filesystem::path p{ path };
-    const std::wstring preview_name = kl::wformat( "__vidhandle_preview_", kl::convert_string( kl::random::gen_string( 10 ) ), "_.png" );
-    std::wstring preview_path = kl::wformat( p.parent_path().wstring(), "/", preview_name );
-    preview_path = std::filesystem::absolute( preview_path ).wstring();
-
-    kl::Window window{ kl::format( "Video Handler Crop Preview ", p.filename(), " [", timestamp.minutes, ":", timestamp.seconds, "]" ) };
-    kl::GPU gpu{ window.ptr() };
-
-    FFMPEGData ffmpeg_data;
-    ffmpeg_data.input_file = path;
-    ffmpeg_data.output_file = preview_path;
-    ffmpeg_data.start_time.emplace( timestamp );
-    ffmpeg_data.codec.emplace<CustomCodec>();
-    ffmpeg_data.other_commands = L"-frames:v 1";
-    execute( ffmpeg_data.produce() );
-
-    kl::Image preview_image{ preview_path };
-    if ( preview_image.width() == 0 || preview_image.height() == 0 )
-        return;
-
-    kl::dx::Texture preview_texture = gpu.create_texture( preview_image );
-    kl::dx::ShaderView preview_view = gpu.create_shader_view( preview_texture, nullptr );
-    std::filesystem::remove( preview_path );
-
-    auto* imgui_context = im::CreateContext();
-    im::SetCurrentContext( imgui_context );
-
-    auto& imio = im::GetIO();
-    imio.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    imio.IniFilename = nullptr;
-
-    ImGui_ImplWin32_Init( window.ptr() );
-    ImGui_ImplDX11_Init( gpu.device().get(), gpu.context().get() );
-    im::StyleColorsDark();
-    load_theme( 1.35f );
-
-    window.set_dark_mode( true );
-    window.on_resize.emplace_back( [&]( kl::Int2 size )
-        {
-            gpu.resize_internal( size );
-            gpu.set_viewport_size( size );
-        } );
-
-    const kl::Int2 texture_size = gpu.texture_size( preview_texture );
-    window.resize( texture_size );
-    window.set_position( kl::SCREEN_SIZE / 2 - window.size() / 2 );
-
-    while ( window.process() )
-    {
-        gpu.clear_internal( kl::colors::GRAY );
-        ImGui_ImplWin32_NewFrame();
-        ImGui_ImplDX11_NewFrame();
-        im::NewFrame();
-        ImGuizmo::BeginFrame();
-        im::DockSpaceOverViewport( 0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode );
-
-        ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos( viewport->WorkPos );
-        ImGui::SetNextWindowSize( viewport->WorkSize );
-        ImGui::SetNextWindowViewport( viewport->ID );
-
-        ImGui::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
-        if ( ImGui::Begin( "Main Window", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking ) )
-        {
-            static constexpr auto convert_coords = []( kl::Int2 pos )
-                {
-                    return ImVec2{ (float) pos.x, (float) pos.y };
-                };
-
-            const ImVec2 min_content = im::GetWindowContentRegionMin();
-            const ImVec2 max_content = im::GetWindowContentRegionMax();
-            const ImVec2 content_region = max_content - min_content;
-            const ImVec2 content_ratio = content_region / convert_coords( texture_size );
-
-            im::Image( preview_view.get(), content_region );
-
-            const ImVec2 top_left = min_content + convert_coords( crop.position ) * content_ratio;
-            const ImVec2 bottom_right = min_content + convert_coords( crop.position + crop.size ) * content_ratio;
-            static const ImU32 rect_color = ImColor( 255, 255, 255 );
-
-            auto& draw_list = *im::GetWindowDrawList();
-            draw_list.AddRect( top_left, bottom_right, rect_color );
-
-            if ( im::IsWindowFocused() )
-            {
-                const ImVec2 mouse_pos = im::WindowPosAbsToRel( im::GetCurrentWindow(), im::GetMousePos() );
-                const ImVec2 video_pos = mouse_pos / content_ratio;
-                const kl::Int2 crop_pos = { int( video_pos.x ), int( video_pos.y ) };
-
-                if ( im::IsMouseDown( ImGuiPopupFlags_MouseButtonLeft ) )
-                    crop.position = crop_pos;
-                else if ( im::IsMouseDown( ImGuiPopupFlags_MouseButtonRight ) )
-                    crop.size = crop_pos - crop.position;
-
-                crop.position = kl::clamp( crop.position, kl::Int2{ 0 }, texture_size - kl::Int2{ 1 } );
-                crop.size = kl::clamp( crop.size, kl::Int2{ 1 }, texture_size - crop.position );
-            }
-        }
-        ImGui::End();
-        ImGui::PopStyleVar( 1 );
-
-        im::Render();
-        ImGui_ImplDX11_RenderDrawData( im::GetDrawData() );
-        gpu.swap_buffers( true );
-    }
-
-    ImGui_ImplDX11_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    im::DestroyContext( imgui_context );
 }
 */
