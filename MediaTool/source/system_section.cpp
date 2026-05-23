@@ -23,6 +23,11 @@ void mt::SystemSection::display()
 
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
 
+    static const std::string WORKING_DIR = fs::current_path().string();
+    im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( WORKING_DIR.data() ).x * .5f );
+    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
+    im::Text( WORKING_DIR.data() );
+
     im::PushStyleColor( ImGuiCol_Text, (ImU32) ( ImColor ) reinterpret_cast<ImVec4 const&>( PYTHON_COLOR ) );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( PYTHON_INSTALL_TEXT.data() ).x * .5f );
     im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
