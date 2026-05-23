@@ -15,6 +15,6 @@ struct SystemSection : Displayable
         : window( window )
     {}
 
-    void display() override;;
+    void display() override;
 };
 }

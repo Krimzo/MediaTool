@@ -8,6 +8,7 @@ namespace mt
 struct OptimizerSection : Displayable
 {
     static const kl::Float4 COLOR;
+    static constexpr float STARTING_BITRATE = 10.0f;
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
@@ -22,7 +23,8 @@ struct OptimizerSection : Displayable
         , imgui_context( imgui_context )
     {}
 
+    std::wstring produce( float bitrate_m ) const;
+    void display() override;
     void optimize() const;
-    void display() override;;
 };
 }

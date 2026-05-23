@@ -20,6 +20,8 @@ struct ConcatSection : Displayable
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
+    const std::wstring vids_list_file = kl::wformat( "concat_vids_list__", kl::convert_string( kl::random::gen_string( 10 ) ), ".txt" );
+
     std::vector<ConcatInput> inputs;
     std::wstring output_file;
 
@@ -28,7 +30,9 @@ struct ConcatSection : Displayable
         , imgui_context( imgui_context )
     {}
 
-    void concat() const;
+    std::wstring produce() const;
     void display() override;
+
+    void concat() const;
 };
 }

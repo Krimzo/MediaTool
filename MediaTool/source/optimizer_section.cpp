@@ -3,26 +3,15 @@
 
 const kl::Float4 mt::OptimizerSection::COLOR = kl::RGB{ 255, 209, 149 };
 
-void mt::OptimizerSection::optimize() const
+std::wstring mt::OptimizerSection::produce( float bitrate_m ) const
 {
-    static constexpr float BIAS = 0.98f;
-
     FFMPEGSection ffmpeg{ window, imgui_context };
     ffmpeg.input_file = input_file;
     ffmpeg.output_file = output_file;
     auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
-    codec.video_bitrate_m = 10.0f;
+    codec.video_bitrate_m = bitrate_m;
     codec.video_codec = video_codec;
-
-    while ( true )
-    {
-        if ( !execute( window.ptr(), ffmpeg.produce() ) )
-            return;
-        const float file_size_mb = float( fs::file_size( output_file ) / ( 1024.0 * 1024.0 ) );
-        if ( file_size_mb <= max_size_mb )
-            break;
-        *codec.video_bitrate_m *= ( max_size_mb / file_size_mb ) * BIAS;
-    }
+    return ffmpeg.produce();
 }
 
 void mt::OptimizerSection::display()
@@ -71,6 +60,15 @@ void mt::OptimizerSection::display()
     im::PopStyleVar( 1 );
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+
+    const std::wstring full_command = produce( STARTING_BITRATE );
+    const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
+    im::SetCursorPos( ImVec2{
+        im::GetWindowWidth() * .5f - text_size.x * .5f,
+        im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y - imgui_context->Style.ItemSpacing.y - text_size.y,
+        } );
+    im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
+
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     if ( im::Button( QNAME( "Optimize" ), main_button_size ) )
@@ -80,4 +78,19 @@ void mt::OptimizerSection::display()
     }
 
     im::PopStyleVar( 2 );
+}
+
+void mt::OptimizerSection::optimize() const
+{
+    static constexpr float BIAS = 0.98f;
+    float bitrate_m = STARTING_BITRATE;
+    while ( true )
+    {
+        if ( !execute( window.ptr(), produce( bitrate_m ), false ) )
+            return;
+        const float file_size_mb = float( fs::file_size( output_file ) / ( 1024.0 * 1024.0 ) );
+        if ( file_size_mb <= max_size_mb )
+            break;
+        bitrate_m *= ( max_size_mb / file_size_mb ) * BIAS;
+    }
 }

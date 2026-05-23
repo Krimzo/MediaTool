@@ -11,33 +11,9 @@ mt::ConcatInput::ConcatInput()
     this->color = color;
 }
 
-void mt::ConcatSection::concat() const
+std::wstring mt::ConcatSection::produce() const
 {
-    if ( inputs.empty() )
-        return;
-    for ( int i = 0; i < (int) inputs.size(); i++ )
-    {
-        auto const& input = inputs[i];
-        if ( input.path.empty() )
-            return;
-    }
-    if ( output_file.empty() )
-        return;
-    if ( !fs::exists( output_file ) )
-        kl::File{ output_file, true }.close();
-
-    const std::wstring rand_str = kl::convert_string( kl::random::gen_string( 10 ) );
-    const std::wstring vids_list_file = kl::wformat( "concat_vids_list__", rand_str, ".txt" );
-    {
-        std::wofstream list_file{ vids_list_file };
-        for ( auto& input : inputs )
-            list_file << "file '" << input.path << "'" << std::endl;
-    }
-
-    const std::wstring command = kl::wformat( "ffmpeg -hide_banner -y -f concat -i \"", vids_list_file, "\" -c copy \"", output_file, "\"" );
-    execute( window.ptr(), command );
-
-    fs::remove( vids_list_file );
+    return kl::wformat( "ffmpeg -hide_banner -y -f concat -i \"", vids_list_file, "\" -c copy \"", output_file, "\"" );
 }
 
 void mt::ConcatSection::display()
@@ -91,10 +67,46 @@ void mt::ConcatSection::display()
     }
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+
+    const std::wstring full_command = produce();
+    const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
+    im::SetCursorPos( ImVec2{
+        im::GetWindowWidth() * .5f - text_size.x * .5f,
+        im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y - imgui_context->Style.ItemSpacing.y - text_size.y,
+        } );
+    im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
+
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     if ( im::Button( QNAME( "Concat" ), main_button_size ) )
         concat();
 
     im::PopStyleVar( 2 );
+}
+
+void mt::ConcatSection::concat() const
+{
+    if ( inputs.empty() )
+        return;
+    for ( int i = 0; i < (int) inputs.size(); i++ )
+    {
+        auto const& input = inputs[i];
+        if ( input.path.empty() )
+            return;
+    }
+    if ( output_file.empty() )
+        return;
+    if ( !fs::exists( output_file ) )
+        kl::File{ output_file, true }.close();
+
+    {
+        std::wofstream list_file{ vids_list_file };
+        for ( auto& input : inputs )
+            list_file << "file '" << input.path << "'" << std::endl;
+    }
+
+    const std::wstring command = produce();
+    execute( window.ptr(), command );
+
+    fs::remove( vids_list_file );
 }

@@ -23,6 +23,6 @@ struct YTDLPSection : Displayable
     {}
 
     std::wstring produce() const;
-    void display() override;;
+    void display() override;
 };
 }

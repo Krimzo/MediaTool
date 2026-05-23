@@ -8,7 +8,7 @@ void mt::clean_string( std::wstring& data )
         kl::replace_all( data, L"  ", L" " );
 }
 
-bool mt::execute( HWND window, std::wstring_view const& command )
+bool mt::execute( HWND window, std::wstring_view const& command, bool pause )
 {
     RECT rect;
     GetWindowRect( window, &rect );
@@ -23,7 +23,8 @@ bool mt::execute( HWND window, std::wstring_view const& command )
 
     ::_wsystem( L"cls" );
     const int result = ::_wsystem( command.data() );
-    ::_wsystem( L"pause" );
+    if ( pause )
+        ::_wsystem( L"pause" );
 
     ShowWindow( GetConsoleWindow(), SW_HIDE );
     ShowWindow( window, SW_SHOW );
