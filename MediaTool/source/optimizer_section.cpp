@@ -158,11 +158,15 @@ void mt::OptimizerSection::display()
     im::SetNextItemWidth( 100.0f );
     im::DragFloat( "Max Video Size [MB]##Optimizer", &video_max_size_mb, 0.01f, 0.0f, 1e6f );
 
-    if ( im::Button( "Optimize##Optimizer" ) )
+    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+    im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
+    im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    if ( im::Button( QNAME( "Optimize" ), main_button_size ) )
     {
         if ( input_file.empty() || output_file.empty() )
             kl::print( kl::colors::RED, "OPTIMIZER: Input and output files must be specified.", kl::colors::CONSOLE );
         else
             optimize();
     }
+    im::PopStyleVar( 1 );
 }

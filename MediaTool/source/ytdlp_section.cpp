@@ -51,11 +51,15 @@ void mt::YTDLPSection::display()
     const std::wstring full_command = produce();
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
 
-    if ( im::Button( QNAME( "Download" ) ) )
+    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+    im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
+    im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    if ( im::Button( QNAME( "Download" ), main_button_size ) )
     {
         if ( url.empty() )
             kl::print( kl::colors::RED, "YTDLP: Video link must be specified.", kl::colors::CONSOLE );
         else
             execute( full_command );
     }
+    im::PopStyleVar( 1 );
 }

@@ -223,6 +223,10 @@ void mt::ConcatSection::display()
         gpu_encoder->edit();
     }
 
-    if ( im::Button( "Concat##Concat" ) )
+    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+    im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
+    im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    if ( im::Button( QNAME( "Concat" ), main_button_size ) )
         concat();
+    im::PopStyleVar( 1 );
 }

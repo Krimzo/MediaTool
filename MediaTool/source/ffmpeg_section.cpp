@@ -229,11 +229,15 @@ void mt::FFMPEGSection::display()
     const std::wstring full_command = produce();
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
 
-    if ( im::Button( QNAME( "Produce" ) ) )
+    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+    im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
+    im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    if ( im::Button( QNAME( "Produce" ), main_button_size ) )
     {
         if ( input_file.empty() || output_file.empty() )
             kl::print( kl::colors::RED, "FFMPEG: Input and output files must be specified.", kl::colors::CONSOLE );
         else
             execute( full_command );
     }
+    im::PopStyleVar( 1 );
 }
