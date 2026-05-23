@@ -1,7 +1,6 @@
 input and output strings should also be "string inputs" instead of pure text
 start and end time should be sliders which also show video frame instead of just a number
 add framerate, video codec, audio codec, video bitrate, audio bitrate
-remove verbous output from ffmpeg
 dont remove whitespace from input/output paths
 concat should just -c copy all instead of reencoding
 add custom commands to yt-dlp

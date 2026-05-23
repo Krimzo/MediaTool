@@ -35,7 +35,7 @@ std::wstring mt::CopyCodec::produce() const
 std::wstring mt::FFMPEGSection::produce() const
 {
     std::wstringstream stream;
-    stream << "ffmpeg -y";
+    stream << "ffmpeg -hide_banner -y";
     stream << " -i \"" << input_file << "\"";
     if ( start_time )
         stream << " -ss " << start_time->total_seconds();

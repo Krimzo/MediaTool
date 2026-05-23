@@ -63,7 +63,7 @@ void mt::ConcatSection::concat() const
         }
     }
 
-    const std::wstring command = kl::wformat( "ffmpeg -y -f concat -i \"", list_file_name, "\" -c copy \"", output_file, "\"" );
+    const std::wstring command = kl::wformat( "ffmpeg -hide_banner -y -f concat -i \"", list_file_name, "\" -c copy \"", output_file, "\"" );
     execute( window.ptr(), command );
 
     for ( auto& new_input_file : new_input_files )
