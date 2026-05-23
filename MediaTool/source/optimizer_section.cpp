@@ -12,7 +12,7 @@ void mt::OptimizerSection::optimize() const
     ffmpeg.output_file = output_file;
     auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
     codec.video_bitrate_m = 10.0f;
-    codec.gpu_encoder = gpu_encoder;
+    codec.video_codec = video_codec;
 
     while ( true )
     {
@@ -46,19 +46,19 @@ void mt::OptimizerSection::display()
 
     im::PopStyleVar( 1 );
 
-    bool has_gpu_encoder = gpu_encoder.has_value();
-    if ( im::Checkbox( QNAME( "GPU Encoder (", kl::convert_string( GPUEncoder::ADAPTER_NAME ), ")" ), &has_gpu_encoder ) )
+    bool has_video_codec = video_codec.has_value();
+    if ( im::Checkbox( QNAME( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ), &has_video_codec ) )
     {
-        if ( has_gpu_encoder )
-            gpu_encoder.emplace();
+        if ( has_video_codec )
+            video_codec.emplace();
         else
-            gpu_encoder.reset();
+            video_codec.reset();
     }
-    if ( has_gpu_encoder )
+    if ( has_video_codec )
     {
         im::Text( "\t" );
         im::SameLine();
-        gpu_encoder->edit();
+        video_codec->edit();
     }
 
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );

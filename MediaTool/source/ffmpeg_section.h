@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu_encoder.h"
+#include "codec.h"
 
 
 namespace mt
@@ -35,7 +35,7 @@ struct DefaultCodec
 {
     std::variant<None, VideoScale, VideoCrop> video_viewport;
     std::optional<float> video_bitrate_m;
-    std::optional<GPUEncoder> gpu_encoder;
+    std::optional<VideoCodec> video_codec;
 
     std::wstring produce() const;
 };

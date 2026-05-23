@@ -22,8 +22,8 @@ std::wstring mt::DefaultCodec::produce() const
         stream << video_crop->produce();
     if ( video_bitrate_m )
         stream << " -vb " << video_bitrate_m.value() << "M";
-    if ( gpu_encoder )
-        stream << " -c:v " << gpu_encoder.value().produce();
+    if ( video_codec )
+        stream << " -c:v " << video_codec.value().produce();
     return stream.str();
 }
 
@@ -194,7 +194,7 @@ void mt::FFMPEGSection::display()
         {
             if ( has_video_bitrate_m )
                 codec.video_bitrate_m = DEFAULT_BITRATE_M;
-            else if ( !codec.gpu_encoder.has_value() )
+            else if ( !codec.video_codec.has_value() )
                 codec.video_bitrate_m.reset();
         }
         if ( codec.video_bitrate_m )
@@ -204,21 +204,21 @@ void mt::FFMPEGSection::display()
             im::DragFloat( QNAME( "##VideoBitrate" ), &*codec.video_bitrate_m, 0.01f, 0.0f, 1e6f );
         }
 
-        bool has_gpu_encoder = codec.gpu_encoder.has_value();
-        if ( im::Checkbox( QNAME( "GPU Encoder (", kl::convert_string( GPUEncoder::ADAPTER_NAME ), ")" ), &has_gpu_encoder ) )
+        bool has_video_codec = codec.video_codec.has_value();
+        if ( im::Checkbox( QNAME( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ), &has_video_codec ) )
         {
-            if ( has_gpu_encoder )
-                codec.gpu_encoder.emplace();
+            if ( has_video_codec )
+                codec.video_codec.emplace();
             else
-                codec.gpu_encoder.reset();
+                codec.video_codec.reset();
         }
-        if ( has_gpu_encoder )
+        if ( has_video_codec )
         {
             if ( !codec.video_bitrate_m )
                 codec.video_bitrate_m = DEFAULT_BITRATE_M;
             im::Text( "\t" );
             im::SameLine();
-            codec.gpu_encoder->edit();
+            codec.video_codec->edit();
         }
     }
 

@@ -14,7 +14,7 @@ struct OptimizerSection : Displayable
 
     std::wstring input_file;
     std::wstring output_file;
-    std::optional<GPUEncoder> gpu_encoder;
+    std::optional<VideoCodec> video_codec;
     float max_size_mb = 10.0f;
 
     OptimizerSection( kl::Window const& window, ImGuiContext* const& imgui_context )

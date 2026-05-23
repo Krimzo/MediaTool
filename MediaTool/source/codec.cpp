@@ -1,8 +1,12 @@
-#include "gpu_encoder.h"
+#include "codec.h"
 
 
-void mt::GPUEncoder::edit()
+void mt::VideoCodec::edit()
 {
+    bool none = vendor == GPUVendor::NONE;
+    if ( im::Checkbox( QNAME( "None" ), &none ) )
+        vendor = GPUVendor::NONE;
+    im::SameLine();
     im::PushStyleColor( ImGuiCol_CheckMark, (ImU32) ImColor( 56, 245, 85 ) );
     im::PushStyleColor( ImGuiCol_Text, (ImU32) ImColor( 56, 245, 85 ) );
     bool nvidia = vendor == GPUVendor::NVIDIA;
@@ -24,20 +28,20 @@ void mt::GPUEncoder::edit()
 
     im::Text( "\t" );
     im::SameLine();
-    bool h264 = codec_type == CodecType::H264;
+    bool h264 = ( codec_type == VideoCodecType::H264 );
     if ( im::Checkbox( QNAME( "H264" ), &h264 ) )
-        codec_type = CodecType::H264;
+        codec_type = VideoCodecType::H264;
     im::SameLine();
-    bool hevc = codec_type == CodecType::HEVC;
+    bool hevc = ( codec_type == VideoCodecType::HEVC );
     if ( im::Checkbox( QNAME( "HEVC" ), &hevc ) )
-        codec_type = CodecType::HEVC;
+        codec_type = VideoCodecType::HEVC;
     im::SameLine();
-    bool av1 = codec_type == CodecType::AV1;
+    bool av1 = ( codec_type == VideoCodecType::AV1 );
     if ( im::Checkbox( QNAME( "AV1" ), &av1 ) )
-        codec_type = CodecType::AV1;
+        codec_type = VideoCodecType::AV1;
 }
 
-std::wstring mt::GPUEncoder::produce() const
+std::wstring mt::VideoCodec::produce() const
 {
     std::wstring vendor_str;
     switch ( vendor )
@@ -49,9 +53,12 @@ std::wstring mt::GPUEncoder::produce() const
     std::wstring type_str;
     switch ( codec_type )
     {
-    case CodecType::H264: type_str = L"h264"; break;
-    case CodecType::HEVC: type_str = L"hevc"; break;
-    case CodecType::AV1: type_str = L"av1"; break;
+    case VideoCodecType::H264: type_str = L"h264"; break;
+    case VideoCodecType::HEVC: type_str = L"hevc"; break;
+    case VideoCodecType::AV1: type_str = L"av1"; break;
     }
-    return kl::wformat( type_str, "_", vendor_str );
+    if ( vendor_str.empty() )
+        return type_str;
+    else
+        return kl::wformat( type_str, "_", vendor_str );
 }
