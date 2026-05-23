@@ -1,4 +1,4 @@
-"system" section should have install instructions if user does not want to use automatic buttons
+add large main button on the bottom of each section
 console should be hidden and only show while an instruction is running (maybe "pause" after a command is done? and "cls" before each run?)
 tabs should be used instead of showing everything at once
 input and output strings should also be "string inputs" instead of pure text
