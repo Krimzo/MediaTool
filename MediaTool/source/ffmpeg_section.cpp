@@ -56,21 +56,22 @@ void mt::FFMPEGSection::display()
 {
     im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
 
-    im::Text( "Input File: %s", kl::convert_string( input_file ).c_str() );
-    im::SameLine();
-    if ( im::Button( QNAME( "Browse##InputFile" ) ) )
+    im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{ 6, 10 } );
+    im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
+
+    if ( im::Button( QNAME( "Input File: ", kl::convert_string( input_file ), "##Input" ) ) )
     {
         if ( auto opt_path = kl::wchoose_file( false ) )
             input_file = fs::absolute( *opt_path ).wstring();
     }
 
-    im::Text( "Output File: %s", kl::convert_string( output_file ).c_str() );
-    im::SameLine();
-    if ( im::Button( QNAME( "Browse##OutputFile" ) ) )
+    if ( im::Button( QNAME( "Output File: ", kl::convert_string( output_file ), "##OutputFile" ) ) )
     {
         if ( auto opt_path = kl::wchoose_file( true ) )
             output_file = fs::absolute( *opt_path ).wstring();
     }
+
+    im::PopStyleVar( 1 );
 
     bool has_start_time = start_time.has_value();
     if ( im::Checkbox( QNAME( "Start Time" ), &has_start_time ) )
@@ -224,7 +225,7 @@ void mt::FFMPEGSection::display()
 
     {
         std::string temp = kl::convert_string( other_commands );
-        if ( im::InputTextMultiline( QNAME( "Custom" ), &temp ) )
+        if ( im::InputTextMultiline( QNAME( "##Custom" ), &temp, { -1.0f, 0.0f } ) )
             other_commands = kl::convert_string( temp );
     }
 
@@ -245,5 +246,6 @@ void mt::FFMPEGSection::display()
         if ( !input_file.empty() && !output_file.empty() )
             execute( window.ptr(), full_command );
     }
-    im::PopStyleVar( 1 );
+
+    im::PopStyleVar( 2 );
 }

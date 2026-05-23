@@ -9,7 +9,7 @@ std::wstring mt::YTDLPSection::produce() const
     if ( output_file )
         stream << " --force-overwrite -o \"" << output_file.value() << "\"";
     if ( audio_only )
-        stream << " -f bestaudio";
+        stream << " -x";
     stream << " \"" << url << "\"";
     std::wstring result = stream.str();
     clean_string( result );
@@ -20,15 +20,24 @@ void mt::YTDLPSection::display()
 {
     im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
 
-    im::Text( "To Download" );
+    im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{ 6, 10 } );
+    im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
+
+    im::SetCursorPosY( im::GetCursorPosY() + imgui_context->Style.FramePadding.y );
+    im::Text( "To Download: " );
     im::SameLine();
     {
         std::string temp = kl::convert_string( url );
-        if ( im::InputText( QNAME(), &temp ) )
+        im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
+        im::SetNextItemWidth( -1.0f );
+        if ( im::InputText( QNAME( "##UrlInput" ), &temp ) )
             url = kl::convert_string( temp );
     }
 
+    im::PopStyleVar( 1 );
+
     bool has_output = output_file.has_value();
+    im::SetCursorPosY( im::GetCursorPosY() + imgui_context->Style.FramePadding.y );
     if ( im::Checkbox( QNAME( "Output" ), &has_output ) )
     {
         if ( has_output )
@@ -39,13 +48,14 @@ void mt::YTDLPSection::display()
     if ( output_file )
     {
         im::SameLine();
-        if ( im::Button( QNAME( "Browse" ) ) )
+        im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
+        im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
+        if ( im::Button( QNAME( "Output File: ", kl::convert_string( *output_file ), "##OutputFile" ) ) )
         {
             if ( auto opt_path = kl::wchoose_file( true ) )
                 output_file = fs::absolute( *opt_path ).wstring();
         }
-        im::SameLine();
-        im::Text( "Output File: %s", kl::convert_string( *output_file ).data() );
+        im::PopStyleVar( 1 );
     }
 
     im::Checkbox( QNAME( "Audio Only" ), &audio_only );
@@ -67,5 +77,6 @@ void mt::YTDLPSection::display()
         if ( !url.empty() )
             execute( window.ptr(), full_command );
     }
-    im::PopStyleVar( 1 );
+
+    im::PopStyleVar( 2 );
 }
