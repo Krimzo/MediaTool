@@ -37,11 +37,10 @@ void mt::ConcatSection::concat() const
     const std::wstring list_file_name = kl::wformat( "concat_vids_list__", rand_str, ".txt" );
     std::vector<std::wstring> new_input_files;
     {
-        FFMPEGSection ffmpeg{ imgui_context };
+        FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.other_commands = kl::wformat(
             "-r ", video_rate, "\n",
-            "-ar ", audio_rate, "\n"
-        );
+            "-ar ", audio_rate, "\n" );
 
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
         codec.video_viewport.emplace<VideoScale>().scale = video_scale;
@@ -57,7 +56,7 @@ void mt::ConcatSection::concat() const
             ffmpeg.start_time = input.start_time;
             ffmpeg.end_time = input.end_time;
             ffmpeg.output_file = kl::wformat( "concat_input_", i + 1, "__", rand_str, output_file_extension );
-            if ( !execute( ffmpeg.produce() ) )
+            if ( !execute( window.ptr(), ffmpeg.produce() ) )
                 return;
             new_input_files.emplace_back( ffmpeg.output_file );
             list_file << "file '" << ffmpeg.output_file << "'" << std::endl;
@@ -65,7 +64,7 @@ void mt::ConcatSection::concat() const
     }
 
     const std::wstring command = kl::wformat( "ffmpeg -y -f concat -i \"", list_file_name, "\" -c copy \"", output_file, "\"" );
-    execute( command );
+    execute( window.ptr(), command );
 
     for ( auto& new_input_file : new_input_files )
         std::filesystem::remove( new_input_file );
@@ -74,13 +73,15 @@ void mt::ConcatSection::concat() const
 
 void mt::ConcatSection::display()
 {
-    static constexpr size_t min_size = 2;
+    static constexpr size_t MIN_INPUTS_COUNT = 2;
 
-    if ( inputs.size() < min_size )
-        inputs.resize( min_size );
+    if ( inputs.size() < MIN_INPUTS_COUNT )
+        inputs.resize( MIN_INPUTS_COUNT );
+
+    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
 
     std::optional<int> to_remove;
-    const bool is_min_size = ( inputs.size() == min_size );
+    const bool is_min_size = ( inputs.size() == MIN_INPUTS_COUNT );
     for ( int i = 0; i < (int) inputs.size(); i++ )
     {
         auto& input = inputs[i];

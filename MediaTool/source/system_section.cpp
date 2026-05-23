@@ -29,7 +29,7 @@ void mt::SystemSection::display()
     im::Text( PYTHON_INSTALL_TEXT.data() );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - DEFAULT_BUTTON_SIZE.x * .5f );
     if ( im::Button( QNAME( PYTHON_INSTALL_COMMAND.data() ), DEFAULT_BUTTON_SIZE ) )
-        execute( kl::convert_string( PYTHON_INSTALL_COMMAND ) );
+        execute( window.ptr(), kl::convert_string( PYTHON_INSTALL_COMMAND ) );
 
     im::PushStyleColor( ImGuiCol_Text, (ImU32) ( ImColor ) reinterpret_cast<ImVec4 const&>( DENO_COLOR ) );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( DENO_INSTALL_TEXT.data() ).x * .5f );
@@ -37,7 +37,7 @@ void mt::SystemSection::display()
     im::Text( DENO_INSTALL_TEXT.data() );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - DEFAULT_BUTTON_SIZE.x * .5f );
     if ( im::Button( QNAME( DENO_INSTALL_COMMAND ), DEFAULT_BUTTON_SIZE ) )
-        execute( kl::convert_string( DENO_INSTALL_COMMAND ) );
+        execute( window.ptr(), kl::convert_string( DENO_INSTALL_COMMAND ) );
 
     im::PushStyleColor( ImGuiCol_Text, (ImU32) ( ImColor ) reinterpret_cast<ImVec4 const&>( YTDLPSection::COLOR ) );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( YTDLP_INSTALL_TEXT.data() ).x * .5f );
@@ -45,7 +45,7 @@ void mt::SystemSection::display()
     im::Text( YTDLP_INSTALL_TEXT.data() );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - DEFAULT_BUTTON_SIZE.x * .5f );
     if ( im::Button( QNAME( YTDLP_INSTALL_COMMAND ), DEFAULT_BUTTON_SIZE ) )
-        execute( kl::convert_string( YTDLP_INSTALL_COMMAND ) );
+        execute( window.ptr(), kl::convert_string( YTDLP_INSTALL_COMMAND ) );
 
     im::PushStyleColor( ImGuiCol_Text, (ImU32) ( ImColor ) reinterpret_cast<ImVec4 const&>( FFMPEGSection::COLOR ) );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( FFMPEG_INSTALL_TEXT.data() ).x * .5f );
@@ -53,7 +53,7 @@ void mt::SystemSection::display()
     im::Text( FFMPEG_INSTALL_TEXT.data() );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - DEFAULT_BUTTON_SIZE.x * .5f );
     if ( im::Button( QNAME( FFMPEG_INSTALL_COMMAND ), DEFAULT_BUTTON_SIZE ) )
-        execute( kl::convert_string( FFMPEG_INSTALL_COMMAND ) );
+        execute( window.ptr(), kl::convert_string( FFMPEG_INSTALL_COMMAND ) );
 
     im::PopStyleColor( 4 );
     im::PopStyleVar( 1 );

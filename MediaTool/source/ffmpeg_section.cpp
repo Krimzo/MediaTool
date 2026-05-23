@@ -54,6 +54,8 @@ std::wstring mt::FFMPEGSection::produce() const
 
 void mt::FFMPEGSection::display()
 {
+    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
+
     im::Text( "Input File: %s", kl::convert_string( input_file ).c_str() );
     im::SameLine();
     if ( im::Button( QNAME( "Browse##InputFile" ) ) )
@@ -243,7 +245,7 @@ void mt::FFMPEGSection::display()
         if ( input_file.empty() || output_file.empty() )
             kl::print( kl::colors::RED, "FFMPEG: Input and output files must be specified.", kl::colors::CONSOLE );
         else
-            execute( full_command );
+            execute( window.ptr(), full_command );
     }
     im::PopStyleVar( 1 );
 }

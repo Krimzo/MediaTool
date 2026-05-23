@@ -18,6 +18,8 @@ std::wstring mt::YTDLPSection::produce() const
 
 void mt::YTDLPSection::display()
 {
+    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
+
     im::Text( "To Download" );
     im::SameLine();
     {
@@ -65,7 +67,7 @@ void mt::YTDLPSection::display()
         if ( url.empty() )
             kl::print( kl::colors::RED, "YTDLP: Video link must be specified.", kl::colors::CONSOLE );
         else
-            execute( full_command );
+            execute( window.ptr(), full_command );
     }
     im::PopStyleVar( 1 );
 }

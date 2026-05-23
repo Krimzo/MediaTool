@@ -52,6 +52,7 @@ struct FFMPEGSection : Displayable
 
     static const kl::Float4 COLOR;
 
+    kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
     std::wstring input_file;
@@ -61,8 +62,9 @@ struct FFMPEGSection : Displayable
     std::variant<DefaultCodec, CopyCodec> codec;
     std::wstring other_commands;
 
-    FFMPEGSection( ImGuiContext* const& imgui_context )
-        : imgui_context( imgui_context )
+    FFMPEGSection( kl::Window const& window, ImGuiContext* const& imgui_context )
+        : window( window )
+        , imgui_context( imgui_context )
     {}
 
     std::wstring produce() const;

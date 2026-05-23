@@ -1,13 +1,10 @@
-maybe add commands to optimize/concat
-console should be hidden and only show while an instruction is running (maybe "pause" after a command is done? and "cls" before each run?)
-tabs should be used instead of showing everything at once
 input and output strings should also be "string inputs" instead of pure text
 start and end time should be sliders which also show video frame instead of just a number
-default is basically custom without copy (remove "custom" and leave default)
 add framerate, video codec, audio codec, video bitrate, audio bitrate
 remove verbous output from ffmpeg
 add file input through argv
 dont remove whitespace from input/output paths
 concat should just -c copy all instead of reencoding
 add custom commands to yt-dlp
-move all section starts down for like 25px
+center any items that can be centered
+maybe add commands to optimize/concat

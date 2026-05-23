@@ -19,6 +19,7 @@ struct ConcatSection : Displayable
 {
     static const kl::Float4 COLOR;
 
+    kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
     std::vector<ConcatInput> inputs;
@@ -29,8 +30,9 @@ struct ConcatSection : Displayable
     std::optional<float> video_bitrate_m;
     std::optional<GPUEncoder> gpu_encoder;
 
-    ConcatSection( ImGuiContext* const& imgui_context )
-        : imgui_context( imgui_context )
+    ConcatSection( kl::Window const& window, ImGuiContext* const& imgui_context )
+        : window( window )
+        , imgui_context( imgui_context )
     {}
 
     void concat() const;

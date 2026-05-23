@@ -9,6 +9,7 @@ struct OptimizerSection : Displayable
 {
     static const kl::Float4 COLOR;
 
+    kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
     std::wstring input_file;
@@ -19,8 +20,9 @@ struct OptimizerSection : Displayable
     std::optional<GPUEncoder> gpu_encoder;
     float video_max_size_mb = 10.0f;
 
-    OptimizerSection( ImGuiContext* const& imgui_context )
-        : imgui_context( imgui_context )
+    OptimizerSection( kl::Window const& window, ImGuiContext* const& imgui_context )
+        : window( window )
+        , imgui_context( imgui_context )
     {}
 
     void optimize() const;

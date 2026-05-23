@@ -8,14 +8,27 @@ void mt::clean_string( std::wstring& data )
         kl::replace_all( data, L"  ", L" " );
 }
 
-int mt::execute( std::wstring_view const& command )
+int mt::execute( HWND window, std::wstring_view const& command )
 {
-    static const auto SPECIAL_COLOR = kl::RGB{ 199, 117, 157 };
-    static const auto DEFAULT_COLOR = kl::colors::CONSOLE;
-    kl::console::set_title( kl::wformat( "Executing: ", command ) );
+    RECT rect;
+    GetWindowRect( window, &rect );
+
+    MoveWindow( GetConsoleWindow(), rect.left, rect.top,
+        rect.right - rect.left, rect.bottom - rect.top, false );
+    kl::console::set_title( command );
+
+    ShowWindow( window, SW_HIDE );
+    ShowWindow( GetConsoleWindow(), SW_SHOW );
+    SetForegroundWindow( GetConsoleWindow() );
+
+    ::_wsystem( L"cls" );
     const int result = ::_wsystem( command.data() );
-    kl::wprint( "Command \"", SPECIAL_COLOR, command, DEFAULT_COLOR, "\" exited with ", SPECIAL_COLOR, result, DEFAULT_COLOR );
-    kl::console::set_title( "Waiting" );
+    ::_wsystem( L"pause" );
+
+    ShowWindow( GetConsoleWindow(), SW_HIDE );
+    ShowWindow( window, SW_SHOW );
+    SetForegroundWindow( window );
+
     return result;
 }
 

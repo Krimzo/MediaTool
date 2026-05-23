@@ -16,16 +16,16 @@ void mt::OptimizerSection::optimize() const
     const float copy_start_time = kl::max( start_time - COPY_TIME_PRECUT, 0.0f );
     const std::wstring output_copy_file = kl::wformat( output_dir, "/__", kl::convert_string( kl::random::gen_string( 10 ) ), "_.mp4" );
 
-    FFMPEGSection copy_ffmpeg_data{ imgui_context };
+    FFMPEGSection copy_ffmpeg_data{ window, imgui_context };
     copy_ffmpeg_data.input_file = input_file;
     copy_ffmpeg_data.output_file = output_copy_file;
     copy_ffmpeg_data.start_time.emplace().seconds = copy_start_time;
     copy_ffmpeg_data.end_time = end_time;
     copy_ffmpeg_data.codec.emplace<CopyCodec>();
-    if ( !execute( copy_ffmpeg_data.produce() ) )
+    if ( !execute( window.ptr(), copy_ffmpeg_data.produce() ) )
         return;
 
-    FFMPEGSection encode_ffmpeg_data{ imgui_context };
+    FFMPEGSection encode_ffmpeg_data{ window, imgui_context };
     encode_ffmpeg_data.input_file = output_copy_file;
     encode_ffmpeg_data.output_file = output_file;
     encode_ffmpeg_data.start_time.emplace().seconds = start_time - copy_start_time;
@@ -36,7 +36,7 @@ void mt::OptimizerSection::optimize() const
     codec.gpu_encoder = gpu_encoder;
     while ( true )
     {
-        if ( !execute( encode_ffmpeg_data.produce() ) )
+        if ( !execute( window.ptr(), encode_ffmpeg_data.produce() ) )
             return;
 
         const float file_size_mb = ( std::filesystem::file_size( output_file ) / 1024.0f ) / 1024.0f;
@@ -55,6 +55,8 @@ void mt::OptimizerSection::optimize() const
 
 void mt::OptimizerSection::display()
 {
+    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
+
     im::Text( "Input File: %s", kl::convert_string( input_file ).c_str() );
     im::SameLine();
     if ( im::Button( "Browse##OptimizerInputFileButton" ) )
