@@ -15,6 +15,7 @@ struct YTDLPSection : Displayable
     std::wstring url;
     std::optional<std::wstring> output_file;
     bool audio_only = false;
+    std::wstring custom_commands;
 
     YTDLPSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )

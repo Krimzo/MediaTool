@@ -60,7 +60,7 @@ struct FFMPEGSection : Displayable
     std::optional<Timestamp> start_time;
     std::optional<Timestamp> end_time;
     std::variant<DefaultCodec, CopyCodec> codec;
-    std::wstring other_commands;
+    std::wstring custom_commands;
 
     FFMPEGSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )

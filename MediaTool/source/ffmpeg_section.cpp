@@ -45,7 +45,7 @@ std::wstring mt::FFMPEGSection::produce() const
         stream << " " << default_codec->produce();
     else if ( auto* copy_codec = std::get_if<CopyCodec>( &codec ) )
         stream << " " << copy_codec->produce();
-    stream << " " << other_commands;
+    stream << " " << custom_commands;
     stream << " \"" << output_file << "\"";
     std::wstring result = stream.str();
     clean_string( result );
@@ -224,9 +224,9 @@ void mt::FFMPEGSection::display()
     }
 
     {
-        std::string temp = kl::convert_string( other_commands );
+        std::string temp = kl::convert_string( custom_commands );
         if ( im::InputTextMultiline( QNAME( "##Custom" ), &temp, { -1.0f, 0.0f } ) )
-            other_commands = kl::convert_string( temp );
+            custom_commands = kl::convert_string( temp );
     }
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };

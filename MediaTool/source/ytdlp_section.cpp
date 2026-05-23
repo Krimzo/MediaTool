@@ -10,6 +10,7 @@ std::wstring mt::YTDLPSection::produce() const
         stream << " --force-overwrite -o \"" << output_file.value() << "\"";
     if ( audio_only )
         stream << " -x";
+    stream << " " << custom_commands;
     stream << " \"" << url << "\"";
     std::wstring result = stream.str();
     clean_string( result );
@@ -59,6 +60,12 @@ void mt::YTDLPSection::display()
     }
 
     im::Checkbox( QNAME( "Audio Only" ), &audio_only );
+
+    {
+        std::string temp = kl::convert_string( custom_commands );
+        if ( im::InputTextMultiline( QNAME( "##Custom" ), &temp, { -1.0f, 0.0f } ) )
+            custom_commands = kl::convert_string( temp );
+    }
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
