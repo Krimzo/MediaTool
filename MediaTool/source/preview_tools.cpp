@@ -3,10 +3,10 @@
 
 void mt::preview_timestamp( std::wstring_view const& path, Timestamp& timestamp )
 {
-    //const std::filesystem::path p{ path };
+    //const fs::path p{ path };
     //const std::wstring preview_name = kl::wformat( "__vidhandle_preview_", kl::convert_string( kl::random::gen_string( 10 ) ), "_.png" );
     //std::wstring preview_path = kl::wformat( p.parent_path().wstring(), "/", preview_name );
-    //preview_path = std::filesystem::absolute( preview_path ).wstring();
+    //preview_path = fs::absolute( preview_path ).wstring();
     //
     //kl::Window window{ kl::format( "Video Handler Timestamp Preview ", p.filename(), " [", timestamp.minutes, ":", timestamp.seconds, "]" ) };
     //kl::GPU gpu{ window.ptr() };
@@ -25,7 +25,7 @@ void mt::preview_timestamp( std::wstring_view const& path, Timestamp& timestamp 
     //
     //kl::dx::Texture preview_texture = gpu.create_texture( preview_image );
     //kl::dx::ShaderView preview_view = gpu.create_shader_view( preview_texture, nullptr );
-    //std::filesystem::remove( preview_path );
+    //fs::remove( preview_path );
     //
     //auto* imgui_context = im::CreateContext();
     //im::SetCurrentContext( imgui_context );
@@ -83,10 +83,10 @@ void mt::preview_timestamp( std::wstring_view const& path, Timestamp& timestamp 
 
 void mt::preview_crop( std::wstring_view const& path, Timestamp timestamp, VideoCrop& crop )
 {
-    //const std::filesystem::path p{ path };
+    //const fs::path p{ path };
     //const std::wstring preview_name = kl::wformat( "__vidhandle_preview_", kl::convert_string( kl::random::gen_string( 10 ) ), "_.png" );
     //std::wstring preview_path = kl::wformat( p.parent_path().wstring(), "/", preview_name );
-    //preview_path = std::filesystem::absolute( preview_path ).wstring();
+    //preview_path = fs::absolute( preview_path ).wstring();
     //
     //kl::Window window{ kl::format( "Video Handler Crop Preview ", p.filename(), " [", timestamp.minutes, ":", timestamp.seconds, "]" ) };
     //kl::GPU gpu{ window.ptr() };
@@ -105,7 +105,7 @@ void mt::preview_crop( std::wstring_view const& path, Timestamp timestamp, Video
     //
     //kl::dx::Texture preview_texture = gpu.create_texture( preview_image );
     //kl::dx::ShaderView preview_view = gpu.create_shader_view( preview_texture, nullptr );
-    //std::filesystem::remove( preview_path );
+    //fs::remove( preview_path );
     //
     //auto* imgui_context = im::CreateContext();
     //im::SetCurrentContext( imgui_context );

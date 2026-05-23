@@ -61,7 +61,7 @@ void mt::FFMPEGSection::display()
     if ( im::Button( QNAME( "Browse##InputFile" ) ) )
     {
         if ( auto opt_path = kl::wchoose_file( false ) )
-            input_file = std::filesystem::absolute( *opt_path ).wstring();
+            input_file = fs::absolute( *opt_path ).wstring();
     }
 
     im::Text( "Output File: %s", kl::convert_string( output_file ).c_str() );
@@ -69,7 +69,7 @@ void mt::FFMPEGSection::display()
     if ( im::Button( QNAME( "Browse##OutputFile" ) ) )
     {
         if ( auto opt_path = kl::wchoose_file( true ) )
-            output_file = std::filesystem::absolute( *opt_path ).wstring();
+            output_file = fs::absolute( *opt_path ).wstring();
     }
 
     bool has_start_time = start_time.has_value();

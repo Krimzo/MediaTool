@@ -21,7 +21,7 @@ void mt::SystemSection::display()
 
     const ImVec2 DEFAULT_BUTTON_SIZE = { im::GetContentRegionAvail().x * .6f, 25.0f };
 
-    im::PushStyleVar( ImGuiStyleVar_FramePadding, { 5, 5 } );
+    im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
 
     im::PushStyleColor( ImGuiCol_Text, (ImU32) ( ImColor ) reinterpret_cast<ImVec4 const&>( PYTHON_COLOR ) );
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( PYTHON_INSTALL_TEXT.data() ).x * .5f );

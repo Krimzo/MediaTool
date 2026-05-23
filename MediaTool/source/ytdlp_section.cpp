@@ -42,7 +42,7 @@ void mt::YTDLPSection::display()
         if ( im::Button( QNAME( "Browse" ) ) )
         {
             if ( auto opt_path = kl::wchoose_file( true ) )
-                output_file = std::filesystem::absolute( *opt_path ).wstring();
+                output_file = fs::absolute( *opt_path ).wstring();
         }
         im::SameLine();
         im::Text( "Output File: %s", kl::convert_string( *output_file ).data() );

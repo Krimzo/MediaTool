@@ -11,7 +11,7 @@ void mt::OptimizerSection::optimize() const
     static constexpr float DEFAULT_BITRATE_M = 5.0f;
 
     const float start_time = this->start_time.value_or( Timestamp{} ).total_seconds();
-    const std::wstring output_dir = std::filesystem::path( this->output_file ).parent_path().wstring();
+    const std::wstring output_dir = fs::path( this->output_file ).parent_path().wstring();
 
     const float copy_start_time = kl::max( start_time - COPY_TIME_PRECUT, 0.0f );
     const std::wstring output_copy_file = kl::wformat( output_dir, "/__", kl::convert_string( kl::random::gen_string( 10 ) ), "_.mp4" );
@@ -39,7 +39,7 @@ void mt::OptimizerSection::optimize() const
         if ( !execute( window.ptr(), encode_ffmpeg_data.produce() ) )
             return;
 
-        const float file_size_mb = ( std::filesystem::file_size( output_file ) / 1024.0f ) / 1024.0f;
+        const float file_size_mb = ( fs::file_size( output_file ) / 1024.0f ) / 1024.0f;
         kl::print( std::fixed, kl::Float2{ video_max_size_mb * MIN_FILESIZE_PERC, video_max_size_mb }, " -> ", file_size_mb );
         if ( file_size_mb > video_max_size_mb || file_size_mb < ( video_max_size_mb * MIN_FILESIZE_PERC ) )
         {
@@ -50,7 +50,7 @@ void mt::OptimizerSection::optimize() const
             break;
     }
 
-    std::filesystem::remove( output_copy_file );
+    fs::remove( output_copy_file );
 }
 
 void mt::OptimizerSection::display()
@@ -62,7 +62,7 @@ void mt::OptimizerSection::display()
     if ( im::Button( "Browse##OptimizerInputFileButton" ) )
     {
         if ( auto opt_path = kl::wchoose_file( false ) )
-            input_file = std::filesystem::absolute( *opt_path ).wstring();
+            input_file = fs::absolute( *opt_path ).wstring();
     }
 
     im::Text( "Output File: %s", kl::convert_string( output_file ).c_str() );
@@ -70,7 +70,7 @@ void mt::OptimizerSection::display()
     if ( im::Button( "Browse##OptimizerOutputFileButton" ) )
     {
         if ( auto opt_path = kl::wchoose_file( true ) )
-            output_file = std::filesystem::absolute( *opt_path ).wstring();
+            output_file = fs::absolute( *opt_path ).wstring();
     }
 
     bool has_start_time = start_time.has_value();

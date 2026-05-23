@@ -4,6 +4,7 @@
 
 namespace mt
 {
+namespace fs = std::filesystem;
 namespace im = ImGui;
 
 struct None
