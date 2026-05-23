@@ -5,7 +5,7 @@
 
 namespace mt
 {
-struct OptimizerSection
+struct OptimizerSection : Displayable
 {
     static const kl::Float4 COLOR;
 
@@ -24,6 +24,6 @@ struct OptimizerSection
     {}
 
     void optimize() const;
-    void display();
+    void display() override;;
 };
 }

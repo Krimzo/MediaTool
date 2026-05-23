@@ -12,7 +12,7 @@ struct ConcatInput
     std::optional<Timestamp> end_time;
 };
 
-struct ConcatSection
+struct ConcatSection : Displayable
 {
     static const kl::Float4 COLOR;
 
@@ -31,6 +31,6 @@ struct ConcatSection
     {}
 
     void concat() const;
-    void display();
+    void display() override;;
 };
 }

@@ -2,7 +2,7 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="ImGUI/ImGUI.vcxproj" />
-  <Project Path="KLibrary/KLibrary.vcxproj" />
-  <Project Path="MediaTool/MediaTool.vcxproj" />
+  <Project Path="ImGUI/ImGUI.vcxproj" Id="37eb02b7-a784-4c8d-9f2c-708db931575d" />
+  <Project Path="KLibrary/KLibrary.vcxproj" Id="4cb918c1-cf55-4503-a8e5-8b5e8094808b" />
+  <Project Path="MediaTool/MediaTool.vcxproj" Id="dead7710-3750-4306-acca-8c210d6ffd41" />
 </Solution>

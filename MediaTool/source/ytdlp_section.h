@@ -5,7 +5,7 @@
 
 namespace mt
 {
-struct YTDLPSection
+struct YTDLPSection : Displayable
 {
     static const kl::Float4 COLOR;
 
@@ -14,6 +14,6 @@ struct YTDLPSection
     bool audio_only = false;
 
     std::wstring produce() const;
-    void display();
+    void display() override;;
 };
 }

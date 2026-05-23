@@ -9,6 +9,12 @@ namespace im = ImGui;
 struct None
 {};
 
+struct Displayable
+{
+    virtual ~Displayable() = default;
+    virtual void display() = 0;
+};
+
 template<typename... Args>
 std::string qname( void const* ptr, Args&&... args )
 {
@@ -19,4 +25,5 @@ std::string qname( void const* ptr, Args&&... args )
 
 void clean_string( std::wstring& data );
 int execute( std::wstring_view const& command );
+bool custom_button( bool is_disabled, char const* label, ImVec2 const& size_arg, kl::Float4 const& color );
 }

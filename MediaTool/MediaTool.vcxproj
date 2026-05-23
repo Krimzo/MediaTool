@@ -89,6 +89,7 @@
     <ClCompile Include="source\general.cpp" />
     <ClCompile Include="source\gpu_encoder.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\media_tool.cpp" />
     <ClCompile Include="source\optimizer_section.cpp" />
     <ClCompile Include="source\preview_tools.cpp" />
     <ClCompile Include="source\system_section.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="source\ffmpeg_section.h" />
     <ClInclude Include="source\general.h" />
     <ClInclude Include="source\gpu_encoder.h" />
+    <ClInclude Include="source\media_tool.h" />
     <ClInclude Include="source\optimizer_section.h" />
     <ClInclude Include="source\system_section.h" />
     <ClInclude Include="source\preview_tools.h" />

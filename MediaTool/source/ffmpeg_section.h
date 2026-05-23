@@ -45,7 +45,7 @@ struct CopyCodec
     std::wstring produce() const;
 };
 
-struct FFMPEGSection
+struct FFMPEGSection : Displayable
 {
     static constexpr float DEFAULT_BITRATE_M = 5.0f;
     static constexpr kl::Int2 DEFAULT_SCALE = { 1920, 1080 };
@@ -66,6 +66,6 @@ struct FFMPEGSection
     {}
 
     std::wstring produce() const;
-    void display();
+    void display() override;
 };
 }

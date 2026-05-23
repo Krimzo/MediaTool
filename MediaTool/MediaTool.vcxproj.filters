@@ -42,6 +42,9 @@
     <ClCompile Include="source\concat_section.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\media_tool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\system_section.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\concat_section.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\media_tool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

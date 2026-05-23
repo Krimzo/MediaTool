@@ -5,10 +5,10 @@
 
 namespace mt
 {
-struct SystemSection
+struct SystemSection : Displayable
 {
     static const kl::Float4 COLOR;
 
-    void display();
+    void display() override;;
 };
 }
