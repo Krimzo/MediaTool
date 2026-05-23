@@ -2,8 +2,7 @@
 
 mt::MediaTool::MediaTool()
 {
-    kl::console::set_title( "Media Tool" );
-
+    kl::console::set_enabled( false );
     imgui_context = im::CreateContext();
     im::SetCurrentContext( imgui_context );
 
@@ -34,6 +33,7 @@ mt::MediaTool::~MediaTool()
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     im::DestroyContext( imgui_context );
+    kl::console::set_enabled( true );
 }
 
 bool mt::MediaTool::update()
@@ -51,26 +51,35 @@ bool mt::MediaTool::update()
     im::SetNextWindowViewport( viewport->ID );
 
     im::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
+    im::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{} );
     if ( im::Begin( QNAME( "Main Window" ), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking ) )
     {
-        if ( custom_button( current_section.is<SystemSection>(), "System", {}, SystemSection::COLOR ) )
-            current_section = new SystemSection();
+        im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+        im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{} );
+        const ImVec2 button_size = { im::GetContentRegionAvail().x / 5, 25 };
+        if ( custom_button( current_section.is<SystemSection>(), "System", button_size, SystemSection::COLOR ) )
+            current_section = system_section;
         im::SameLine();
-        if ( custom_button( current_section.is<YTDLPSection>(), "YT-DLP", {}, YTDLPSection::COLOR ) )
-            current_section = new YTDLPSection();
+        if ( custom_button( current_section.is<YTDLPSection>(), "YT-DLP", button_size, YTDLPSection::COLOR ) )
+            current_section = ytdlp_section;
         im::SameLine();
-        if ( custom_button( current_section.is<FFMPEGSection>(), "FFMPEG", {}, FFMPEGSection::COLOR ) )
-            current_section = new FFMPEGSection( imgui_context );
+        if ( custom_button( current_section.is<FFMPEGSection>(), "FFMPEG", button_size, FFMPEGSection::COLOR ) )
+            current_section = ffmpeg_section;
         im::SameLine();
-        if ( custom_button( current_section.is<OptimizerSection>(), "OPTIMIZER", {}, OptimizerSection::COLOR ) )
-            current_section = new OptimizerSection( imgui_context );
+        if ( custom_button( current_section.is<OptimizerSection>(), "OPTIMIZER", button_size, OptimizerSection::COLOR ) )
+            current_section = optimizer_section;
         im::SameLine();
-        if ( custom_button( current_section.is<ConcatSection>(), "CONCAT", {}, ConcatSection::COLOR ) )
-            current_section = new ConcatSection( imgui_context );
-        current_section->display();
+        if ( custom_button( current_section.is<ConcatSection>(), "CONCAT", button_size, ConcatSection::COLOR ) )
+            current_section = concat_section;
+        im::PopStyleVar( 2 );
+        im::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{ 8, 8 } );
+        if ( im::BeginChild( "Section Child", {}, ImGuiChildFlags_AlwaysUseWindowPadding ) )
+            current_section->display();
+        im::EndChild();
+        im::PopStyleVar( 1 );
     }
     im::End();
-    im::PopStyleVar( 1 );
+    im::PopStyleVar( 2 );
 
     im::Render();
     ImGui_ImplDX11_RenderDrawData( im::GetDrawData() );
@@ -81,8 +90,8 @@ bool mt::MediaTool::update()
 
 void mt::MediaTool::load_theme()
 {
-    kl::Float4 special_color = kl::colors::WHITE;
-    kl::Float4 alternate_color = kl::colors::BLACK;
+    const kl::Float4 special_color = kl::colors::WHITE;
+    const kl::Float4 alternate_color = kl::colors::BLACK;
     ImGuiStyle& style = im::GetStyle();
 
     style.Colors[ImGuiCol_Text] = ImVec4( 1.00f, 1.00f, 1.00f, 1.00f );
@@ -95,7 +104,7 @@ void mt::MediaTool::load_theme()
     style.Colors[ImGuiCol_Border] = ImVec4( 0.45f, 0.45f, 0.45f, 0.50f );
     style.Colors[ImGuiCol_BorderShadow] = ImVec4( 0.00f, 0.00f, 0.00f, 0.00f );
 
-    style.Colors[ImGuiCol_FrameBg] = ImVec4( 0.15f, 0.15f, 0.15f, 1.00f );
+    style.Colors[ImGuiCol_FrameBg] = style.Colors[ImGuiCol_ChildBg];
     style.Colors[ImGuiCol_FrameBgHovered] = ImVec4( 0.30f, 0.30f, 0.30f, 1.00f );
     style.Colors[ImGuiCol_FrameBgActive] = ImVec4( 0.60f, 0.60f, 0.60f, 0.40f );
 

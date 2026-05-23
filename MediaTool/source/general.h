@@ -25,5 +25,5 @@ std::string qname( void const* ptr, Args&&... args )
 
 void clean_string( std::wstring& data );
 int execute( std::wstring_view const& command );
-bool custom_button( bool is_disabled, char const* label, ImVec2 const& size_arg, kl::Float4 const& color );
+bool custom_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color );
 }

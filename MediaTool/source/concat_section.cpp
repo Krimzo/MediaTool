@@ -66,8 +66,6 @@ void mt::ConcatSection::concat() const
 
 void mt::ConcatSection::display()
 {
-    im::TextColored( (ImVec4 const&) COLOR, "CONCAT" );
-
     static constexpr size_t min_size = 2;
 
     if ( inputs.size() < min_size )

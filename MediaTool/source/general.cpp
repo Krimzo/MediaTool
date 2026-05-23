@@ -19,16 +19,20 @@ int mt::execute( std::wstring_view const& command )
     return result;
 }
 
-bool mt::custom_button( bool is_disabled, char const* label, ImVec2 const& size_arg, kl::Float4 const& color )
+bool mt::custom_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color )
 {
-    if ( is_disabled )
-        im::BeginDisabled();
-    else
+    if ( is_pressed )
+    {
+        im::PushItemFlag( ImGuiItemFlags_Disabled, true );
         im::PushStyleColor( ImGuiCol_Text, reinterpret_cast<ImVec4 const&>( color ) );
+        im::PushStyleVar( ImGuiStyleVar_FrameBorderSize, 0.0f );
+    }
     const bool result = im::Button( label, size_arg );
-    if ( is_disabled )
-        im::EndDisabled();
-    else
-        im::PopStyleColor( 1 );
+    if ( is_pressed )
+    {
+        im::PopStyleVar();
+        im::PopStyleColor();
+        im::PopItemFlag();
+    }
     return result;
 }

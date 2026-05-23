@@ -18,8 +18,6 @@ std::wstring mt::YTDLPSection::produce() const
 
 void mt::YTDLPSection::display()
 {
-    im::TextColored( (ImVec4 const&) COLOR, "YT-DLP" );
-
     im::Text( "To Download" );
     im::SameLine();
     {

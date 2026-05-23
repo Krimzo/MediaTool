@@ -15,7 +15,12 @@ struct MediaTool
     kl::GPU gpu{ window.ptr() };
     ImGuiContext* imgui_context = nullptr;
 
-    kl::Ref<Displayable> current_section = new FFMPEGSection( imgui_context );
+    kl::Ref<SystemSection> system_section = new SystemSection();
+    kl::Ref<YTDLPSection> ytdlp_section = new YTDLPSection();
+    kl::Ref<FFMPEGSection> ffmpeg_section = new FFMPEGSection( imgui_context );
+    kl::Ref<OptimizerSection> optimizer_section = new OptimizerSection( imgui_context );
+    kl::Ref<ConcatSection> concat_section = new ConcatSection( imgui_context );
+    kl::Ref<Displayable> current_section = ffmpeg_section;
 
     MediaTool();
     virtual ~MediaTool() noexcept;

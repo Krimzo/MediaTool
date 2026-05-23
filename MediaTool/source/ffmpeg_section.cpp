@@ -54,8 +54,6 @@ std::wstring mt::FFMPEGSection::produce() const
 
 void mt::FFMPEGSection::display()
 {
-    im::TextColored( (ImVec4 const&) COLOR, "FFMPEG" );
-
     im::Text( "Input File: %s", kl::convert_string( input_file ).c_str() );
     im::SameLine();
     if ( im::Button( QNAME( "Browse##InputFile" ) ) )

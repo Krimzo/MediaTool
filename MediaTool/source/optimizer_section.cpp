@@ -55,8 +55,6 @@ void mt::OptimizerSection::optimize() const
 
 void mt::OptimizerSection::display()
 {
-    im::TextColored( (ImVec4 const&) COLOR, "OPTIMIZER" );
-
     im::Text( "Input File: %s", kl::convert_string( input_file ).c_str() );
     im::SameLine();
     if ( im::Button( "Browse##OptimizerInputFileButton" ) )
