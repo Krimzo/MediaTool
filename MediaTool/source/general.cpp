@@ -30,8 +30,8 @@ bool mt::custom_button( bool is_pressed, char const* label, ImVec2 const& size_a
     const bool result = im::Button( label, size_arg );
     if ( is_pressed )
     {
-        im::PopStyleVar();
-        im::PopStyleColor();
+        im::PopStyleVar( 1 );
+        im::PopStyleColor( 1 );
         im::PopItemFlag();
     }
     return result;

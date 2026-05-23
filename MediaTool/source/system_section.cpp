@@ -1,6 +1,6 @@
 #include "system_section.h"
 
-const kl::Float4 mt::SystemSection::COLOR = kl::RGB{ 117, 203, 224 };
+const kl::Float4 mt::SystemSection::COLOR = kl::RGB{ 160, 236, 255 };
 
 void mt::SystemSection::display()
 {

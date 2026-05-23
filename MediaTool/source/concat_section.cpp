@@ -1,7 +1,15 @@
 #include "concat_section.h"
 #include "preview_tools.h"
 
-const kl::Float4 mt::ConcatSection::COLOR = kl::RGB{ 184, 108, 235 };
+const kl::Float4 mt::ConcatSection::COLOR = kl::RGB{ 218, 162, 255 };
+
+mt::ConcatInput::ConcatInput()
+{
+    kl::RGB color;
+    while ( kl::YUV{ color }.y < .5f )
+        color = kl::random::gen_rgb();
+    this->color = color;
+}
 
 void mt::ConcatSection::concat() const
 {
@@ -77,6 +85,8 @@ void mt::ConcatSection::display()
     {
         auto& input = inputs[i];
 
+        im::PushStyleColor( ImGuiCol_Text, reinterpret_cast<ImVec4 const&>( input.color ) );
+
         im::Text( "Input File %d: %s", i + 1, kl::convert_string( input.path ).c_str() );
         im::SameLine();
         if ( im::Button( kl::format( "Browse##ConcatInput", i ).c_str() ) )
@@ -86,21 +96,17 @@ void mt::ConcatSection::display()
         }
         im::SameLine();
         if ( im::Button( kl::format( is_min_size ? "Erase##ConcatInput" : "Remove##ConcatInput", i ).c_str() ) )
-        {
             to_remove = i;
-        }
-        if ( i > 0 )
-        {
-            im::SameLine();
-            if ( im::Button( kl::format( "Move Up##ConcatInput", i ).c_str() ) )
-                std::swap( inputs[i], inputs[(size_t) i - 1] );
-        }
-        if ( i < (int) inputs.size() - 1 )
-        {
-            im::SameLine();
-            if ( im::Button( kl::format( "Move Down##ConcatInput", i ).c_str() ) )
-                std::swap( inputs[i], inputs[(size_t) i + 1] );
-        }
+        im::SameLine();
+        im::BeginDisabled( i <= 0 );
+        if ( im::Button( kl::format( "Move Up##ConcatInput", i ).c_str() ) )
+            std::swap( inputs[i], inputs[(size_t) i - 1] );
+        im::EndDisabled();
+        im::SameLine();
+        im::BeginDisabled( i >= (int) inputs.size() - 1 );
+        if ( im::Button( kl::format( "Move Down##ConcatInput", i ).c_str() ) )
+            std::swap( inputs[i], inputs[(size_t) i + 1] );
+        im::EndDisabled();
 
         bool has_start_time = input.start_time.has_value();
         if ( im::Checkbox( kl::format( "Start Time##Concat", i ).c_str(), &has_start_time ) )
@@ -155,6 +161,8 @@ void mt::ConcatSection::display()
                 }
             }
         }
+
+        im::PopStyleColor( 1 );
     }
     if ( im::Button( "Add Input##Concat" ) )
         inputs.emplace_back();

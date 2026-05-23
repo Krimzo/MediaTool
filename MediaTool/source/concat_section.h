@@ -10,6 +10,9 @@ struct ConcatInput
     std::wstring path;
     std::optional<Timestamp> start_time;
     std::optional<Timestamp> end_time;
+    kl::Float4 color;
+
+    ConcatInput();
 };
 
 struct ConcatSection : Displayable

@@ -1,6 +1,6 @@
 #include "ytdlp_section.h"
 
-const kl::Float4 mt::YTDLPSection::COLOR = kl::RGB{ 219, 202, 118 };
+const kl::Float4 mt::YTDLPSection::COLOR = kl::RGB{ 255, 242, 152 };
 
 std::wstring mt::YTDLPSection::produce() const
 {

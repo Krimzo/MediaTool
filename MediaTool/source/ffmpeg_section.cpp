@@ -1,7 +1,7 @@
 #include "ffmpeg_section.h"
 #include "preview_tools.h"
 
-const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 118, 219, 192 };
+const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 227 };
 
 std::wstring mt::VideoScale::produce() const
 {

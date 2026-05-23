@@ -1,4 +1,3 @@
-concat "move up/down" buttons should always exist but be disabled if no function instead of being removed
 "system" section should have install instructions if user does not want to use automatic buttons
 console should be hidden and only show while an instruction is running (maybe "pause" after a command is done? and "cls" before each run?)
 tabs should be used instead of showing everything at once
