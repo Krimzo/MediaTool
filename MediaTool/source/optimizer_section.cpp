@@ -7,16 +7,16 @@ void mt::OptimizerSection::optimize() const
 {
     static constexpr float BIAS = 0.98f;
 
-    FFMPEGSection encode_ffmpeg_data{ window, imgui_context };
-    encode_ffmpeg_data.input_file = input_file;
-    encode_ffmpeg_data.output_file = output_file;
-    auto& codec = encode_ffmpeg_data.codec.emplace<DefaultCodec>();
+    FFMPEGSection ffmpeg{ window, imgui_context };
+    ffmpeg.input_file = input_file;
+    ffmpeg.output_file = output_file;
+    auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
     codec.video_bitrate_m = 10.0f;
     codec.gpu_encoder = gpu_encoder;
 
     while ( true )
     {
-        if ( !execute( window.ptr(), encode_ffmpeg_data.produce() ) )
+        if ( !execute( window.ptr(), ffmpeg.produce() ) )
             return;
         const float file_size_mb = float( fs::file_size( output_file ) / ( 1024.0 * 1024.0 ) );
         if ( file_size_mb <= max_size_mb )
