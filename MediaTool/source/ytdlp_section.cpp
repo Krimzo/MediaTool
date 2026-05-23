@@ -48,10 +48,16 @@ void mt::YTDLPSection::display()
 
     im::Checkbox( QNAME( "Audio Only" ), &audio_only );
 
+    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+
     const std::wstring full_command = produce();
+    const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
+    im::SetCursorPos( ImVec2{
+        im::GetWindowWidth() * .5f - text_size.x * .5f,
+        im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y - imgui_context->Style.ItemSpacing.y - text_size.y,
+        } );
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
 
-    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     if ( im::Button( QNAME( "Download" ), main_button_size ) )
