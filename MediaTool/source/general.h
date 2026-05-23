@@ -25,6 +25,6 @@ std::string qname( void const* ptr, Args&&... args )
 #define QNAME(...) (qname(this, __VA_ARGS__).c_str())
 
 void clean_string( std::wstring& data );
-int execute( HWND window, std::wstring_view const& command );
+bool execute( HWND window, std::wstring_view const& command );
 bool custom_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color );
 }

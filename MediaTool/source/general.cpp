@@ -8,7 +8,7 @@ void mt::clean_string( std::wstring& data )
         kl::replace_all( data, L"  ", L" " );
 }
 
-int mt::execute( HWND window, std::wstring_view const& command )
+bool mt::execute( HWND window, std::wstring_view const& command )
 {
     RECT rect;
     GetWindowRect( window, &rect );
@@ -29,7 +29,7 @@ int mt::execute( HWND window, std::wstring_view const& command )
     ShowWindow( window, SW_SHOW );
     SetForegroundWindow( window );
 
-    return result;
+    return ( result == 0 );
 }
 
 bool mt::custom_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color )

@@ -64,9 +64,7 @@ void mt::YTDLPSection::display()
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     if ( im::Button( QNAME( "Download" ), main_button_size ) )
     {
-        if ( url.empty() )
-            kl::print( kl::colors::RED, "YTDLP: Video link must be specified.", kl::colors::CONSOLE );
-        else
+        if ( !url.empty() )
             execute( window.ptr(), full_command );
     }
     im::PopStyleVar( 1 );

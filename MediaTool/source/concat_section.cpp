@@ -14,24 +14,15 @@ mt::ConcatInput::ConcatInput()
 void mt::ConcatSection::concat() const
 {
     if ( inputs.empty() )
-    {
-        kl::print( kl::colors::RED, "Concat inputs can't be empty.", kl::colors::CONSOLE );
         return;
-    }
     for ( int i = 0; i < (int) inputs.size(); i++ )
     {
         auto const& input = inputs[i];
         if ( input.path.empty() )
-        {
-            kl::print( kl::colors::RED, "Concat input ", i + 1, " can't be empty.", kl::colors::CONSOLE );
             return;
-        }
     }
     if ( output_file.empty() )
-    {
-        kl::print( kl::colors::RED, "Concat output file can't be empty.", kl::colors::CONSOLE );
         return;
-    }
     if ( !fs::exists( output_file ) )
         kl::File{ output_file, true }.close();
 

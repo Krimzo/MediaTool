@@ -242,9 +242,7 @@ void mt::FFMPEGSection::display()
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     if ( im::Button( QNAME( "Produce" ), main_button_size ) )
     {
-        if ( input_file.empty() || output_file.empty() )
-            kl::print( kl::colors::RED, "FFMPEG: Input and output files must be specified.", kl::colors::CONSOLE );
-        else
+        if ( !input_file.empty() && !output_file.empty() )
             execute( window.ptr(), full_command );
     }
     im::PopStyleVar( 1 );

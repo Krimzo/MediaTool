@@ -5,4 +5,4 @@ dont remove whitespace from input/output paths
 add custom commands to yt-dlp
 center any items that can be centered
 maybe add commands to optimize/concat
-replace print with logging
+rename gpu encoder to video codec
