@@ -79,8 +79,20 @@ void mt::preview_timestamp( fs::path const& path, Timestamp& timestamp )
                 timestamp.load( time_value );
                 reload_texture();
             }
-            ImVec2 view_size = im::GetContentRegionAvail();
-            im::Image( preview_view.get(), view_size );
+            const kl::Int2 texture_size = gpu.texture_size( preview_texture );
+            const ImVec2 view_size = im::GetContentRegionAvail();
+            ImVec2 image_size{};
+            if ( view_size.x / view_size.y > texture_size.x / (float) texture_size.y )
+            {
+                image_size = { view_size.y * ( texture_size.x / (float) texture_size.y ), view_size.y };
+                im::SetCursorPosX( im::GetCursorPosX() + ( view_size.x - image_size.x ) * .5f );
+            }
+            else
+            {
+                image_size = { view_size.x, view_size.x * ( texture_size.y / (float) texture_size.x ) };
+                im::SetCursorPosY( im::GetCursorPosY() + ( view_size.y - image_size.y ) * .5f );
+            }
+            im::Image( preview_view.get(), image_size );
         }
         ImGui::End();
         ImGui::PopStyleVar( 1 );
@@ -174,12 +186,23 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
             }
             const bool is_slider_active = im::IsItemActive();
 
+            const kl::Int2 texture_size = gpu.texture_size( preview_texture );
+            const ImVec2 view_size = im::GetContentRegionAvail();
+            ImVec2 image_size{};
+            if ( view_size.x / view_size.y > texture_size.x / (float) texture_size.y )
+            {
+                image_size = { view_size.y * ( texture_size.x / (float) texture_size.y ), view_size.y };
+                im::SetCursorPosX( im::GetCursorPosX() + ( view_size.x - image_size.x ) * .5f );
+            }
+            else
+            {
+                image_size = { view_size.x, view_size.x * ( texture_size.y / (float) texture_size.x ) };
+                im::SetCursorPosY( im::GetCursorPosY() + ( view_size.y - image_size.y ) * .5f );
+            }
             const ImVec2 min_content = im::GetCursorPos();
-            const ImVec2 max_content = im::GetWindowSize() - imgui_context->Style.WindowPadding;
-            const ImVec2 content_size = max_content - min_content;
-            const ImVec2 content_ratio = content_size / convert_coords( texture_size );
+            const ImVec2 content_ratio = image_size / convert_coords( texture_size );
 
-            im::Image( preview_view.get(), content_size );
+            im::Image( preview_view.get(), image_size );
 
             const ImVec2 top_left = min_content + convert_coords( crop.position ) * content_ratio;
             const ImVec2 bottom_right = min_content + convert_coords( crop.position + crop.size ) * content_ratio;

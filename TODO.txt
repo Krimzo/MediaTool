@@ -1,1 +1,1 @@
-always keep aspect ratio in previews
+crop should move top left but not the whole rect
