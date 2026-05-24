@@ -1,1 +1,1 @@
-add crop preview
+always keep aspect ratio in previews

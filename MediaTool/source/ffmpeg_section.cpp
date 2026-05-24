@@ -194,12 +194,12 @@ void mt::FFMPEGSection::display()
             im::SameLine();
             im::SetNextItemWidth( 200.0f );
             im::DragInt2( QNAME( "Size##VideoCrop" ), &video_crop->size.x, 1.0f, 1, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
-            if ( !input_file.empty() )
+            if ( !input_file.empty() && kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
             {
                 im::SameLine();
                 if ( im::Button( QNAME( "Preview##VideoCrop" ) ) )
                 {
-                    auto timestamp = start_time ? *start_time : Timestamp{};
+                    const auto timestamp = start_time ? *start_time : Timestamp{};
                     preview_crop( input_file, timestamp, *video_crop );
                     im::SetCurrentContext( imgui_context );
                 }
