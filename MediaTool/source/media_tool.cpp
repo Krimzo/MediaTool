@@ -1,4 +1,5 @@
 #include "media_tool.h"
+#include "../resource.h"
 
 mt::MediaTool::MediaTool()
 {
@@ -26,6 +27,12 @@ mt::MediaTool::MediaTool()
     const kl::Int2 screen_work_size = kl::SCREEN_SIZE - kl::Int2{ 0, get_taskbar_height() };
     const kl::Int2 total_app_size = window.size();
     window.set_position( ( screen_work_size - total_app_size ) / 2 );
+
+    if ( HICON icon = LoadIcon( GetModuleHandleA( nullptr ), MAKEINTRESOURCE( IDI_ICON1 ) ) )
+    {
+        SendMessage( window.ptr(), WM_SETICON, ICON_BIG, (LPARAM) icon );
+        SendMessage( window.ptr(), WM_SETICON, ICON_SMALL, (LPARAM) icon );
+    }
 }
 
 mt::MediaTool::~MediaTool()

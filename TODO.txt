@@ -1,2 +1,1 @@
 start and end time should be sliders which also show video frame instead of just a number
-add program icon
