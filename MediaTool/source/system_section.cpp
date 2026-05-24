@@ -13,11 +13,13 @@ void mt::SystemSection::display()
     static constexpr std::string_view DENO_INSTALL_TEXT = "Install/Upgrade DENO (yt-dlp requirement)";
     static constexpr std::string_view YTDLP_INSTALL_TEXT = "Install/Upgrade YT-DLP";
     static constexpr std::string_view FFMPEG_INSTALL_TEXT = "Install/Upgrade FFMPEG";
+    static constexpr std::string_view FFPROBE_TEXT = "Probe Media Info With FFPROBE";
 
     static constexpr std::string_view PYTHON_INSTALL_COMMAND = R"(winget install python)";
     static constexpr std::string_view DENO_INSTALL_COMMAND = R"(winget install deno)";
     static constexpr std::string_view YTDLP_INSTALL_COMMAND = R"(pip install yt-dlp)";
     static constexpr std::string_view FFMPEG_INSTALL_COMMAND = R"(winget install ffmpeg)";
+    static constexpr std::string_view FFPROBE_COMMAND = R"(ffprobe -hide_banner "...")";
 
     const ImVec2 DEFAULT_BUTTON_SIZE = { im::GetContentRegionAvail().x * .6f, 25.0f };
 
@@ -61,5 +63,20 @@ void mt::SystemSection::display()
         execute( window.ptr(), kl::convert_string( FFMPEG_INSTALL_COMMAND ) );
 
     im::PopStyleColor( 4 );
+
+    im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( FFPROBE_TEXT.data() ).x * .5f );
+    im::SetCursorPosY( im::GetCursorPosY() + 35.0f );
+    im::Text( FFPROBE_TEXT.data() );
+    im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - DEFAULT_BUTTON_SIZE.x * .5f );
+    if ( im::Button( QNAME( FFPROBE_COMMAND ), DEFAULT_BUTTON_SIZE ) )
+    {
+        if ( auto opt_path = kl::wchoose_file( false ) )
+        {
+            std::wstring full_command = kl::convert_string( FFPROBE_COMMAND );
+            kl::replace_all( full_command, L"...", fs::absolute( *opt_path ).wstring() );
+            execute( window.ptr(), full_command );
+        }
+    }
+
     im::PopStyleVar( 1 );
 }

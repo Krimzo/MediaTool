@@ -1,4 +1,3 @@
 start and end time should be sliders which also show video frame instead of just a number
 dont remove whitespace from input/output paths
 add program icon
-add ffprobe to system
