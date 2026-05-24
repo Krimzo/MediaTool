@@ -21,7 +21,8 @@ std::wstring mt::VideoScale::produce() const
 
 std::wstring mt::VideoCrop::produce() const
 {
-    return kl::wformat( " -vf \"crop=", size.x, ":", size.y, ":", position.x, ":", position.y, "\"" );
+    const kl::Int2 size = bottom_right - top_left;
+    return kl::wformat( " -vf \"crop=", size.x, ":", size.y, ":", top_left.x, ":", top_left.y, "\"" );
 }
 
 std::wstring mt::DefaultCodec::produce() const
@@ -189,11 +190,11 @@ void mt::FFMPEGSection::display()
             im::Text( "\t" );
             im::SameLine();
             im::SetNextItemWidth( 200.0f );
-            im::DragInt2( QNAME( "Position##VideoCrop" ), &video_crop->position.x, 1.0f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+            im::DragInt2( QNAME( "Top Left##VideoCrop" ), &video_crop->top_left.x, 1.0f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
             im::Text( "\t" );
             im::SameLine();
             im::SetNextItemWidth( 200.0f );
-            im::DragInt2( QNAME( "Size##VideoCrop" ), &video_crop->size.x, 1.0f, 1, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+            im::DragInt2( QNAME( "Bottom Right##VideoCrop" ), &video_crop->bottom_right.x, 1.0f, 1, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
             if ( !input_file.empty() && kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
             {
                 im::SameLine();

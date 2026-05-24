@@ -23,8 +23,8 @@ struct VideoScale
 
 struct VideoCrop
 {
-    kl::Int2 position;
-    kl::Int2 size{ 1 };
+    kl::Int2 top_left{ 0 };
+    kl::Int2 bottom_right{ 1 };
 
     std::wstring produce() const;
 };

@@ -204,8 +204,8 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
 
             im::Image( preview_view.get(), image_size );
 
-            const ImVec2 top_left = min_content + convert_coords( crop.position ) * content_ratio;
-            const ImVec2 bottom_right = min_content + convert_coords( crop.position + crop.size ) * content_ratio;
+            const ImVec2 top_left = min_content + convert_coords( crop.top_left ) * content_ratio;
+            const ImVec2 bottom_right = min_content + convert_coords( crop.bottom_right ) * content_ratio;
             static const ImU32 rect_color = ImColor( 255, 255, 255 );
 
             auto& draw_list = *im::GetWindowDrawList();
@@ -218,12 +218,12 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
                 const kl::Int2 crop_pos = { int( video_pos.x ), int( video_pos.y ) };
 
                 if ( im::IsMouseDown( ImGuiPopupFlags_MouseButtonLeft ) )
-                    crop.position = crop_pos;
+                    crop.top_left = crop_pos + kl::Int2{ 1 };
                 else if ( im::IsMouseDown( ImGuiPopupFlags_MouseButtonRight ) )
-                    crop.size = crop_pos - crop.position + kl::Int2{ 1 };
+                    crop.bottom_right = crop_pos + kl::Int2{ 1 };
 
-                crop.position = kl::clamp( crop.position, kl::Int2{ 0 }, texture_size - kl::Int2{ 1 } );
-                crop.size = kl::clamp( crop.size, kl::Int2{ 1 }, texture_size - crop.position );
+                crop.top_left = kl::clamp( crop.top_left, kl::Int2{ 0 }, texture_size - kl::Int2{ 1 } );
+                crop.bottom_right = kl::clamp( crop.bottom_right, crop.top_left + kl::Int2{ 1 }, texture_size );
             }
         }
         ImGui::End();
