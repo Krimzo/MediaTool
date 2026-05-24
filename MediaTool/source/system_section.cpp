@@ -15,8 +15,8 @@ void mt::SystemSection::display()
     static constexpr std::string_view FFMPEG_INSTALL_TEXT = "Install/Upgrade FFMPEG";
     static constexpr std::string_view FFPROBE_TEXT = "Probe Media Info With FFPROBE";
 
-    static constexpr std::string_view PYTHON_INSTALL_COMMAND = R"(winget install python)";
-    static constexpr std::string_view DENO_INSTALL_COMMAND = R"(winget install deno)";
+    static constexpr std::string_view PYTHON_INSTALL_COMMAND = R"(winget install Python.Python.3.14)";
+    static constexpr std::string_view DENO_INSTALL_COMMAND = R"(winget install DenoLand.Deno)";
     static constexpr std::string_view YTDLP_INSTALL_COMMAND = R"(pip install yt-dlp)";
     static constexpr std::string_view FFMPEG_INSTALL_COMMAND = R"(winget install ffmpeg)";
     static constexpr std::string_view FFPROBE_COMMAND = R"(ffprobe -hide_banner "...")";
