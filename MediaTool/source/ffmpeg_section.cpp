@@ -5,12 +5,12 @@ const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 227 };
 
 std::wstring mt::VideoScale::produce() const
 {
-    return kl::wformat( "-vf \"scale=", scale.x, ":", scale.y, "\"" );
+    return kl::wformat( " -vf \"scale=", scale.x, ":", scale.y, "\"" );
 }
 
 std::wstring mt::VideoCrop::produce() const
 {
-    return kl::wformat( "-vf \"crop=", size.x, ":", size.y, ":", position.x, ":", position.y, "\"" );
+    return kl::wformat( " -vf \"crop=", size.x, ":", size.y, ":", position.x, ":", position.y, "\"" );
 }
 
 std::wstring mt::DefaultCodec::produce() const
@@ -35,7 +35,7 @@ std::wstring mt::DefaultCodec::produce() const
 
 std::wstring mt::CopyCodec::produce() const
 {
-    return L"-c copy";
+    return L" -c copy";
 }
 
 std::wstring mt::FFMPEGSection::produce() const
@@ -48,14 +48,13 @@ std::wstring mt::FFMPEGSection::produce() const
     if ( end_time )
         stream << " -to " << end_time->total_seconds();
     if ( auto* default_codec = std::get_if<DefaultCodec>( &codec ) )
-        stream << " " << default_codec->produce();
+        stream << default_codec->produce();
     else if ( auto* copy_codec = std::get_if<CopyCodec>( &codec ) )
-        stream << " " << copy_codec->produce();
-    stream << " " << custom_commands;
+        stream << copy_codec->produce();
+    if ( !custom_commands.empty() )
+        stream << " " << custom_commands;
     stream << " \"" << output_file << "\"";
-    std::wstring result = stream.str();
-    clean_string( result );
-    return result;
+    return stream.str();
 }
 
 void mt::FFMPEGSection::display()
@@ -274,10 +273,11 @@ void mt::FFMPEGSection::display()
         }
     }
 
+    std::string custom_input = kl::convert_string( custom_commands );
+    if ( im::InputTextMultiline( QNAME( "##Custom" ), &custom_input, { -1.0f, 0.0f } ) )
     {
-        std::string temp = kl::convert_string( custom_commands );
-        if ( im::InputTextMultiline( QNAME( "##Custom" ), &temp, { -1.0f, 0.0f } ) )
-            custom_commands = kl::convert_string( temp );
+        mt::clean_string( custom_input );
+        custom_commands = kl::convert_string( custom_input );
     }
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
