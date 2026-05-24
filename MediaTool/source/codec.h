@@ -20,6 +20,14 @@ enum struct VideoCodecType
     AV1,
 };
 
+enum struct AudioCodecType
+{
+    AAC,
+    MP3,
+    OPUS,
+    FLAC,
+};
+
 inline const std::wstring GPU_ADAPTER_NAME = []() -> std::wstring
     {
         kl::GPU gpu{ nullptr };
@@ -52,10 +60,20 @@ inline const GPUVendor CURRENT_GPU_VENDOR = []() -> GPUVendor
 
 struct VideoCodec
 {
-    GPUVendor vendor = CURRENT_GPU_VENDOR;
+    GPUVendor gpu_vendor = CURRENT_GPU_VENDOR;
     VideoCodecType codec_type = VideoCodecType::H264;
 
-    void edit();
     std::wstring produce() const;
+    void edit();
+
+    bool uses_gpu() const;
+};
+
+struct AudioCodec
+{
+    AudioCodecType codec_type = AudioCodecType::AAC;
+
+    std::wstring produce() const;
+    void edit();
 };
 }

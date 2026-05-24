@@ -1,4 +1,4 @@
 start and end time should be sliders which also show video frame instead of just a number
-add framerate, audio codec, audio bitrate
 dont remove whitespace from input/output paths
 add program icon
+add ffprobe to system

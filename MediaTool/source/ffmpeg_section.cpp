@@ -20,10 +20,16 @@ std::wstring mt::DefaultCodec::produce() const
         stream << video_scale->produce();
     else if ( VideoCrop const* video_crop = std::get_if<VideoCrop>( &video_viewport ) )
         stream << video_crop->produce();
+    if ( frame_rate )
+        stream << " -r " << frame_rate.value();
     if ( video_bitrate_m )
         stream << " -vb " << video_bitrate_m.value() << "M";
     if ( video_codec )
         stream << " -c:v " << video_codec.value().produce();
+    if ( audio_bitrate_k )
+        stream << " -ab " << audio_bitrate_k.value() << "K";
+    if ( audio_codec )
+        stream << " -c:a " << audio_codec.value().produce();
     return stream.str();
 }
 
@@ -190,12 +196,27 @@ void mt::FFMPEGSection::display()
             }
         }
 
+        bool has_frame_rate = codec.frame_rate.has_value();
+        if ( im::Checkbox( QNAME( "Frame Rate" ), &has_frame_rate ) )
+        {
+            if ( has_frame_rate )
+                codec.frame_rate = DEFAULT_FRAME_RATE;
+            else if ( !codec.video_codec.has_value() )
+                codec.frame_rate.reset();
+        }
+        if ( codec.frame_rate )
+        {
+            im::SameLine();
+            im::SetNextItemWidth( 100.0f );
+            im::DragFloat( QNAME( "##FrameRate" ), &*codec.frame_rate, 0.01f, 0.0f, 1e6f );
+        }
+
         bool has_video_bitrate_m = codec.video_bitrate_m.has_value();
         if ( im::Checkbox( QNAME( "Video Bitrate [Mb]" ), &has_video_bitrate_m ) )
         {
             if ( has_video_bitrate_m )
-                codec.video_bitrate_m = DEFAULT_BITRATE_M;
-            else if ( !codec.video_codec.has_value() )
+                codec.video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
+            else if ( !codec.video_codec->uses_gpu() )
                 codec.video_bitrate_m.reset();
         }
         if ( codec.video_bitrate_m )
@@ -215,11 +236,41 @@ void mt::FFMPEGSection::display()
         }
         if ( has_video_codec )
         {
-            if ( !codec.video_bitrate_m )
-                codec.video_bitrate_m = DEFAULT_BITRATE_M;
+            if ( codec.video_codec->uses_gpu() && !codec.video_bitrate_m )
+                codec.video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
             im::Text( "\t" );
             im::SameLine();
             codec.video_codec->edit();
+        }
+
+        bool has_audio_bitrate_k = codec.audio_bitrate_k.has_value();
+        if ( im::Checkbox( QNAME( "Audio Bitrate [Kb]" ), &has_audio_bitrate_k ) )
+        {
+            if ( has_audio_bitrate_k )
+                codec.audio_bitrate_k = DEFAULT_AUDIO_BITRATE_K;
+            else
+                codec.audio_bitrate_k.reset();
+        }
+        if ( codec.audio_bitrate_k )
+        {
+            im::SameLine();
+            im::SetNextItemWidth( 100.0f );
+            im::DragFloat( QNAME( "##AudioBitrate" ), &*codec.audio_bitrate_k, 0.01f, 0.0f, 1e6f );
+        }
+
+        bool has_audio_codec = codec.audio_codec.has_value();
+        if ( im::Checkbox( QNAME( "Audio Codec" ), &has_audio_codec ) )
+        {
+            if ( has_audio_codec )
+                codec.audio_codec.emplace();
+            else
+                codec.audio_codec.reset();
+        }
+        if ( has_audio_codec )
+        {
+            im::Text( "\t" );
+            im::SameLine();
+            codec.audio_codec->edit();
         }
     }
 

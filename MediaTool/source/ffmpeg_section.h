@@ -34,8 +34,11 @@ struct VideoCrop
 struct DefaultCodec
 {
     std::variant<None, VideoScale, VideoCrop> video_viewport;
+    std::optional<float> frame_rate;
     std::optional<float> video_bitrate_m;
     std::optional<VideoCodec> video_codec;
+    std::optional<float> audio_bitrate_k;
+    std::optional<AudioCodec> audio_codec;
 
     std::wstring produce() const;
 };
@@ -47,8 +50,10 @@ struct CopyCodec
 
 struct FFMPEGSection : Displayable
 {
-    static constexpr float DEFAULT_BITRATE_M = 5.0f;
     static constexpr kl::Int2 DEFAULT_SCALE = { 1920, 1080 };
+    static constexpr float DEFAULT_FRAME_RATE = 30.0f;
+    static constexpr float DEFAULT_VIDEO_BITRATE_M = 5.0f;
+    static constexpr float DEFAULT_AUDIO_BITRATE_K = 192.0f;
 
     static const kl::Float4 COLOR;
 
