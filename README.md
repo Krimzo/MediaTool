@@ -1,3 +1,7 @@
-# Media Tool  
+## About
+Windows YTDLP/FFMPEG GUI helper.
 
-Windows FFMPEG GUI helper.
+## Screenshot
+![](screen1.png)
+![](screen2.png)
+
