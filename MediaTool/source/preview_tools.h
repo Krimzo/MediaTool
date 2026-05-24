@@ -5,6 +5,6 @@
 
 namespace mt
 {
-void preview_timestamp( std::wstring_view const& path, Timestamp& timestamp );
-void preview_crop( std::wstring_view const& path, Timestamp timestamp, VideoCrop& crop );
+void preview_timestamp( fs::path const& path, Timestamp& timestamp );
+void preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& crop );
 }

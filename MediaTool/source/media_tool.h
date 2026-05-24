@@ -27,8 +27,7 @@ struct MediaTool
 
     bool update();
 
-private:
-    void load_theme();
-    int get_taskbar_height();
+    static void load_theme();
+    static int get_taskbar_height();
 };
 }

@@ -10,10 +10,8 @@ struct Timestamp
     int minutes = 0;
     float seconds = 0.0f;
 
-    constexpr float total_seconds() const
-    {
-        return minutes * 60 + seconds;
-    }
+    void load( float seconds );
+    float total_seconds() const;
 };
 
 struct VideoScale

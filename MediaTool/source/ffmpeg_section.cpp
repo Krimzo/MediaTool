@@ -3,6 +3,17 @@
 
 const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 227 };
 
+void mt::Timestamp::load( float seconds_value )
+{
+    this->minutes = int( seconds_value / 60 );
+    this->seconds = seconds_value - ( this->minutes * 60 );
+}
+
+float mt::Timestamp::total_seconds() const
+{
+    return minutes * 60 + seconds;
+}
+
 std::wstring mt::VideoScale::produce() const
 {
     return kl::wformat( " -vf \"scale=", scale.x, ":", scale.y, "\"" );
@@ -94,7 +105,7 @@ void mt::FFMPEGSection::display()
         im::SameLine();
         im::SetNextItemWidth( 100.0f );
         im::DragFloat( QNAME( "##StartTimeSeconds" ), &start_time->seconds, 0.01f, 0.0f, 59.999f, "%.3f", ImGuiSliderFlags_AlwaysClamp );
-        if ( !input_file.empty() )
+        if ( !input_file.empty() && kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
         {
             im::SameLine();
             if ( im::Button( QNAME( "Preview##StartTime" ) ) )
@@ -121,7 +132,7 @@ void mt::FFMPEGSection::display()
         im::SameLine();
         im::SetNextItemWidth( 100.0f );
         im::DragFloat( QNAME( "##EndTimeSeconds" ), &end_time->seconds, 0.01f, 0.0f, 59.999f, "%.3f", ImGuiSliderFlags_AlwaysClamp );
-        if ( !input_file.empty() )
+        if ( !input_file.empty() && kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
         {
             im::SameLine();
             if ( im::Button( QNAME( "Preview##EndTime" ) ) )
