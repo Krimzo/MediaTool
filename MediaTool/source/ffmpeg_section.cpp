@@ -227,7 +227,7 @@ void mt::FFMPEGSection::display()
         {
             if ( has_video_bitrate_m )
                 codec.video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
-            else if ( !codec.video_codec->uses_gpu() )
+            else if ( !codec.video_codec || !codec.video_codec->uses_gpu() )
                 codec.video_bitrate_m.reset();
         }
         if ( codec.video_bitrate_m )
