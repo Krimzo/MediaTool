@@ -64,6 +64,12 @@ void mt::OptimizerSection::display()
     im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
     if ( im::DragFloat( QNAME( "##SizeLimitsY" ), &size_limits_mb.y, 0.01f, 0.0f, 1e6f, "%.3f", ImGuiSliderFlags_AlwaysClamp ) )
         size_limits_mb.x = kl::min( size_limits_mb.x, size_limits_mb.y );
+    im::SetCursorPosY( im::GetCursorPosY() + imgui_context->Style.FramePadding.y );
+    im::Text( "Max Repeat Count: " );
+    im::SameLine();
+    im::SetNextItemWidth( 100.0f );
+    im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
+    im::DragInt( QNAME( "##MaxRepeat" ), &max_repeat_count, 0.1f, 1, 1'000, "%d", ImGuiSliderFlags_AlwaysClamp );
     im::PopStyleVar( 1 );
 
     std::string custom_input = kl::convert_string( custom_commands );
@@ -73,6 +79,7 @@ void mt::OptimizerSection::display()
         custom_commands = kl::convert_string( custom_input );
     }
 
+    const ImVec2 error_box_tl = { im::GetItemRectMin().x, im::GetItemRectMax().y };
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
     const std::wstring full_command = produce( STARTING_BITRATE );
@@ -82,6 +89,7 @@ void mt::OptimizerSection::display()
         im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y - imgui_context->Style.ItemSpacing.y - text_size.y,
         } );
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
+    const ImVec2 error_box_br = { im::GetWindowWidth() - imgui_context->Style.WindowPadding.x, im::GetItemRectMin().y };
 
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
@@ -89,13 +97,20 @@ void mt::OptimizerSection::display()
     if ( im::Button( QNAME( "Optimize" ), main_button_size ) )
     {
         if ( !input_file.empty() && !output_file.empty() )
-            optimize();
+            m_last_error = optimize();
     }
     im::EndDisabled();
     im::PopStyleVar( 2 );
+
+    if ( !m_last_error.empty() )
+    {
+        const ImVec2 text_size = im::CalcTextSize( m_last_error.c_str() );
+        im::SetCursorPos( error_box_tl + ( error_box_br - error_box_tl ) * .5f - text_size * .5f - ImVec2{ 0.0f, TAB_BOTTOM_SPACING } );
+        im::TextColored( ImColor( 255, 0, 0 ), m_last_error.c_str() );
+    }
 }
 
-void mt::OptimizerSection::optimize() const
+std::string mt::OptimizerSection::optimize() const
 {
     static constexpr float BIAS = 0.98f;
     float bitrate_m = STARTING_BITRATE;
@@ -104,8 +119,10 @@ void mt::OptimizerSection::optimize() const
         kl::VideoReader reader{ input_file, {}, false };
         bitrate_m = ( size_limits_mb.y * 8 ) / reader.duration_seconds();
     }
-    while ( execute( window.ptr(), produce( bitrate_m ), false ) )
+    for ( int i = 0; i < max_repeat_count; i++ )
     {
+        if ( !execute( window.ptr(), produce( bitrate_m ), false ) )
+            return "Optimize command failed.";
         const float file_size_mb = float( fs::file_size( output_file ) / ( 1024.0 * 1024.0 ) );
         if ( file_size_mb < size_limits_mb.x )
         {
@@ -117,6 +134,7 @@ void mt::OptimizerSection::optimize() const
             bitrate_m *= ( size_limits_mb.y / file_size_mb ) * BIAS;
             continue;
         }
-        break;
+        return {};
     }
+    return kl::format( "Max repeat count reached: ", max_repeat_count );
 }

@@ -1,1 +1,1 @@
-add repeat limit to optimizer (and a "FAILED" log)
+add exe to releases
