@@ -38,6 +38,8 @@ std::wstring mt::DefaultCodec::produce() const
         stream << " -vb " << video_bitrate_m.value() << "M";
     if ( video_codec )
         stream << " -c:v " << video_codec.value().produce();
+    if ( audio_rate )
+        stream << " -ar " << audio_rate.value();
     if ( audio_bitrate_k )
         stream << " -ab " << audio_bitrate_k.value() << "K";
     if ( audio_codec )
@@ -252,6 +254,21 @@ void mt::FFMPEGSection::display()
             im::Text( "\t" );
             im::SameLine();
             codec.video_codec->edit();
+        }
+
+        bool has_audio_rate = codec.audio_rate.has_value();
+        if ( im::Checkbox( QNAME( "Audio Rate" ), &has_audio_rate ) )
+        {
+            if ( has_audio_rate )
+                codec.audio_rate = DEFAULT_AUDIO_RATE;
+            else
+                codec.audio_rate.reset();
+        }
+        if ( codec.audio_rate )
+        {
+            im::SameLine();
+            im::SetNextItemWidth( 100.0f );
+            im::DragInt( QNAME( "##AudioRate" ), &*codec.audio_rate, 0.1f, 0, 10'000'000 );
         }
 
         bool has_audio_bitrate_k = codec.audio_bitrate_k.has_value();
