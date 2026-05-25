@@ -15,6 +15,11 @@ void mt::clean_string( std::string& data )
             data = data.substr( size_t( i ) );
             break;
         }
+        else if ( i == (int) data.size() - 1 )
+        {
+            data = {};
+            return;
+        }
     }
     for ( int i = (int) data.size() - 1; i >= 0; i-- )
     {

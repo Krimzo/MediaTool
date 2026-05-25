@@ -1,3 +1,2 @@
 add repeat limit to optimizer (and a "FAILED" log)
 add concat info for each file and allow concat only if all parameters match
-custom input shouldnt allow whitespace on its own
