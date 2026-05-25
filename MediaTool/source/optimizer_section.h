@@ -17,6 +17,7 @@ struct OptimizerSection : Displayable
     std::wstring output_file;
     std::optional<VideoCodec> video_codec;
     float max_size_mb = 10.0f;
+    std::wstring custom_commands;
 
     OptimizerSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )

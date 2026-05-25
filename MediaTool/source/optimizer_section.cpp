@@ -8,6 +8,7 @@ std::wstring mt::OptimizerSection::produce( float bitrate_m ) const
     FFMPEGSection ffmpeg{ window, imgui_context };
     ffmpeg.input_file = input_file;
     ffmpeg.output_file = output_file;
+    ffmpeg.custom_commands = custom_commands;
     auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
     codec.video_bitrate_m = bitrate_m;
     codec.video_codec = video_codec;
@@ -58,6 +59,13 @@ void mt::OptimizerSection::display()
     im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
     im::DragFloat( QNAME( "##MaxSize" ), &max_size_mb, 0.01f, 0.0f, 1e6f );
     im::PopStyleVar( 1 );
+
+    std::string custom_input = kl::convert_string( custom_commands );
+    if ( im::InputTextMultiline( QNAME( "##Custom" ), &custom_input, { -1.0f, 0.0f } ) )
+    {
+        mt::clean_string( custom_input );
+        custom_commands = kl::convert_string( custom_input );
+    }
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
