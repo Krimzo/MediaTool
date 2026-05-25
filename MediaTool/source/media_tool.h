@@ -30,4 +30,6 @@ struct MediaTool
     static void load_theme();
     static int get_taskbar_height();
 };
+
+bool tab_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color );
 }

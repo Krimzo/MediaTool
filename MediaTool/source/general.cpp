@@ -50,21 +50,3 @@ bool mt::execute( HWND window, std::wstring_view const& command, bool pause )
 
     return ( result == 0 );
 }
-
-bool mt::custom_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color )
-{
-    if ( is_pressed )
-    {
-        im::PushItemFlag( ImGuiItemFlags_Disabled, true );
-        im::PushStyleColor( ImGuiCol_Text, reinterpret_cast<ImVec4 const&>( color ) );
-        im::PushStyleVar( ImGuiStyleVar_FrameBorderSize, 0.0f );
-    }
-    const bool result = im::Button( label, size_arg );
-    if ( is_pressed )
-    {
-        im::PopStyleVar( 1 );
-        im::PopStyleColor( 1 );
-        im::PopItemFlag();
-    }
-    return result;
-}

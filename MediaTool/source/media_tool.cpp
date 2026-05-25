@@ -64,19 +64,19 @@ bool mt::MediaTool::update()
         im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
         im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{} );
         const ImVec2 button_size = { im::GetContentRegionAvail().x / 5, 25 };
-        if ( custom_button( current_section.is<SystemSection>(), "System", button_size, SystemSection::COLOR ) )
+        if ( tab_button( current_section.is<SystemSection>(), "System", button_size, SystemSection::COLOR ) )
             current_section = system_section;
         im::SameLine();
-        if ( custom_button( current_section.is<YTDLPSection>(), "YT-DLP", button_size, YTDLPSection::COLOR ) )
+        if ( tab_button( current_section.is<YTDLPSection>(), "YT-DLP", button_size, YTDLPSection::COLOR ) )
             current_section = ytdlp_section;
         im::SameLine();
-        if ( custom_button( current_section.is<FFMPEGSection>(), "FFMPEG", button_size, FFMPEGSection::COLOR ) )
+        if ( tab_button( current_section.is<FFMPEGSection>(), "FFMPEG", button_size, FFMPEGSection::COLOR ) )
             current_section = ffmpeg_section;
         im::SameLine();
-        if ( custom_button( current_section.is<OptimizerSection>(), "OPTIMIZER", button_size, OptimizerSection::COLOR ) )
+        if ( tab_button( current_section.is<OptimizerSection>(), "OPTIMIZER", button_size, OptimizerSection::COLOR ) )
             current_section = optimizer_section;
         im::SameLine();
-        if ( custom_button( current_section.is<ConcatSection>(), "CONCAT", button_size, ConcatSection::COLOR ) )
+        if ( tab_button( current_section.is<ConcatSection>(), "CONCAT", button_size, ConcatSection::COLOR ) )
             current_section = concat_section;
         im::PopStyleVar( 2 );
         im::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{ 8, 8 } );
@@ -205,4 +205,22 @@ int mt::MediaTool::get_taskbar_height()
     const int screen_height = screen_rect.bottom - screen_rect.top;
     const int work_height = work_area_rect.bottom - work_area_rect.top;
     return ( work_height < screen_height ) ? screen_height - work_height : 0;
+}
+
+bool mt::tab_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color )
+{
+    if ( is_pressed )
+    {
+        im::PushItemFlag( ImGuiItemFlags_Disabled, true );
+        im::PushStyleColor( ImGuiCol_Text, reinterpret_cast<ImVec4 const&>( color ) );
+        im::PushStyleVar( ImGuiStyleVar_FrameBorderSize, 0.0f );
+    }
+    const bool result = im::Button( label, size_arg );
+    if ( is_pressed )
+    {
+        im::PopStyleVar( 1 );
+        im::PopStyleColor( 1 );
+        im::PopItemFlag();
+    }
+    return result;
 }
