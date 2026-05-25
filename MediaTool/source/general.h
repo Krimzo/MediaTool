@@ -7,6 +7,8 @@ namespace mt
 namespace fs = std::filesystem;
 namespace im = ImGui;
 
+inline constexpr float TAB_BOTTOM_SPACING = 25.0f;
+
 struct None
 {};
 

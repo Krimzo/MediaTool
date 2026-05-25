@@ -71,7 +71,7 @@ std::wstring mt::FFMPEGSection::produce() const
 
 void mt::FFMPEGSection::display()
 {
-    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
+    im::SetCursorPosY( im::GetCursorPosY() + TAB_BOTTOM_SPACING );
 
     im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{ 6, 10 } );
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );

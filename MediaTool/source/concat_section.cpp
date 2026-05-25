@@ -18,7 +18,7 @@ std::wstring mt::ConcatSection::produce() const
     stream << " -f concat -safe 0 -i \"" << vids_list_file << "\"";
     if ( !custom_commands.empty() )
         stream << " " << custom_commands;
-    else
+    else if ( use_copy_codec )
         stream << " -c copy";
     stream << " \"" << output_file << "\"";
     return stream.str();
@@ -26,8 +26,9 @@ std::wstring mt::ConcatSection::produce() const
 
 void mt::ConcatSection::display()
 {
-    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
+    static constexpr float VERTICAL_SPACING = 20.0f;
 
+    im::SetCursorPosY( im::GetCursorPosY() + TAB_BOTTOM_SPACING );
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
 
     std::optional<int> to_remove;
@@ -66,7 +67,7 @@ void mt::ConcatSection::display()
     if ( to_remove )
         inputs.erase( inputs.begin() + *to_remove );
 
-    im::SetCursorPosY( im::GetCursorPosY() + 20.0f );
+    im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING );
 
     if ( im::Button( QNAME( "Output File: ", kl::convert_string( output_file ), "##Output" ) ) )
     {
@@ -74,7 +75,15 @@ void mt::ConcatSection::display()
             output_file = fs::absolute( *opt_path ).wstring();
     }
 
-    im::SetCursorPosY( im::GetCursorPosY() + 20.0f );
+    im::PopStyleVar( 1 );
+
+    im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING );
+
+    im::BeginDisabled( !custom_commands.empty() );
+    im::Checkbox( QNAME( "Use Copy Codec" ), &use_copy_codec );
+    im::EndDisabled();
+
+    im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING );
 
     std::string custom_input = kl::convert_string( custom_commands );
     if ( im::InputTextMultiline( QNAME( "##Custom" ), &custom_input, { -1.0f, 0.0f } ) )
@@ -98,7 +107,7 @@ void mt::ConcatSection::display()
     if ( im::Button( QNAME( "Concat" ), main_button_size ) )
         concat();
 
-    im::PopStyleVar( 2 );
+    im::PopStyleVar( 1 );
 }
 
 void mt::ConcatSection::concat() const
