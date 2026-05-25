@@ -5,6 +5,12 @@
 
 namespace mt
 {
+struct BoundingBox
+{
+    ImVec2 top_left{};
+    ImVec2 bottom_right{};
+};
+
 struct ConcatFileInfo
 {
     kl::Int2 video_resolution;
@@ -14,7 +20,7 @@ struct ConcatFileInfo
     bool load( fs::path const& path );
     bool match( ConcatFileInfo const& other ) const;
 
-    void display();
+    void display( ConcatFileInfo const* to_compare, std::vector<BoundingBox>& out_boxes );
 };
 
 struct ConcatInput
@@ -26,6 +32,10 @@ struct ConcatInput
     ConcatInput();
 
     bool set_path( std::wstring path );
+    void reload();
+
+private:
+    fs::file_time_type m_last_write_time{};
 };
 
 struct ConcatSection : Displayable

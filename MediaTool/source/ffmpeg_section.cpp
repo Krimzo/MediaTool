@@ -212,7 +212,7 @@ void mt::FFMPEGSection::display()
         {
             if ( has_frame_rate )
                 codec.frame_rate = DEFAULT_FRAME_RATE;
-            else if ( !codec.video_codec.has_value() )
+            else
                 codec.frame_rate.reset();
         }
         if ( codec.frame_rate )

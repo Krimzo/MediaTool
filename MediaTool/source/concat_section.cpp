@@ -21,17 +21,23 @@ bool mt::ConcatFileInfo::match( ConcatFileInfo const& other ) const
         && this->audio_rate == other.audio_rate;
 }
 
-void mt::ConcatFileInfo::display()
+void mt::ConcatFileInfo::display( ConcatFileInfo const* to_compare, std::vector<BoundingBox>& out_boxes )
 {
     im::PushItemFlag( ImGuiItemFlags_Disabled, true );
     im::SetNextItemWidth( 200.0f );
     im::DragInt2( QNAME( "Resolution" ), &video_resolution.x );
+    if ( to_compare && to_compare->video_resolution != video_resolution )
+        out_boxes.emplace_back( ImGui::GetItemRectMin(), ImGui::GetItemRectMax() );
     im::SameLine();
     im::SetNextItemWidth( 100.0f );
     im::DragInt( QNAME( "Framerate" ), &frame_rate );
+    if ( to_compare && to_compare->frame_rate != frame_rate )
+        out_boxes.emplace_back( ImGui::GetItemRectMin(), ImGui::GetItemRectMax() );
     im::SameLine();
     im::SetNextItemWidth( 100.0f );
     im::DragInt( QNAME( "Audio Rate" ), &audio_rate );
+    if ( to_compare && to_compare->audio_rate != audio_rate )
+        out_boxes.emplace_back( ImGui::GetItemRectMin(), ImGui::GetItemRectMax() );
     im::PopItemFlag();
 }
 
@@ -47,6 +53,15 @@ bool mt::ConcatInput::set_path( std::wstring path )
 {
     this->path = path;
     return info.load( this->path );
+}
+
+void mt::ConcatInput::reload()
+{
+    const auto write_time = fs::last_write_time( path );
+    if ( write_time == m_last_write_time )
+        return;
+    m_last_write_time = write_time;
+    info.load( this->path );
 }
 
 std::wstring mt::ConcatSection::produce() const
@@ -65,11 +80,13 @@ std::wstring mt::ConcatSection::produce() const
 void mt::ConcatSection::display()
 {
     static constexpr float VERTICAL_SPACING = 20.0f;
+    static const ImU32 CROSS_LINE_COLOR = ImColor( 255, 0, 0 );
 
     im::SetCursorPosY( im::GetCursorPosY() + TAB_BOTTOM_SPACING );
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
 
     std::optional<int> to_remove;
+    std::vector<BoundingBox> boxes_to_cross;
     for ( int i = 0; i < (int) inputs.size(); i++ )
     {
         auto& input = inputs[i];
@@ -95,7 +112,8 @@ void mt::ConcatSection::display()
             std::swap( inputs[i], inputs[(size_t) i + 1] );
         im::EndDisabled();
 
-        inputs[i].info.display();
+        inputs[i].reload();
+        inputs[i].info.display( &inputs[0].info, boxes_to_cross );
 
         im::PopStyleColor( 1 );
     }
@@ -132,6 +150,10 @@ void mt::ConcatSection::display()
         custom_commands = kl::convert_string( custom_input );
     }
 
+    auto& draw_list = *im::GetWindowDrawList();
+    for ( auto& box : boxes_to_cross )
+        draw_list.AddLine( box.top_left, box.bottom_right, CROSS_LINE_COLOR );
+
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
     const std::wstring full_command = produce();
@@ -144,9 +166,10 @@ void mt::ConcatSection::display()
 
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    im::BeginDisabled( inputs.empty() || output_file.empty() || !boxes_to_cross.empty() );
     if ( im::Button( QNAME( "Concat" ), main_button_size ) )
         concat();
-
+    im::EndDisabled();
     im::PopStyleVar( 1 );
 }
 
