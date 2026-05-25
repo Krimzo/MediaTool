@@ -84,10 +84,13 @@ void mt::OptimizerSection::optimize() const
 {
     static constexpr float BIAS = 0.98f;
     float bitrate_m = STARTING_BITRATE;
-    while ( true )
+    if ( kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
     {
-        if ( !execute( window.ptr(), produce( bitrate_m ), false ) )
-            return;
+        kl::VideoReader reader{ input_file, {}, false };
+        bitrate_m = ( max_size_mb * 8 ) / reader.duration_seconds();
+    }
+    while ( execute( window.ptr(), produce( bitrate_m ), false ) )
+    {
         const float file_size_mb = float( fs::file_size( output_file ) / ( 1024.0 * 1024.0 ) );
         if ( file_size_mb <= max_size_mb )
             break;

@@ -21,7 +21,9 @@ struct OptimizerSection : Displayable
     OptimizerSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )
         , imgui_context( imgui_context )
-    {}
+    {
+        video_codec.emplace();
+    }
 
     std::wstring produce( float bitrate_m ) const;
     void display() override;
