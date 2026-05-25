@@ -1,2 +1,3 @@
 add repeat limit to optimizer (and a "FAILED" log)
-add concat info for each file and allow concat only if all parameters match
+allow concat only if all parameters match
+main buttons should be disabled in certain states

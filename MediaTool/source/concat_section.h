@@ -5,12 +5,27 @@
 
 namespace mt
 {
+struct ConcatFileInfo
+{
+    kl::Int2 video_resolution;
+    int frame_rate = 0;
+    int audio_rate = 0;
+
+    bool load( fs::path const& path );
+    bool match( ConcatFileInfo const& other ) const;
+
+    void display();
+};
+
 struct ConcatInput
 {
     std::wstring path;
     kl::Float4 color;
+    ConcatFileInfo info;
 
     ConcatInput();
+
+    bool set_path( std::wstring path );
 };
 
 struct ConcatSection : Displayable

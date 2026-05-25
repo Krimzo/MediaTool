@@ -3,12 +3,50 @@
 
 const kl::Float4 mt::ConcatSection::COLOR = kl::RGB{ 218, 162, 255 };
 
+bool mt::ConcatFileInfo::load( fs::path const& path )
+{
+    if ( !kl::probe_content_type( path ).value_or( {} ).starts_with( "video" ) )
+        return false;
+    kl::VideoReader reader{ path.generic_wstring(), {}, false };
+    video_resolution = reader.frame_size();
+    frame_rate = reader.fps();
+    audio_rate = reader.audio_rate();
+    return true;
+}
+
+bool mt::ConcatFileInfo::match( ConcatFileInfo const& other ) const
+{
+    return this->video_resolution == other.video_resolution
+        && this->frame_rate == other.frame_rate
+        && this->audio_rate == other.audio_rate;
+}
+
+void mt::ConcatFileInfo::display()
+{
+    im::PushItemFlag( ImGuiItemFlags_Disabled, true );
+    im::SetNextItemWidth( 200.0f );
+    im::DragInt2( QNAME( "Resolution" ), &video_resolution.x );
+    im::SameLine();
+    im::SetNextItemWidth( 100.0f );
+    im::DragInt( QNAME( "Framerate" ), &frame_rate );
+    im::SameLine();
+    im::SetNextItemWidth( 100.0f );
+    im::DragInt( QNAME( "Audio Rate" ), &audio_rate );
+    im::PopItemFlag();
+}
+
 mt::ConcatInput::ConcatInput()
 {
     kl::RGB color;
     while ( kl::YUV{ color }.y < .5f )
         color = kl::random::gen_rgb();
     this->color = color;
+}
+
+bool mt::ConcatInput::set_path( std::wstring path )
+{
+    this->path = path;
+    return info.load( this->path );
 }
 
 std::wstring mt::ConcatSection::produce() const
@@ -41,7 +79,7 @@ void mt::ConcatSection::display()
         if ( im::Button( QNAME( "Input File ", i + 1, ": ", kl::convert_string( input.path ), "##Input", i ) ) )
         {
             if ( auto opt_path = kl::wchoose_file( false ) )
-                input.path = fs::absolute( *opt_path ).wstring();
+                input.set_path( fs::absolute( *opt_path ).wstring() );
         }
         im::SameLine();
         if ( im::Button( QNAME( "Remove##Input", i ) ) )
@@ -57,12 +95,14 @@ void mt::ConcatSection::display()
             std::swap( inputs[i], inputs[(size_t) i + 1] );
         im::EndDisabled();
 
+        inputs[i].info.display();
+
         im::PopStyleColor( 1 );
     }
     if ( im::Button( kl::format( "Input File ", inputs.size() + 1, ": " ).c_str() ) )
     {
         if ( auto opt_path = kl::wchoose_file( false ) )
-            inputs.emplace_back().path = fs::absolute( *opt_path ).wstring();
+            inputs.emplace_back().set_path( fs::absolute( *opt_path ).wstring() );
     }
     if ( to_remove )
         inputs.erase( inputs.begin() + *to_remove );
