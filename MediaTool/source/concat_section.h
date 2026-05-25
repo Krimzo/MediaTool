@@ -24,6 +24,7 @@ struct ConcatSection : Displayable
 
     std::vector<ConcatInput> inputs;
     std::wstring output_file;
+    std::wstring custom_commands;
 
     ConcatSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )

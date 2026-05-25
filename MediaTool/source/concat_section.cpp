@@ -13,7 +13,15 @@ mt::ConcatInput::ConcatInput()
 
 std::wstring mt::ConcatSection::produce() const
 {
-    return kl::wformat( "ffmpeg -hide_banner -y -f concat -i \"", vids_list_file, "\" -c copy \"", output_file, "\"" );
+    std::wstringstream stream;
+    stream << "ffmpeg -hide_banner -y";
+    stream << " -f concat -safe 0 -i \"" << vids_list_file << "\"";
+    if ( !custom_commands.empty() )
+        stream << " " << custom_commands;
+    else
+        stream << " -c copy";
+    stream << " \"" << output_file << "\"";
+    return stream.str();
 }
 
 void mt::ConcatSection::display()
@@ -58,12 +66,21 @@ void mt::ConcatSection::display()
     if ( to_remove )
         inputs.erase( inputs.begin() + *to_remove );
 
-    im::SetCursorPosY( im::GetCursorPosY() + 25.0f );
+    im::SetCursorPosY( im::GetCursorPosY() + 20.0f );
 
     if ( im::Button( QNAME( "Output File: ", kl::convert_string( output_file ), "##Output" ) ) )
     {
         if ( auto opt_path = kl::wchoose_file( true ) )
             output_file = fs::absolute( *opt_path ).wstring();
+    }
+
+    im::SetCursorPosY( im::GetCursorPosY() + 20.0f );
+
+    std::string custom_input = kl::convert_string( custom_commands );
+    if ( im::InputTextMultiline( QNAME( "##Custom" ), &custom_input, { -1.0f, 0.0f } ) )
+    {
+        mt::clean_string( custom_input );
+        custom_commands = kl::convert_string( custom_input );
     }
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
