@@ -1,3 +1,2 @@
 add repeat limit to optimizer (and a "FAILED" log)
-main buttons should be disabled in certain states
 add audio rate in ffmpeg

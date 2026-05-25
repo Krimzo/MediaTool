@@ -57,11 +57,13 @@ void mt::OptimizerSection::display()
     im::SameLine();
     im::SetNextItemWidth( 100.0f );
     im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
-    im::DragFloat( QNAME( "##SizeLimitsX" ), &size_limits_mb.x, 0.01f, 0.0f, 1e6f );
+    if ( im::DragFloat( QNAME( "##SizeLimitsX" ), &size_limits_mb.x, 0.01f, 0.0f, 1e6f, "%.3f", ImGuiSliderFlags_AlwaysClamp ) )
+        size_limits_mb.y = kl::max( size_limits_mb.y, size_limits_mb.x );
     im::SameLine();
     im::SetNextItemWidth( 100.0f );
     im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
-    im::DragFloat( QNAME( "##SizeLimitsY" ), &size_limits_mb.y, 0.01f, 0.0f, 1e6f );
+    if ( im::DragFloat( QNAME( "##SizeLimitsY" ), &size_limits_mb.y, 0.01f, 0.0f, 1e6f, "%.3f", ImGuiSliderFlags_AlwaysClamp ) )
+        size_limits_mb.x = kl::min( size_limits_mb.x, size_limits_mb.y );
     im::PopStyleVar( 1 );
 
     std::string custom_input = kl::convert_string( custom_commands );
@@ -83,12 +85,13 @@ void mt::OptimizerSection::display()
 
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    im::BeginDisabled( input_file.empty() || output_file.empty() || size_limits_mb.x >= size_limits_mb.y );
     if ( im::Button( QNAME( "Optimize" ), main_button_size ) )
     {
         if ( !input_file.empty() && !output_file.empty() )
             optimize();
     }
-
+    im::EndDisabled();
     im::PopStyleVar( 2 );
 }
 

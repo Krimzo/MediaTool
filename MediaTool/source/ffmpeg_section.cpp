@@ -304,11 +304,12 @@ void mt::FFMPEGSection::display()
 
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    im::BeginDisabled( input_file.empty() || output_file.empty() || ( start_time && end_time && start_time->total_seconds() >= end_time->total_seconds() ) );
     if ( im::Button( QNAME( "Produce" ), main_button_size ) )
     {
         if ( !input_file.empty() && !output_file.empty() )
             execute( window.ptr(), full_command );
     }
-
+    im::EndDisabled();
     im::PopStyleVar( 2 );
 }
