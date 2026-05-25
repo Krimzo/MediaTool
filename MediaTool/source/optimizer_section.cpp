@@ -53,11 +53,15 @@ void mt::OptimizerSection::display()
 
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
     im::SetCursorPosY( im::GetCursorPosY() + imgui_context->Style.FramePadding.y );
-    im::Text( "Max Size [MB]: " );
+    im::Text( "Size Limits [MB]: " );
     im::SameLine();
     im::SetNextItemWidth( 100.0f );
     im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
-    im::DragFloat( QNAME( "##MaxSize" ), &max_size_mb, 0.01f, 0.0f, 1e6f );
+    im::DragFloat( QNAME( "##SizeLimitsX" ), &size_limits_mb.x, 0.01f, 0.0f, 1e6f );
+    im::SameLine();
+    im::SetNextItemWidth( 100.0f );
+    im::SetCursorPosY( im::GetCursorPosY() - imgui_context->Style.FramePadding.y );
+    im::DragFloat( QNAME( "##SizeLimitsY" ), &size_limits_mb.y, 0.01f, 0.0f, 1e6f );
     im::PopStyleVar( 1 );
 
     std::string custom_input = kl::convert_string( custom_commands );
@@ -95,13 +99,21 @@ void mt::OptimizerSection::optimize() const
     if ( kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
     {
         kl::VideoReader reader{ input_file, {}, false };
-        bitrate_m = ( max_size_mb * 8 ) / reader.duration_seconds();
+        bitrate_m = ( size_limits_mb.y * 8 ) / reader.duration_seconds();
     }
     while ( execute( window.ptr(), produce( bitrate_m ), false ) )
     {
         const float file_size_mb = float( fs::file_size( output_file ) / ( 1024.0 * 1024.0 ) );
-        if ( file_size_mb <= max_size_mb )
-            break;
-        bitrate_m *= ( max_size_mb / file_size_mb ) * BIAS;
+        if ( file_size_mb < size_limits_mb.x )
+        {
+            bitrate_m *= ( size_limits_mb.x / file_size_mb ) / BIAS;
+            continue;
+        }
+        if ( file_size_mb > size_limits_mb.y )
+        {
+            bitrate_m *= ( size_limits_mb.y / file_size_mb ) * BIAS;
+            continue;
+        }
+        break;
     }
 }
