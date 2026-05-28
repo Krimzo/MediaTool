@@ -1,6 +1,8 @@
 #include "media_tool.h"
 #include "../resource.h"
 
+static constexpr int TABS_COUNT = 6;
+
 mt::MediaTool::MediaTool()
 {
     kl::console::set_enabled( false );
@@ -63,7 +65,7 @@ bool mt::MediaTool::update()
     {
         im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
         im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{} );
-        const ImVec2 button_size = { im::GetContentRegionAvail().x / 5, 25 };
+        const ImVec2 button_size = { im::GetContentRegionAvail().x / TABS_COUNT, 25 };
         if ( tab_button( current_section.is<SystemSection>(), "System", button_size, SystemSection::COLOR ) )
             current_section = system_section;
         im::SameLine();
@@ -78,6 +80,9 @@ bool mt::MediaTool::update()
         im::SameLine();
         if ( tab_button( current_section.is<ConcatSection>(), "CONCAT", button_size, ConcatSection::COLOR ) )
             current_section = concat_section;
+        im::SameLine();
+        if ( tab_button( current_section.is<ProcessSection>(), "PROCESS", button_size, ProcessSection::COLOR ) )
+            current_section = process_section;
         im::PopStyleVar( 2 );
         im::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{ 8, 8 } );
         if ( im::BeginChild( "Section Child", {}, ImGuiChildFlags_AlwaysUseWindowPadding ) )

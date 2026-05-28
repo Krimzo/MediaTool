@@ -81,10 +81,7 @@ void mt::YTDLPSection::display()
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     im::BeginDisabled( url.empty() || ( output_file && output_file->empty() ) );
     if ( im::Button( QNAME( "Download" ), main_button_size ) )
-    {
-        if ( !url.empty() )
-            execute( window.ptr(), full_command );
-    }
+        execute( window.ptr(), full_command );
     im::EndDisabled();
     im::PopStyleVar( 2 );
 }

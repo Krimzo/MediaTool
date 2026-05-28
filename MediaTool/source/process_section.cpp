@@ -1,0 +1,187 @@
+#include "process_section.h"
+
+const kl::Float4 mt::ProcessSection::COLOR = kl::RGB{ 255, 149, 170 };
+static constexpr float EXTENSION_INPUT_WIDTH = 50.0f;
+
+std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* outout_file ) const
+{
+    const auto opt_content_type = kl::probe_content_type( input_file );
+    if ( !opt_content_type )
+        return {};
+
+    const auto get_output_file = [&]( std::string const& new_extension ) -> std::wstring
+        {
+            if ( retain_folder_structure )
+            {
+                fs::path relative_file = fs::relative( input_file, fs::exists( input_file ) ? input_dir : std::wstring{} );
+                relative_file.replace_extension( new_extension );
+                return output_dir / relative_file;
+            }
+            else
+                return output_dir / fs::path{ input_file.stem().wstring() + kl::convert_string( new_extension ) };
+        };
+
+    if ( opt_content_type->starts_with( "image" ) )
+    {
+        FFMPEGSection ffmpeg{ window, imgui_context };
+        ffmpeg.input_file = input_file;
+        ffmpeg.output_file = get_output_file( image_output_ext );
+        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_image_dimension, ",iw)':min'(", max_image_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
+        ffmpeg.codec.emplace<DefaultCodec>();
+        if ( outout_file )
+            *outout_file = ffmpeg.output_file;
+        return ffmpeg.produce();
+    }
+    if ( opt_content_type->starts_with( "audio" ) )
+    {
+        FFMPEGSection ffmpeg{ window, imgui_context };
+        ffmpeg.input_file = input_file;
+        ffmpeg.output_file = get_output_file( audio_output_ext );
+        ffmpeg.codec.emplace<DefaultCodec>();
+        if ( outout_file )
+            *outout_file = ffmpeg.output_file;
+        return ffmpeg.produce();
+    }
+    if ( opt_content_type->starts_with( "video" ) )
+    {
+        int target_framerate = 0;
+        if ( fs::exists( input_file ) )
+        {
+            kl::VideoReader reader{ input_file.generic_wstring(), {}, false };
+            if ( reader.fps() > float( max_video_framerate ) )
+                target_framerate = max_video_framerate;
+        }
+        FFMPEGSection ffmpeg{ window, imgui_context };
+        ffmpeg.input_file = input_file;
+        ffmpeg.output_file = get_output_file( video_output_ext );
+        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
+        auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
+        if ( target_framerate > 0 )
+            codec.frame_rate = float( target_framerate );
+        codec.video_bitrate_m = video_bitrate_m;
+        codec.video_codec = video_codec;
+        if ( outout_file )
+            *outout_file = ffmpeg.output_file;
+        return ffmpeg.produce();
+    }
+    return {};
+}
+
+void mt::ProcessSection::display()
+{
+    im::SetCursorPosY( im::GetCursorPosY() + TAB_BOTTOM_SPACING );
+
+    im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{ 6, 10 } );
+    im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
+
+    if ( im::Button( QNAME( "Input Directory: ", kl::convert_string( input_dir ), "##Input" ) ) )
+    {
+        if ( auto opt_dir = kl::wchoose_dir() )
+            input_dir = fs::absolute( *opt_dir ).wstring();
+    }
+
+    if ( im::Button( QNAME( "Output Directory: ", kl::convert_string( output_dir ), "##Output" ) ) )
+    {
+        if ( auto opt_dir = kl::wchoose_dir() )
+            output_dir = fs::absolute( *opt_dir ).wstring();
+    }
+
+    im::PopStyleVar( 1 );
+
+    im::Checkbox( QNAME( "Retain Folder Structure" ), &retain_folder_structure );
+
+    im::Text( "Image Output Extension" );
+    im::SameLine();
+    im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
+    im::InputText( QNAME( "##ImageOutputExt" ), &image_output_ext );
+    im::Text( "Audio Output Extension" );
+    im::SameLine();
+    im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
+    im::InputText( QNAME( "##AudioOutputExt" ), &audio_output_ext );
+    im::Text( "Video Output Extension" );
+    im::SameLine();
+    im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
+    im::InputText( QNAME( "##VideoOutputExt" ), &video_output_ext );
+
+    im::Text( "Max Image Dimension" );
+    im::SameLine();
+    im::SetNextItemWidth( 100.0f );
+    im::DragInt( QNAME( "##MaxImageDimension" ), &max_image_dimension, 0.1f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+
+    im::Text( "Max Video Dimension" );
+    im::SameLine();
+    im::SetNextItemWidth( 100.0f );
+    im::DragInt( QNAME( "##MaxVideoDimension" ), &max_video_dimension, 0.1f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+
+    im::Text( "Max Video Framerate" );
+    im::SameLine();
+    im::SetNextItemWidth( 100.0f );
+    im::DragInt( QNAME( "##MaxVideoFramerate" ), &max_video_framerate, 0.1f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+
+    bool has_video_bitrate_m = video_bitrate_m.has_value();
+    if ( im::Checkbox( QNAME( "Video Bitrate [Mb]" ), &has_video_bitrate_m ) )
+    {
+        if ( has_video_bitrate_m )
+            video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
+        else if ( !video_codec || !video_codec->uses_gpu() )
+            video_bitrate_m.reset();
+    }
+    if ( video_bitrate_m )
+    {
+        im::SameLine();
+        im::SetNextItemWidth( 100.0f );
+        im::DragFloat( QNAME( "##VideoBitrate" ), &*video_bitrate_m, 0.01f, 0.0f, 1e6f );
+    }
+
+    bool has_video_codec = video_codec.has_value();
+    if ( im::Checkbox( QNAME( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ), &has_video_codec ) )
+    {
+        if ( has_video_codec )
+            video_codec.emplace();
+        else
+            video_codec.reset();
+    }
+    if ( has_video_codec )
+    {
+        if ( video_codec->uses_gpu() && !video_bitrate_m )
+            video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
+        im::Text( "\t" );
+        im::SameLine();
+        video_codec->edit();
+    }
+
+    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
+
+    const std::wstring full_command =
+        L"Image: " + produce( "./some_image_dir/some_file.png" ) + L"\n\n" +
+        L"Audio: " + produce( "./some_audio_dir/some_file.wav" ) + L"\n\n" +
+        L"Video: " + produce( "./some_video_dir/some_file.mkv" );
+    const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
+    im::SetCursorPos( ImVec2{
+        im::GetWindowWidth() * .5f - text_size.x * .5f,
+        im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y - imgui_context->Style.ItemSpacing.y - text_size.y,
+        } );
+    im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
+
+    im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
+    im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
+    im::BeginDisabled( input_dir.empty() || output_dir.empty() || fs::equivalent( input_dir, output_dir ) );
+    if ( im::Button( QNAME( "Process" ), main_button_size ) )
+        this->process();
+    im::EndDisabled();
+    im::PopStyleVar( 2 );
+}
+
+void mt::ProcessSection::process() const
+{
+    if ( !fs::exists( input_dir ) )
+        return;
+    for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
+    {
+        fs::path output_file;
+        const std::wstring command = produce( entry, &output_file );
+        if ( output_file.has_parent_path() )
+            fs::create_directories( output_file.parent_path() );
+        execute( window.ptr(), command, false );
+    }
+}

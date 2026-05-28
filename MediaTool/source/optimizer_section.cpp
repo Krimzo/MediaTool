@@ -95,10 +95,7 @@ void mt::OptimizerSection::display()
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     im::BeginDisabled( input_file.empty() || output_file.empty() || size_limits_mb.x >= size_limits_mb.y );
     if ( im::Button( QNAME( "Optimize" ), main_button_size ) )
-    {
-        if ( !input_file.empty() && !output_file.empty() )
-            m_last_error = optimize();
-    }
+        m_last_error = optimize();
     im::EndDisabled();
     im::PopStyleVar( 2 );
 
