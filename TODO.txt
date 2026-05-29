@@ -1,2 +1,3 @@
 add description under each tab
 add list of failed items to process
+add ability to disable certain media types in process

@@ -8,13 +8,14 @@ namespace mt
 struct OptimizerSection : Displayable
 {
     static const kl::Float4 COLOR;
-    static constexpr float STARTING_BITRATE = 10.0f;
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
     std::wstring input_file;
     std::wstring output_file;
+    std::optional<Timestamp> start_time;
+    std::optional<Timestamp> end_time;
     std::optional<VideoCodec> video_codec;
     kl::Float2 size_limits_mb = { 9.0f, 10.0f };
     int max_repeat_count = 10;
@@ -33,5 +34,7 @@ struct OptimizerSection : Displayable
 
 private:
     std::string m_last_error;
+
+    float start_bitrate() const;
 };
 }

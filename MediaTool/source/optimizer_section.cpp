@@ -8,6 +8,8 @@ std::wstring mt::OptimizerSection::produce( float bitrate_m ) const
     FFMPEGSection ffmpeg{ window, imgui_context };
     ffmpeg.input_file = input_file;
     ffmpeg.output_file = output_file;
+    ffmpeg.start_time = start_time;
+    ffmpeg.end_time = end_time;
     ffmpeg.custom_commands = custom_commands;
     auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
     codec.video_bitrate_m = bitrate_m;
@@ -35,6 +37,60 @@ void mt::OptimizerSection::display()
     }
 
     im::PopStyleVar( 1 );
+
+    bool has_start_time = start_time.has_value();
+    if ( im::Checkbox( QNAME( "Start Time" ), &has_start_time ) )
+    {
+        if ( has_start_time )
+            start_time.emplace();
+        else
+            start_time.reset();
+    }
+    if ( start_time )
+    {
+        im::SameLine();
+        im::SetNextItemWidth( 100.0f );
+        im::DragInt( QNAME( "##StartTimeMinutes" ), &start_time->minutes, 0.05f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+        im::SameLine();
+        im::SetNextItemWidth( 100.0f );
+        im::DragFloat( QNAME( "##StartTimeSeconds" ), &start_time->seconds, 0.01f, 0.0f, 59.999f, "%.3f", ImGuiSliderFlags_AlwaysClamp );
+        if ( !input_file.empty() && kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
+        {
+            im::SameLine();
+            if ( im::Button( QNAME( "Preview##StartTime" ) ) )
+            {
+                preview_timestamp( input_file, *start_time );
+                im::SetCurrentContext( imgui_context );
+            }
+        }
+    }
+
+    bool has_end_time = end_time.has_value();
+    if ( im::Checkbox( QNAME( "End Time" ), &has_end_time ) )
+    {
+        if ( has_end_time )
+            end_time.emplace();
+        else
+            end_time.reset();
+    }
+    if ( end_time )
+    {
+        im::SameLine();
+        im::SetNextItemWidth( 100.0f );
+        im::DragInt( QNAME( "##EndTimeMinutes" ), &end_time->minutes, 0.05f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+        im::SameLine();
+        im::SetNextItemWidth( 100.0f );
+        im::DragFloat( QNAME( "##EndTimeSeconds" ), &end_time->seconds, 0.01f, 0.0f, 59.999f, "%.3f", ImGuiSliderFlags_AlwaysClamp );
+        if ( !input_file.empty() && kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
+        {
+            im::SameLine();
+            if ( im::Button( QNAME( "Preview##EndTime" ) ) )
+            {
+                preview_timestamp( input_file, *end_time );
+                im::SetCurrentContext( imgui_context );
+            }
+        }
+    }
 
     bool has_video_codec = video_codec.has_value();
     if ( im::Checkbox( QNAME( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ), &has_video_codec ) )
@@ -82,7 +138,7 @@ void mt::OptimizerSection::display()
     const ImVec2 error_box_tl = { im::GetItemRectMin().x, im::GetItemRectMax().y };
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
-    const std::wstring full_command = produce( STARTING_BITRATE );
+    const std::wstring full_command = produce( start_bitrate() );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
     im::SetCursorPos( ImVec2{
         im::GetWindowWidth() * .5f - text_size.x * .5f,
@@ -110,12 +166,7 @@ void mt::OptimizerSection::display()
 std::string mt::OptimizerSection::optimize() const
 {
     static constexpr float BIAS = 0.98f;
-    float bitrate_m = STARTING_BITRATE;
-    if ( kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
-    {
-        kl::VideoReader reader{ input_file, {}, false };
-        bitrate_m = ( size_limits_mb.y * 8 ) / reader.duration_seconds();
-    }
+    float bitrate_m = start_bitrate();
     for ( int i = 0; i < max_repeat_count; i++ )
     {
         if ( !execute( window.ptr(), produce( bitrate_m ), false ) )
@@ -134,4 +185,19 @@ std::string mt::OptimizerSection::optimize() const
         return {};
     }
     return kl::format( "Max repeat count reached: ", max_repeat_count );
+}
+
+float mt::OptimizerSection::start_bitrate() const
+{
+    static constexpr float STARTING_BITRATE = 10.0f;
+    float result = STARTING_BITRATE;
+    if ( kl::probe_content_type( input_file ).value_or( {} ).starts_with( "video" ) )
+    {
+        kl::VideoReader reader{ input_file, {}, false };
+        const float start = start_time ? start_time->total_seconds() : 0.0f;
+        const float end = end_time ? end_time->total_seconds() : reader.duration_seconds();
+        const float duration = kl::max( end - start, 1.0f ); // 1.0f to prevent dividing by 0
+        result = ( size_limits_mb.y * 8 ) / duration;
+    }
+    return result;
 }
