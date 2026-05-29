@@ -1,4 +1,5 @@
 #include "klibrary.h"
+#include "file.h"
 
 
 kl::File::File( std::string_view const& filepath, bool write )
@@ -241,6 +242,39 @@ std::optional<std::wstring> kl::wchoose_file( bool save, std::vector<std::pair<s
             *out_index = (int) dialog_info.nFilterIndex - 1;
     }
     SetCursor( LoadCursor( NULL, IDC_ARROW ) );
+    return result;
+}
+
+std::optional<std::string> kl::choose_dir( std::string_view const& title )
+{
+    if ( auto opt_dir = wchoose_dir() )
+        return convert_string( *opt_dir );
+    else
+        return std::nullopt;
+}
+
+std::optional<std::wstring> kl::wchoose_dir( std::wstring_view const& title )
+{
+    ComRef<IFileOpenDialog> file_open_dialog;
+    if ( FAILED( CoCreateInstance( CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS( &file_open_dialog ) ) ) )
+        return std::nullopt;
+
+    DWORD opts{};
+    file_open_dialog->GetOptions( &opts );
+    file_open_dialog->SetOptions( opts | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM );
+    if ( FAILED( file_open_dialog->Show( GetConsoleWindow() ) ) )
+        return std::nullopt;
+
+    ComRef<IShellItem> shell_item;
+    if ( FAILED( file_open_dialog->GetResult( &shell_item ) ) )
+        return std::nullopt;
+
+    PWSTR result_buffer = nullptr;
+    if ( FAILED( shell_item->GetDisplayName( SIGDN_FILESYSPATH, &result_buffer ) ) )
+        return std::nullopt;
+
+    std::wstring result = result_buffer;
+    CoTaskMemFree( result_buffer );
     return result;
 }
 

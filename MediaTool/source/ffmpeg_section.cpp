@@ -1,7 +1,7 @@
 #include "ffmpeg_section.h"
 #include "preview_tools.h"
 
-const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 227 };
+const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 210 };
 
 void mt::Timestamp::load( float seconds_value )
 {
@@ -272,7 +272,7 @@ void mt::FFMPEGSection::display()
         }
 
         bool has_audio_bitrate_k = codec.audio_bitrate_k.has_value();
-        if ( im::Checkbox( QNAME( "Audio Bitrate [Kb]" ), &has_audio_bitrate_k ) )
+        if ( im::Checkbox( QNAME( "Audio Bitrate [kb]" ), &has_audio_bitrate_k ) )
         {
             if ( has_audio_bitrate_k )
                 codec.audio_bitrate_k = DEFAULT_AUDIO_BITRATE_K;
@@ -323,10 +323,7 @@ void mt::FFMPEGSection::display()
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     im::BeginDisabled( input_file.empty() || output_file.empty() || ( start_time && end_time && start_time->total_seconds() >= end_time->total_seconds() ) );
     if ( im::Button( QNAME( "Produce" ), main_button_size ) )
-    {
-        if ( !input_file.empty() && !output_file.empty() )
-            execute( window.ptr(), full_command );
-    }
+        execute( window.ptr(), full_command );
     im::EndDisabled();
     im::PopStyleVar( 2 );
 }
