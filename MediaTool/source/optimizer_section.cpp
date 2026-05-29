@@ -1,7 +1,7 @@
 #include "optimizer_section.h"
 #include "preview_tools.h"
 
-const kl::Float4 mt::OptimizerSection::COLOR = kl::RGB{ 255, 209, 149 };
+const kl::Float4 mt::OptimizerSection::COLOR = kl::RGB{ 255, 198, 149 };
 
 std::wstring mt::OptimizerSection::produce( float bitrate_m ) const
 {

@@ -2,7 +2,7 @@
 #include "ytdlp_section.h"
 #include "ffmpeg_section.h"
 
-const kl::Float4 mt::SystemSection::COLOR = kl::RGB{ 160, 236, 255 };
+const kl::Float4 mt::SystemSection::COLOR = kl::RGB{ 160, 219, 255 };
 
 void mt::SystemSection::display()
 {

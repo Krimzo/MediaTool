@@ -58,7 +58,6 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
         if ( target_framerate > 0 )
             codec.frame_rate = float( target_framerate );
-        codec.video_bitrate_m = video_bitrate_m;
         codec.video_codec = video_codec;
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
@@ -118,37 +117,15 @@ void mt::ProcessSection::display()
     im::SetNextItemWidth( 100.0f );
     im::DragInt( QNAME( "##MaxVideoFramerate" ), &max_video_framerate, 0.1f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
 
-    bool has_video_bitrate_m = video_bitrate_m.has_value();
-    if ( im::Checkbox( QNAME( "Video Bitrate [Mb]" ), &has_video_bitrate_m ) )
-    {
-        if ( has_video_bitrate_m )
-            video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
-        else if ( !video_codec || !video_codec->uses_gpu() )
-            video_bitrate_m.reset();
-    }
-    if ( video_bitrate_m )
-    {
-        im::SameLine();
-        im::SetNextItemWidth( 100.0f );
-        im::DragFloat( QNAME( "##VideoBitrate" ), &*video_bitrate_m, 0.01f, 0.0f, 1e6f );
-    }
-
-    bool has_video_codec = video_codec.has_value();
-    if ( im::Checkbox( QNAME( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ), &has_video_codec ) )
-    {
-        if ( has_video_codec )
-            video_codec.emplace();
-        else
-            video_codec.reset();
-    }
-    if ( has_video_codec )
-    {
-        if ( video_codec->uses_gpu() && !video_bitrate_m )
-            video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
-        im::Text( "\t" );
-        im::SameLine();
-        video_codec->edit();
-    }
+    im::Text( "Video Codec" );
+    im::SameLine();
+    bool h264 = ( video_codec.codec_type == VideoCodecType::H264 );
+    if ( im::Checkbox( QNAME( "H264" ), &h264 ) )
+        video_codec.codec_type = VideoCodecType::H264;
+    im::SameLine();
+    bool hevc = ( video_codec.codec_type == VideoCodecType::HEVC );
+    if ( im::Checkbox( QNAME( "HEVC" ), &hevc ) )
+        video_codec.codec_type = VideoCodecType::HEVC;
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
