@@ -16,7 +16,7 @@ struct ProcessSection : Displayable
 
     std::wstring input_dir;
     std::wstring output_dir;
-    bool retain_folder_structure = false;
+    bool retain_folder_structure = true;
     std::string image_output_ext = ".jpg";
     std::string audio_output_ext = ".mp3";
     std::string video_output_ext = ".mp4";
