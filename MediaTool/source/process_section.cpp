@@ -68,7 +68,11 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
 
 void mt::ProcessSection::display()
 {
-    im::SetCursorPosY( im::GetCursorPosY() + TAB_BOTTOM_SPACING );
+    const float starting_cursor_pos_y = im::GetCursorPosY();
+    const ImVec2 desc_text_size = im::CalcTextSize( DESCRIPTION.data() );
+    im::SetCursorPos( ImVec2{ im::GetContentRegionAvail().x, TAB_BOTTOM_SPACING } * .5f - desc_text_size * .5f );
+    im::Text( DESCRIPTION.data() );
+    im::SetCursorPosY( starting_cursor_pos_y + TAB_BOTTOM_SPACING );
 
     im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{ 6, 10 } );
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );

@@ -41,6 +41,7 @@ private:
 struct ConcatSection : Displayable
 {
     static const kl::Float4 COLOR;
+    static constexpr std::string_view DESCRIPTION = "Media concatenation.";
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;

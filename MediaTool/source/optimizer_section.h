@@ -8,6 +8,7 @@ namespace mt
 struct OptimizerSection : Displayable
 {
     static const kl::Float4 COLOR;
+    static constexpr std::string_view DESCRIPTION = "Media file size optimization.";
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;

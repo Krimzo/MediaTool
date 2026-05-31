@@ -56,6 +56,7 @@ struct FFMPEGSection : Displayable
     static constexpr float DEFAULT_AUDIO_BITRATE_K = 192.0f;
 
     static const kl::Float4 COLOR;
+    static constexpr std::string_view DESCRIPTION = "Media editing.";
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;

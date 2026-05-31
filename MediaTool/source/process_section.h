@@ -13,6 +13,7 @@ struct ProcessSection : Displayable
     static constexpr float DEFAULT_VIDEO_BITRATE_M = 3.0f;
 
     static const kl::Float4 COLOR;
+    static constexpr std::string_view DESCRIPTION = "Bulk media processing.";
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
