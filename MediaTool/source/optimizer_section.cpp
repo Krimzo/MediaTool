@@ -135,7 +135,7 @@ void mt::OptimizerSection::display()
         custom_commands = kl::convert_string( custom_input );
     }
 
-    const ImVec2 error_box_tl = { im::GetItemRectMin().x, im::GetItemRectMax().y };
+    const ImVec2 error_box_tl = { imgui_context->Style.WindowPadding.x, im::GetItemRectMax().y };
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
     const std::wstring full_command = produce( start_bitrate() );

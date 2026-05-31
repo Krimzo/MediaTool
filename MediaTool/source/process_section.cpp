@@ -159,6 +159,7 @@ void mt::ProcessSection::display()
     if ( im::Checkbox( QNAME( "HEVC" ), &hevc ) )
         video_codec.codec_type = VideoCodecType::HEVC;
 
+    const ImVec2 error_box_tl = { imgui_context->Style.WindowPadding.x, im::GetItemRectMax().y };
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
     const std::wstring full_command =
@@ -171,20 +172,30 @@ void mt::ProcessSection::display()
         im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y - imgui_context->Style.ItemSpacing.y - text_size.y,
         } );
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
+    const ImVec2 error_box_br = { im::GetWindowWidth() - imgui_context->Style.WindowPadding.x, im::GetItemRectMin().y };
 
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     im::BeginDisabled( input_dir.empty() || output_dir.empty() || fs::equivalent( input_dir, output_dir ) || ( !image_output_ext && !audio_output_ext && !video_output_ext ) );
     if ( im::Button( QNAME( "Process" ), main_button_size ) )
-        this->process();
+        m_last_error = this->process();
     im::EndDisabled();
     im::PopStyleVar( 2 );
+
+    if ( !m_last_error.empty() )
+    {
+        const ImVec2 text_size = im::CalcTextSize( m_last_error.c_str() );
+        im::SetCursorPos( error_box_tl + ( error_box_br - error_box_tl ) * .5f - text_size * .5f - ImVec2{ 0.0f, TAB_BOTTOM_SPACING } );
+        im::TextColored( ImColor( 255, 0, 0 ), m_last_error.c_str() );
+    }
 }
 
-void mt::ProcessSection::process() const
+std::string mt::ProcessSection::process() const
 {
     if ( !fs::exists( input_dir ) )
-        return;
+        return "Input directory does not exist.";
+    std::stringstream stream;
+    int counter = 0;
     for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
     {
         if ( entry.is_directory() )
@@ -195,6 +206,8 @@ void mt::ProcessSection::process() const
             continue;
         if ( output_file.has_parent_path() )
             fs::create_directories( output_file.parent_path() );
-        execute( window.ptr(), command, false );
+        if ( !execute( window.ptr(), command, false ) )
+            stream << "Failed: " << ( ++counter ) << ". " << fs::path{ entry }.generic_string() << "\n";
     }
+    return stream.str();
 }

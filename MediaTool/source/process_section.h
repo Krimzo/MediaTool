@@ -38,6 +38,9 @@ struct ProcessSection : Displayable
 
     std::wstring produce( fs::path const& input_file, fs::path* outout_file = nullptr ) const;
     void display() override;
-    void process() const;
+    std::string process() const;
+
+private:
+    std::string m_last_error;
 };
 }
