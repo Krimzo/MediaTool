@@ -9,7 +9,7 @@ bool mt::ConcatFileInfo::load( fs::path const& path )
         return false;
     kl::VideoReader reader{ path.generic_wstring(), {}, false };
     video_resolution = reader.frame_size();
-    frame_rate = reader.fps();
+    frame_rate = (int) std::lround( reader.fps() );
     audio_rate = reader.audio_rate();
     return true;
 }
