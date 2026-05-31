@@ -9,7 +9,7 @@ bool mt::ConcatFileInfo::load( fs::path const& path )
         return false;
     kl::VideoReader reader{ path.generic_wstring(), {}, false };
     video_resolution = reader.frame_size();
-    frame_rate = reader.fps();
+    frame_rate = (int) std::lround( reader.fps() );
     audio_rate = reader.audio_rate();
     return true;
 }
@@ -82,7 +82,12 @@ void mt::ConcatSection::display()
     static constexpr float VERTICAL_SPACING = 20.0f;
     static const ImU32 CROSS_LINE_COLOR = ImColor( 255, 0, 0 );
 
-    im::SetCursorPosY( im::GetCursorPosY() + TAB_BOTTOM_SPACING );
+    const float starting_cursor_pos_y = im::GetCursorPosY();
+    const ImVec2 desc_text_size = im::CalcTextSize( DESCRIPTION.data() );
+    im::SetCursorPos( ImVec2{ im::GetContentRegionAvail().x, TAB_BOTTOM_SPACING } * .5f - desc_text_size * .5f );
+    im::Text( DESCRIPTION.data() );
+    im::SetCursorPosY( starting_cursor_pos_y + TAB_BOTTOM_SPACING );
+
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
 
     std::optional<int> to_remove;

@@ -1,7 +1,7 @@
 #include "ffmpeg_section.h"
 #include "preview_tools.h"
 
-const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 227 };
+const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 210 };
 
 void mt::Timestamp::load( float seconds_value )
 {
@@ -73,7 +73,11 @@ std::wstring mt::FFMPEGSection::produce() const
 
 void mt::FFMPEGSection::display()
 {
-    im::SetCursorPosY( im::GetCursorPosY() + TAB_BOTTOM_SPACING );
+    const float starting_cursor_pos_y = im::GetCursorPosY();
+    const ImVec2 desc_text_size = im::CalcTextSize( DESCRIPTION.data() );
+    im::SetCursorPos( ImVec2{ im::GetContentRegionAvail().x, TAB_BOTTOM_SPACING } * .5f - desc_text_size * .5f );
+    im::Text( DESCRIPTION.data() );
+    im::SetCursorPosY( starting_cursor_pos_y + TAB_BOTTOM_SPACING );
 
     im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{ 6, 10 } );
     im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
@@ -272,7 +276,7 @@ void mt::FFMPEGSection::display()
         }
 
         bool has_audio_bitrate_k = codec.audio_bitrate_k.has_value();
-        if ( im::Checkbox( QNAME( "Audio Bitrate [Kb]" ), &has_audio_bitrate_k ) )
+        if ( im::Checkbox( QNAME( "Audio Bitrate [kb]" ), &has_audio_bitrate_k ) )
         {
             if ( has_audio_bitrate_k )
                 codec.audio_bitrate_k = DEFAULT_AUDIO_BITRATE_K;
@@ -323,10 +327,7 @@ void mt::FFMPEGSection::display()
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     im::BeginDisabled( input_file.empty() || output_file.empty() || ( start_time && end_time && start_time->total_seconds() >= end_time->total_seconds() ) );
     if ( im::Button( QNAME( "Produce" ), main_button_size ) )
-    {
-        if ( !input_file.empty() && !output_file.empty() )
-            execute( window.ptr(), full_command );
-    }
+        execute( window.ptr(), full_command );
     im::EndDisabled();
     im::PopStyleVar( 2 );
 }

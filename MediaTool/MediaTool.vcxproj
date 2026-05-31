@@ -92,6 +92,7 @@
     <ClCompile Include="source\media_tool.cpp" />
     <ClCompile Include="source\optimizer_section.cpp" />
     <ClCompile Include="source\preview_tools.cpp" />
+    <ClCompile Include="source\process_section.cpp" />
     <ClCompile Include="source\system_section.cpp" />
     <ClCompile Include="source\ytdlp_section.cpp" />
   </ItemGroup>
@@ -111,6 +112,7 @@
     <ClInclude Include="source\codec.h" />
     <ClInclude Include="source\media_tool.h" />
     <ClInclude Include="source\optimizer_section.h" />
+    <ClInclude Include="source\process_section.h" />
     <ClInclude Include="source\system_section.h" />
     <ClInclude Include="source\preview_tools.h" />
     <ClInclude Include="source\ytdlp_section.h" />
