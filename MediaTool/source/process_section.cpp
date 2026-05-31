@@ -21,28 +21,28 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
                 return output_dir / fs::path{ input_file.stem().wstring() + kl::convert_string( new_extension ) };
         };
 
-    if ( opt_content_type->starts_with( "image" ) )
+    if ( image_output_ext && opt_content_type->starts_with( "image" ) )
     {
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
-        ffmpeg.output_file = get_output_file( image_output_ext );
+        ffmpeg.output_file = get_output_file( *image_output_ext );
         ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_image_dimension, ",iw)':min'(", max_image_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
         ffmpeg.codec.emplace<DefaultCodec>();
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
         return ffmpeg.produce();
     }
-    if ( opt_content_type->starts_with( "audio" ) )
+    if ( audio_output_ext && opt_content_type->starts_with( "audio" ) )
     {
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
-        ffmpeg.output_file = get_output_file( audio_output_ext );
+        ffmpeg.output_file = get_output_file( *audio_output_ext );
         ffmpeg.codec.emplace<DefaultCodec>();
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
         return ffmpeg.produce();
     }
-    if ( opt_content_type->starts_with( "video" ) )
+    if ( video_output_ext && opt_content_type->starts_with( "video" ) )
     {
         int target_framerate = 0;
         if ( fs::exists( input_file ) )
@@ -53,7 +53,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
         }
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
-        ffmpeg.output_file = get_output_file( video_output_ext );
+        ffmpeg.output_file = get_output_file( *video_output_ext );
         ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
         if ( target_framerate > 0 )
@@ -89,18 +89,50 @@ void mt::ProcessSection::display()
 
     im::Checkbox( QNAME( "Retain Folder Structure" ), &retain_folder_structure );
 
-    im::Text( "Image Output Extension" );
-    im::SameLine();
-    im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
-    im::InputText( QNAME( "##ImageOutputExt" ), &image_output_ext );
-    im::Text( "Audio Output Extension" );
-    im::SameLine();
-    im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
-    im::InputText( QNAME( "##AudioOutputExt" ), &audio_output_ext );
-    im::Text( "Video Output Extension" );
-    im::SameLine();
-    im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
-    im::InputText( QNAME( "##VideoOutputExt" ), &video_output_ext );
+    bool image_output = image_output_ext.has_value();
+    if ( im::Checkbox( QNAME( "Image Output Extension" ), &image_output ) )
+    {
+        if ( image_output )
+            image_output_ext = DEFAULT_IMAGE_OUTPUT_EXTENSION;
+        else
+            image_output_ext.reset();
+    }
+    if ( image_output )
+    {
+        im::SameLine();
+        im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
+        im::InputText( QNAME( "##ImageOutputExt" ), &*image_output_ext );
+    }
+
+    bool audio_output = audio_output_ext.has_value();
+    if ( im::Checkbox( QNAME( "Audio Output Extension" ), &audio_output ) )
+    {
+        if ( audio_output )
+            audio_output_ext = DEFAULT_AUDIO_OUTPUT_EXTENSION;
+        else
+            audio_output_ext.reset();
+    }
+    if ( audio_output )
+    {
+        im::SameLine();
+        im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
+        im::InputText( QNAME( "##AudioOutputExt" ), &*audio_output_ext );
+    }
+
+    bool video_output = video_output_ext.has_value();
+    if ( im::Checkbox( QNAME( "Video Output Extension" ), &video_output ) )
+    {
+        if ( video_output )
+            video_output_ext = DEFAULT_VIDEO_OUTPUT_EXTENSION;
+        else
+            video_output_ext.reset();
+    }
+    if ( video_output )
+    {
+        im::SameLine();
+        im::SetNextItemWidth( EXTENSION_INPUT_WIDTH );
+        im::InputText( QNAME( "##VideoOutputExt" ), &*video_output_ext );
+    }
 
     im::Text( "Max Image Dimension" );
     im::SameLine();
@@ -142,7 +174,7 @@ void mt::ProcessSection::display()
 
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
-    im::BeginDisabled( input_dir.empty() || output_dir.empty() || fs::equivalent( input_dir, output_dir ) );
+    im::BeginDisabled( input_dir.empty() || output_dir.empty() || fs::equivalent( input_dir, output_dir ) || ( !image_output_ext && !audio_output_ext && !video_output_ext ) );
     if ( im::Button( QNAME( "Process" ), main_button_size ) )
         this->process();
     im::EndDisabled();
@@ -155,8 +187,12 @@ void mt::ProcessSection::process() const
         return;
     for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
     {
+        if ( entry.is_directory() )
+            continue;
         fs::path output_file;
         const std::wstring command = produce( entry, &output_file );
+        if ( command.empty() )
+            continue;
         if ( output_file.has_parent_path() )
             fs::create_directories( output_file.parent_path() );
         execute( window.ptr(), command, false );

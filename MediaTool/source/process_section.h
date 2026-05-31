@@ -7,6 +7,9 @@ namespace mt
 {
 struct ProcessSection : Displayable
 {
+    static constexpr std::string_view DEFAULT_IMAGE_OUTPUT_EXTENSION = ".jpg";
+    static constexpr std::string_view DEFAULT_AUDIO_OUTPUT_EXTENSION = ".mp3";
+    static constexpr std::string_view DEFAULT_VIDEO_OUTPUT_EXTENSION = ".mp4";
     static constexpr float DEFAULT_VIDEO_BITRATE_M = 3.0f;
 
     static const kl::Float4 COLOR;
@@ -17,9 +20,9 @@ struct ProcessSection : Displayable
     std::wstring input_dir;
     std::wstring output_dir;
     bool retain_folder_structure = true;
-    std::string image_output_ext = ".jpg";
-    std::string audio_output_ext = ".mp3";
-    std::string video_output_ext = ".mp4";
+    std::optional<std::string> image_output_ext{ DEFAULT_IMAGE_OUTPUT_EXTENSION };
+    std::optional<std::string> audio_output_ext{ DEFAULT_AUDIO_OUTPUT_EXTENSION };
+    std::optional<std::string> video_output_ext{ DEFAULT_VIDEO_OUTPUT_EXTENSION };
     int max_image_dimension = 1920;
     int max_video_dimension = 1920;
     int max_video_framerate = 30;
