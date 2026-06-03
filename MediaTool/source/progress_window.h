@@ -13,6 +13,8 @@ struct ProgressWindow
     void increment();
     void close();
 
+    bool is_open() const;
+
 private:
     const int m_count;
     std::atomic_int m_counter;

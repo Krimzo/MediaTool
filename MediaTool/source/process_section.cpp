@@ -3,6 +3,8 @@
 
 const kl::Float4 mt::ProcessSection::COLOR = kl::RGB{ 255, 149, 170 };
 static constexpr float EXTENSION_INPUT_WIDTH = 50.0f;
+static constexpr int SLEEP_ITERATIONS = 100;
+static constexpr int SLEEP_ITERATION_TIME = 100;
 
 std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* outout_file ) const
 {
@@ -197,13 +199,26 @@ void mt::ProcessSection::display()
 
 std::string mt::ProcessSection::process() const
 {
+    struct Input
+    {
+        std::string input_file;
+        std::wstring command;
+    };
+
     if ( !fs::exists( input_dir ) )
         return "Input directory does not exist.";
-    std::vector<fs::path> inputs;
+    std::vector<Input> inputs;
     for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
     {
-        if ( !entry.is_directory() )
-            inputs.emplace_back( entry );
+        if ( entry.is_directory() )
+            continue;
+        fs::path output_file;
+        const std::wstring command = produce( entry, &output_file );
+        if ( command.empty() )
+            continue;
+        if ( output_file.has_parent_path() )
+            fs::create_directories( output_file.parent_path() );
+        inputs.emplace_back( fs::path{ entry }.generic_string(), command );
     }
     if ( inputs.empty() )
         return "No files to process.";
@@ -215,18 +230,16 @@ std::string mt::ProcessSection::process() const
     std::jthread progress_thread{ [&]() {
         progress_window.run( "Process Progress" );
         } };
-    std::for_each( std::execution::par, inputs.begin(), inputs.end(), [&]( fs::path const& input )
+    for ( int i = 0; i < SLEEP_ITERATIONS && !progress_window.is_open(); i++ )
+        Sleep( SLEEP_ITERATION_TIME );
+    std::for_each( std::execution::par, inputs.begin(), inputs.end(), [&]( Input const& input )
         {
-            fs::path output_file;
-            const std::wstring command = produce( input, &output_file );
-            if ( command.empty() )
+            if ( !progress_window.is_open() )
                 return;
-            if ( output_file.has_parent_path() )
-                fs::create_directories( output_file.parent_path() );
-            if ( ::_wsystem( command.data() ) != 0 )
+            if ( ::_wsystem( input.command.data() ) != 0 )
             {
                 std::lock_guard lock{ mutex };
-                stream << "Failed: " << ( ++counter ) << ". " << input.generic_string() << "\n";
+                stream << "Failed: " << ( ++counter ) << ". " << input.input_file << "\n";
             }
             progress_window.increment();
         } );

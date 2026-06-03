@@ -64,6 +64,7 @@ void mt::ProgressWindow::run( std::string_view const& title )
         gpu.draw_text_batch();
         gpu.swap_buffers( true );
     }
+    progress_hwnd = nullptr;
 }
 
 void mt::ProgressWindow::increment()
@@ -74,4 +75,9 @@ void mt::ProgressWindow::increment()
 void mt::ProgressWindow::close()
 {
     PostMessageA( progress_hwnd, WM_CLOSE, NULL, NULL );
+}
+
+bool mt::ProgressWindow::is_open() const
+{
+    return (bool) progress_hwnd;
 }
