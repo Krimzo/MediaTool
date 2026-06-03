@@ -48,6 +48,9 @@
     <ClCompile Include="source\process_section.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\progress_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\system_section.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\process_section.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\progress_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,10 +52,10 @@ std::wstring mt::CopyCodec::produce() const
     return L" -c copy";
 }
 
-std::wstring mt::FFMPEGSection::produce() const
+std::wstring mt::FFMPEGSection::produce( bool display_info ) const
 {
     std::wstringstream stream;
-    stream << "ffmpeg -hide_banner -y";
+    stream << "ffmpeg" << ( display_info ? " -hide_banner" : " -loglevel 0" ) << " -y";
     stream << " -i \"" << input_file << "\"";
     if ( start_time )
         stream << " -ss " << start_time->total_seconds();
@@ -315,7 +315,7 @@ void mt::FFMPEGSection::display()
 
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
-    const std::wstring full_command = produce();
+    const std::wstring full_command = produce( true );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
     im::SetCursorPos( ImVec2{
         im::GetWindowWidth() * .5f - text_size.x * .5f,

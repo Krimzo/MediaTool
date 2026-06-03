@@ -73,7 +73,7 @@ struct FFMPEGSection : Displayable
         , imgui_context( imgui_context )
     {}
 
-    std::wstring produce() const;
+    std::wstring produce( bool display_info ) const;
     void display() override;
 };
 }

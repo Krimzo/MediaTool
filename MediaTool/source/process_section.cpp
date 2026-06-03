@@ -1,4 +1,5 @@
 #include "process_section.h"
+#include "progress_window.h"
 
 const kl::Float4 mt::ProcessSection::COLOR = kl::RGB{ 255, 149, 170 };
 static constexpr float EXTENSION_INPUT_WIDTH = 50.0f;
@@ -30,7 +31,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
         ffmpeg.codec.emplace<DefaultCodec>();
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
-        return ffmpeg.produce();
+        return ffmpeg.produce( false );
     }
     if ( audio_output_ext && opt_content_type->starts_with( "audio" ) )
     {
@@ -40,7 +41,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
         ffmpeg.codec.emplace<DefaultCodec>();
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
-        return ffmpeg.produce();
+        return ffmpeg.produce( false );
     }
     if ( video_output_ext && opt_content_type->starts_with( "video" ) )
     {
@@ -61,7 +62,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
         codec.video_codec = video_codec;
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
-        return ffmpeg.produce();
+        return ffmpeg.produce( false );
     }
     return {};
 }
@@ -198,20 +199,37 @@ std::string mt::ProcessSection::process() const
 {
     if ( !fs::exists( input_dir ) )
         return "Input directory does not exist.";
-    std::stringstream stream;
-    int counter = 0;
+    std::vector<fs::path> inputs;
     for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
     {
-        if ( entry.is_directory() )
-            continue;
-        fs::path output_file;
-        const std::wstring command = produce( entry, &output_file );
-        if ( command.empty() )
-            continue;
-        if ( output_file.has_parent_path() )
-            fs::create_directories( output_file.parent_path() );
-        if ( !execute( window.ptr(), command, false ) )
-            stream << "Failed: " << ( ++counter ) << ". " << fs::path{ entry }.generic_string() << "\n";
+        if ( !entry.is_directory() )
+            inputs.emplace_back( entry );
     }
+    if ( inputs.empty() )
+        return "No files to process.";
+
+    std::mutex mutex;
+    std::stringstream stream;
+    int counter = 0;
+    ProgressWindow progress_window{ (int) inputs.size() };
+    std::jthread progress_thread{ [&]() {
+        progress_window.run( "Process Progress" );
+        } };
+    std::for_each( std::execution::par, inputs.begin(), inputs.end(), [&]( fs::path const& input )
+        {
+            fs::path output_file;
+            const std::wstring command = produce( input, &output_file );
+            if ( command.empty() )
+                return;
+            if ( output_file.has_parent_path() )
+                fs::create_directories( output_file.parent_path() );
+            if ( ::_wsystem( command.data() ) != 0 )
+            {
+                std::lock_guard lock{ mutex };
+                stream << "Failed: " << ( ++counter ) << ". " << input.generic_string() << "\n";
+            }
+            progress_window.increment();
+        } );
+    progress_window.close();
     return stream.str();
 }

@@ -93,6 +93,7 @@
     <ClCompile Include="source\optimizer_section.cpp" />
     <ClCompile Include="source\preview_tools.cpp" />
     <ClCompile Include="source\process_section.cpp" />
+    <ClCompile Include="source\progress_window.cpp" />
     <ClCompile Include="source\system_section.cpp" />
     <ClCompile Include="source\ytdlp_section.cpp" />
   </ItemGroup>
@@ -113,6 +114,7 @@
     <ClInclude Include="source\media_tool.h" />
     <ClInclude Include="source\optimizer_section.h" />
     <ClInclude Include="source\process_section.h" />
+    <ClInclude Include="source\progress_window.h" />
     <ClInclude Include="source\system_section.h" />
     <ClInclude Include="source\preview_tools.h" />
     <ClInclude Include="source\ytdlp_section.h" />

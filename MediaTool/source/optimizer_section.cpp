@@ -14,7 +14,7 @@ std::wstring mt::OptimizerSection::produce( float bitrate_m ) const
     auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
     codec.video_bitrate_m = bitrate_m;
     codec.video_codec = video_codec;
-    return ffmpeg.produce();
+    return ffmpeg.produce( true );
 }
 
 void mt::OptimizerSection::display()
