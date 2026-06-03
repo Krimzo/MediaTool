@@ -20,6 +20,7 @@ struct ProcessSection : Displayable
 
     std::wstring input_dir;
     std::wstring output_dir;
+    bool recursive_search = true;
     bool retain_folder_structure = true;
     std::optional<std::string> image_output_ext{ DEFAULT_IMAGE_OUTPUT_EXTENSION };
     std::optional<std::string> audio_output_ext{ DEFAULT_AUDIO_OUTPUT_EXTENSION };

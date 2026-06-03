@@ -85,7 +85,9 @@ void mt::ProcessSection::display()
 
     im::PopStyleVar( 1 );
 
-    im::Checkbox( QNAME( "Retain Folder Structure" ), &retain_folder_structure );
+    im::Checkbox( QNAME( "Recursive Search" ), &recursive_search );
+    if ( recursive_search )
+        im::Checkbox( QNAME( "Retain Folder Structure" ), &retain_folder_structure );
 
     bool image_output = image_output_ext.has_value();
     if ( im::Checkbox( QNAME( "Image Output Extension" ), &image_output ) )
@@ -200,18 +202,24 @@ std::string mt::ProcessSection::process() const
     if ( !fs::exists( input_dir ) )
         return "Input directory does not exist.";
     std::vector<Input> inputs;
-    for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
-    {
-        if ( entry.is_directory() )
-            continue;
-        fs::path output_file;
-        const std::wstring command = produce( entry, &output_file );
-        if ( command.empty() )
-            continue;
-        if ( output_file.has_parent_path() )
-            fs::create_directories( output_file.parent_path() );
-        inputs.emplace_back( fs::path{ entry }.generic_string(), command );
-    }
+    const auto search_func = [&]( fs::directory_entry const& entry )
+        {
+            if ( entry.is_directory() )
+                return;
+            fs::path output_file;
+            const std::wstring command = produce( entry, &output_file );
+            if ( command.empty() )
+                return;
+            if ( output_file.has_parent_path() )
+                fs::create_directories( output_file.parent_path() );
+            inputs.emplace_back( fs::path{ entry }.generic_string(), command );
+        };
+    if ( recursive_search )
+        for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
+            search_func( entry );
+    else
+        for ( auto& entry : fs::directory_iterator( input_dir ) )
+            search_func( entry );
     if ( inputs.empty() )
         return "No files to process.";
 

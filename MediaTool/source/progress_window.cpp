@@ -1,4 +1,5 @@
 #include "progress_window.h"
+#include "../resource.h"
 
 static constexpr auto SHADERS_SOURCE = R"(
 float X_OFFSET;
@@ -31,6 +32,12 @@ void mt::ProgressWindow::run( std::string_view const& title )
             gpu.set_viewport_size( size );
         } );
     window.resize( { 250, 100 } );
+
+    if ( HICON icon = LoadIcon( GetModuleHandleA( nullptr ), MAKEINTRESOURCE( IDI_ICON1 ) ) )
+    {
+        SendMessage( window.ptr(), WM_SETICON, ICON_BIG, (LPARAM) icon );
+        SendMessage( window.ptr(), WM_SETICON, ICON_SMALL, (LPARAM) icon );
+    }
 
     auto& progress_text = gpu.text_batch.emplace_back();
     progress_text.format = gpu.create_text_format( L"roboto", DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, 25.0f );

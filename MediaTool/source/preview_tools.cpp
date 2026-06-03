@@ -48,6 +48,7 @@ void mt::preview_timestamp( fs::path const& path, Timestamp& timestamp )
         } );
     window.resize( gpu.texture_size( preview_texture ) );
     window.set_position( kl::SCREEN_SIZE / 2 - window.size() / 2 );
+    window.maximize();
 
     if ( HICON icon = LoadIcon( GetModuleHandleA( nullptr ), MAKEINTRESOURCE( IDI_ICON1 ) ) )
     {
@@ -154,6 +155,13 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
     const kl::Int2 texture_size = gpu.texture_size( preview_texture );
     window.resize( texture_size );
     window.set_position( kl::SCREEN_SIZE / 2 - window.size() / 2 );
+    window.maximize();
+
+    if ( HICON icon = LoadIcon( GetModuleHandleA( nullptr ), MAKEINTRESOURCE( IDI_ICON1 ) ) )
+    {
+        SendMessage( window.ptr(), WM_SETICON, ICON_BIG, (LPARAM) icon );
+        SendMessage( window.ptr(), WM_SETICON, ICON_SMALL, (LPARAM) icon );
+    }
 
     while ( window.process() )
     {
