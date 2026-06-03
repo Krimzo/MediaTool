@@ -47,20 +47,11 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
     }
     if ( video_output_ext && opt_content_type->starts_with( "video" ) )
     {
-        int target_framerate = 0;
-        if ( fs::exists( input_file ) )
-        {
-            kl::VideoReader reader{ input_file.generic_wstring(), {}, false };
-            if ( reader.fps() > float( max_video_framerate ) )
-                target_framerate = max_video_framerate;
-        }
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *video_output_ext );
-        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
+        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\"" );
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
-        if ( target_framerate > 0 )
-            codec.frame_rate = float( target_framerate );
         codec.video_codec = video_codec;
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
@@ -183,7 +174,8 @@ void mt::ProcessSection::display()
 
     im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
-    im::BeginDisabled( input_dir.empty() || output_dir.empty() || fs::equivalent( input_dir, output_dir ) || ( !image_output_ext && !audio_output_ext && !video_output_ext ) );
+    std::error_code _ignored_error{};
+    im::BeginDisabled( input_dir.empty() || output_dir.empty() || fs::equivalent( input_dir, output_dir, _ignored_error ) || ( !image_output_ext && !audio_output_ext && !video_output_ext ) );
     if ( im::Button( QNAME( "Process" ), main_button_size ) )
         m_last_error = this->process();
     im::EndDisabled();
