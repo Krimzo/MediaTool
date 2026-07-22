@@ -5,6 +5,14 @@
 
 namespace mt
 {
+enum struct MediaType
+{
+    IGNORED = 0,
+    IMAGE,
+    AUDIO,
+    VIDEO,
+};
+
 struct ProcessSection : Displayable
 {
     static constexpr std::string_view DEFAULT_IMAGE_OUTPUT_EXTENSION = ".jpg";
@@ -38,7 +46,7 @@ struct ProcessSection : Displayable
         video_codec.codec_type = VideoCodecType::HEVC;
     }
 
-    std::wstring produce( fs::path const& input_file, fs::path* outout_file = nullptr ) const;
+    std::wstring produce( fs::path const& input_file, MediaType& out_media_type, fs::path* outout_file = nullptr ) const;
     void display() override;
     std::string process() const;
 

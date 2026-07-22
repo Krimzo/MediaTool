@@ -6,7 +6,7 @@ static constexpr float EXTENSION_INPUT_WIDTH = 50.0f;
 static constexpr int SLEEP_ITERATIONS = 100;
 static constexpr int SLEEP_ITERATION_TIME = 100;
 
-std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* outout_file ) const
+std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType& out_media_type, fs::path* outout_file ) const
 {
     const auto opt_content_type = kl::probe_content_type( input_file );
     if ( !opt_content_type )
@@ -31,21 +31,23 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
         ffmpeg.output_file = get_output_file( *image_output_ext );
         ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_image_dimension, ",iw)':min'(", max_image_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
         ffmpeg.codec.emplace<DefaultCodec>();
+        out_media_type = MediaType::IMAGE;
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
         return ffmpeg.produce( false );
     }
-    if ( audio_output_ext && opt_content_type->starts_with( "audio" ) )
+    else if ( audio_output_ext && opt_content_type->starts_with( "audio" ) )
     {
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *audio_output_ext );
         ffmpeg.codec.emplace<DefaultCodec>();
+        out_media_type = MediaType::AUDIO;
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
         return ffmpeg.produce( false );
     }
-    if ( video_output_ext && opt_content_type->starts_with( "video" ) )
+    else if ( video_output_ext && opt_content_type->starts_with( "video" ) )
     {
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
@@ -53,11 +55,16 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, fs::path* 
         ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\"" );
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
         codec.video_codec = video_codec;
+        out_media_type = MediaType::VIDEO;
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
         return ffmpeg.produce( false );
     }
-    return {};
+    else
+    {
+        out_media_type = MediaType::IGNORED;
+        return {};
+    }
 }
 
 void mt::ProcessSection::display()
@@ -162,10 +169,11 @@ void mt::ProcessSection::display()
     const ImVec2 error_box_tl = { imgui_context->Style.WindowPadding.x, im::GetItemRectMax().y };
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
 
+    MediaType _med_typ{};
     const std::wstring full_command =
-        L"Image: " + produce( "./some_image_dir/some_file.png" ) + L"\n\n" +
-        L"Audio: " + produce( "./some_audio_dir/some_file.wav" ) + L"\n\n" +
-        L"Video: " + produce( "./some_video_dir/some_file.mkv" );
+        L"Image: " + produce( "./some_image_dir/some_file.png", _med_typ ) + L"\n\n" +
+        L"Audio: " + produce( "./some_audio_dir/some_file.wav", _med_typ ) + L"\n\n" +
+        L"Video: " + produce( "./some_video_dir/some_file.mkv", _med_typ );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
     im::SetCursorPos( ImVec2{
         im::GetWindowWidth() * .5f - text_size.x * .5f,
@@ -196,6 +204,7 @@ std::string mt::ProcessSection::process() const
     struct Input
     {
         std::string input_file;
+        MediaType media_type{};
         std::wstring command;
     };
 
@@ -206,13 +215,14 @@ std::string mt::ProcessSection::process() const
         {
             if ( entry.is_directory() )
                 return;
+            MediaType media_type{};
             fs::path output_file;
-            const std::wstring command = produce( entry, &output_file );
+            const std::wstring command = produce( entry, media_type, &output_file );
             if ( command.empty() )
                 return;
             if ( output_file.has_parent_path() )
                 fs::create_directories( output_file.parent_path() );
-            inputs.emplace_back( fs::path{ entry }.generic_string(), command );
+            inputs.emplace_back( fs::path{ entry }.generic_string(), media_type, command );
         };
     if ( recursive_search )
         for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
@@ -223,24 +233,30 @@ std::string mt::ProcessSection::process() const
     if ( inputs.empty() )
         return "No files to process.";
 
-    std::mutex mutex;
-    std::stringstream stream;
-    int counter = 0;
     ProgressWindow progress_window{ (int) inputs.size() };
     std::jthread progress_thread{ [&]() {
         progress_window.run( "Process Progress" );
         } };
     for ( int i = 0; i < SLEEP_ITERATIONS && !progress_window.is_open(); i++ )
         Sleep( SLEEP_ITERATION_TIME );
+
+    int counter = 0;
+    std::stringstream stream;
+    std::mutex stream_out_mutex;
+    std::mutex video_proc_mutex;
     std::for_each( std::execution::par, inputs.begin(), inputs.end(), [&]( Input const& input )
         {
             if ( !progress_window.is_open() )
                 return;
+            if ( input.media_type == MediaType::VIDEO )
+                video_proc_mutex.lock();
             if ( ::_wsystem( input.command.data() ) != 0 )
             {
-                std::lock_guard lock{ mutex };
+                std::lock_guard stream_out_lock{ stream_out_mutex };
                 stream << "Failed: " << ( ++counter ) << ". " << input.input_file << "\n";
             }
+            if ( input.media_type == MediaType::VIDEO )
+                video_proc_mutex.unlock();
             progress_window.increment();
         } );
     progress_window.close();
