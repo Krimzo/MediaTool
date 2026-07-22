@@ -54,6 +54,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
         ffmpeg.output_file = get_output_file( *video_output_ext );
         ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\"" );
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
+        codec.video_bitrate_m = video_bitrate_m;
         codec.video_codec = video_codec;
         out_media_type = MediaType::VIDEO;
         if ( outout_file )
@@ -156,15 +157,27 @@ void mt::ProcessSection::display()
     im::SetNextItemWidth( 100.0f );
     im::DragInt( QNAME( "##MaxVideoFramerate" ), &max_video_framerate, 0.1f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
 
-    im::Text( "Video Codec" );
+    bool has_video_bitrate_m = video_bitrate_m.has_value();
+    if ( im::Checkbox( QNAME( "Video Bitrate [Mb]" ), &has_video_bitrate_m ) )
+    {
+        if ( has_video_bitrate_m )
+            video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
+        else if ( !video_codec.uses_gpu() )
+            video_bitrate_m.reset();
+    }
+    if ( video_bitrate_m )
+    {
+        im::SameLine();
+        im::SetNextItemWidth( 100.0f );
+        im::DragFloat( QNAME( "##VideoBitrate" ), &*video_bitrate_m, 0.01f, 0.0f, 1e6f );
+    }
+
+    im::Text( kl::format( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ).c_str() );
+    if ( video_codec.uses_gpu() && !video_bitrate_m )
+        video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
+    im::Text( "\t" );
     im::SameLine();
-    bool h264 = ( video_codec.codec_type == VideoCodecType::H264 );
-    if ( im::Checkbox( QNAME( "H264" ), &h264 ) )
-        video_codec.codec_type = VideoCodecType::H264;
-    im::SameLine();
-    bool hevc = ( video_codec.codec_type == VideoCodecType::HEVC );
-    if ( im::Checkbox( QNAME( "HEVC" ), &hevc ) )
-        video_codec.codec_type = VideoCodecType::HEVC;
+    video_codec.edit();
 
     const ImVec2 error_box_tl = { imgui_context->Style.WindowPadding.x, im::GetItemRectMax().y };
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
@@ -203,7 +216,7 @@ std::string mt::ProcessSection::process() const
 {
     struct Input
     {
-        std::string input_file;
+        std::wstring input_file;
         MediaType media_type{};
         std::wstring command;
     };
@@ -222,7 +235,7 @@ std::string mt::ProcessSection::process() const
                 return;
             if ( output_file.has_parent_path() )
                 fs::create_directories( output_file.parent_path() );
-            inputs.emplace_back( fs::path{ entry }.generic_string(), media_type, command );
+            inputs.emplace_back( fs::path{ entry }.generic_wstring(), media_type, command );
         };
     if ( recursive_search )
         for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
@@ -253,7 +266,7 @@ std::string mt::ProcessSection::process() const
             if ( ::_wsystem( input.command.data() ) != 0 )
             {
                 std::lock_guard stream_out_lock{ stream_out_mutex };
-                stream << "Failed: " << ( ++counter ) << ". " << input.input_file << "\n";
+                stream << "Failed: " << ( ++counter ) << ". " << kl::convert_string( input.input_file ) << "\n";
             }
             if ( input.media_type == MediaType::VIDEO )
                 video_proc_mutex.unlock();

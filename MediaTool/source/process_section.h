@@ -36,13 +36,13 @@ struct ProcessSection : Displayable
     int max_image_dimension = 1920;
     int max_video_dimension = 1920;
     int max_video_framerate = 30;
-    VideoCodec video_codec{};
+    std::optional<float> video_bitrate_m;
+    VideoCodec video_codec;
 
     ProcessSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )
         , imgui_context( imgui_context )
     {
-        video_codec.gpu_vendor = GPUVendor::NONE;
         video_codec.codec_type = VideoCodecType::HEVC;
     }
 
