@@ -3,13 +3,7 @@
 
 std::wstring mt::VideoCodec::produce( bool bitrate_provided ) const
 {
-    std::wstring gpu_vendor_str;
-    switch ( gpu_vendor )
-    {
-    case GPUVendor::NVIDIA: gpu_vendor_str = L"nvenc"; break;
-    case GPUVendor::AMD: gpu_vendor_str = L"amf"; break;
-    case GPUVendor::INTEL: gpu_vendor_str = L"qsv"; break;
-    }
+    const std::wstring gpu_vendor_str = get_gpu_vendor_str( gpu_vendor );
     std::wstring type_str;
     switch ( codec_type )
     {

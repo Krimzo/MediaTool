@@ -6,6 +6,7 @@ const kl::Float4 mt::OptimizerSection::COLOR = kl::RGB{ 255, 198, 149 };
 std::wstring mt::OptimizerSection::produce( float bitrate_m ) const
 {
     FFMPEGSection ffmpeg{ window, imgui_context };
+    ffmpeg.use_hardware_decoding = use_hardware_decoding;
     ffmpeg.input_file = input_file;
     ffmpeg.output_file = output_file;
     ffmpeg.start_time = start_time;
@@ -95,6 +96,8 @@ void mt::OptimizerSection::display()
             }
         }
     }
+
+    im::Checkbox( QNAME( "Hardware Decoding" ), &use_hardware_decoding );
 
     bool has_video_codec = video_codec.has_value();
     if ( im::Checkbox( QNAME( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ), &has_video_codec ) )

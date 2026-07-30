@@ -56,6 +56,11 @@ std::wstring mt::FFMPEGSection::produce( bool display_info ) const
 {
     std::wstringstream stream;
     stream << "ffmpeg" << ( display_info ? " -hide_banner" : " -loglevel 0" ) << " -y";
+    if ( use_hardware_decoding )
+    {
+        static const std::wstring GPU_VENDOR_STR = get_gpu_vendor_str( CURRENT_GPU_VENDOR );
+        stream << " -hwaccel " << GPU_VENDOR_STR << " -hwaccel_output_format " << GPU_VENDOR_STR;
+    }
     stream << " -i \"" << input_file << "\"";
     if ( start_time )
         stream << " -ss " << start_time->total_seconds();
@@ -149,6 +154,8 @@ void mt::FFMPEGSection::display()
             }
         }
     }
+
+    im::Checkbox( QNAME( "Hardware Decoding" ), &use_hardware_decoding );
 
     bool has_default_codec = std::holds_alternative<DefaultCodec>( codec );
     if ( im::Checkbox( QNAME( "Default Codec" ), &has_default_codec ) )

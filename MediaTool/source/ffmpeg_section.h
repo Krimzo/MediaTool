@@ -61,6 +61,7 @@ struct FFMPEGSection : Displayable
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
+    bool use_hardware_decoding = false;
     std::wstring input_file;
     std::wstring output_file;
     std::optional<Timestamp> start_time;

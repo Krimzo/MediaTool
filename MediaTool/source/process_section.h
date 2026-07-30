@@ -26,6 +26,7 @@ struct ProcessSection : Displayable
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
+    bool use_hardware_decoding = false;
     std::wstring input_dir;
     std::wstring output_dir;
     bool recursive_search = true;

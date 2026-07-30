@@ -76,4 +76,15 @@ struct AudioCodec
     std::wstring produce() const;
     void edit();
 };
+
+constexpr std::wstring get_gpu_vendor_str( GPUVendor gpu_vendor )
+{
+    switch ( gpu_vendor )
+    {
+    default: return {};
+    case GPUVendor::NVIDIA: return L"nvenc";
+    case GPUVendor::AMD: return L"amf";
+    case GPUVendor::INTEL: return L"qsv";
+    }
+}
 }

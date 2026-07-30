@@ -50,6 +50,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
     else if ( video_output_ext && opt_content_type->starts_with( "video" ) )
     {
         FFMPEGSection ffmpeg{ window, imgui_context };
+        ffmpeg.use_hardware_decoding = use_hardware_decoding;
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *video_output_ext );
         ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\"" );
@@ -156,6 +157,8 @@ void mt::ProcessSection::display()
     im::SameLine();
     im::SetNextItemWidth( 100.0f );
     im::DragInt( QNAME( "##MaxVideoFramerate" ), &max_video_framerate, 0.1f, 0, 1'000'000, "%d", ImGuiSliderFlags_AlwaysClamp );
+
+    im::Checkbox( QNAME( "Hardware Decoding" ), &use_hardware_decoding );
 
     bool has_video_bitrate_m = video_bitrate_m.has_value();
     if ( im::Checkbox( QNAME( "Video Bitrate [Mb]" ), &has_video_bitrate_m ) )
