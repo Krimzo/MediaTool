@@ -1,7 +1,7 @@
 #include "codec.h"
 
 
-std::wstring mt::VideoCodec::produce() const
+std::wstring mt::VideoCodec::produce( bool bitrate_provided ) const
 {
     std::wstring gpu_vendor_str;
     switch ( gpu_vendor )
@@ -17,10 +17,19 @@ std::wstring mt::VideoCodec::produce() const
     case VideoCodecType::HEVC: type_str = L"hevc"; break;
     case VideoCodecType::AV1: type_str = L"av1"; break;
     }
+    std::wstring rate_control;
+    switch ( gpu_vendor )
+    {
+    case GPUVendor::NVIDIA: rate_control = L"-rc constqp"; break;
+    case GPUVendor::AMD: rate_control = L"-rc cqp"; break;
+    case GPUVendor::INTEL: rate_control = L""; break;
+    }
     if ( gpu_vendor_str.empty() )
         return type_str;
-    else
+    else if ( bitrate_provided || rate_control.empty() )
         return kl::wformat( type_str, "_", gpu_vendor_str );
+    else
+        return kl::wformat( type_str, "_", gpu_vendor_str, " ", rate_control );
 }
 
 void mt::VideoCodec::edit()

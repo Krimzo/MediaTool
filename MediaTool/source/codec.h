@@ -63,7 +63,7 @@ struct VideoCodec
     GPUVendor gpu_vendor = CURRENT_GPU_VENDOR;
     VideoCodecType codec_type = VideoCodecType::H264;
 
-    std::wstring produce() const;
+    std::wstring produce( bool bitrate_provided ) const;
     void edit();
 
     bool uses_gpu() const;

@@ -162,7 +162,7 @@ void mt::ProcessSection::display()
     {
         if ( has_video_bitrate_m )
             video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
-        else if ( !video_codec.uses_gpu() )
+        else
             video_bitrate_m.reset();
     }
     if ( video_bitrate_m )
@@ -173,8 +173,6 @@ void mt::ProcessSection::display()
     }
 
     im::Text( kl::format( "Video Codec (", kl::convert_string( GPU_ADAPTER_NAME ), ")" ).c_str() );
-    if ( video_codec.uses_gpu() && !video_bitrate_m )
-        video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
     im::Text( "\t" );
     im::SameLine();
     video_codec.edit();

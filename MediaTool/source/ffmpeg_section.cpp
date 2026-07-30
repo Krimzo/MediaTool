@@ -37,7 +37,7 @@ std::wstring mt::DefaultCodec::produce() const
     if ( video_bitrate_m )
         stream << " -vb " << video_bitrate_m.value() << "M";
     if ( video_codec )
-        stream << " -c:v " << video_codec.value().produce();
+        stream << " -c:v " << video_codec.value().produce( video_bitrate_m.has_value() );
     if ( audio_rate )
         stream << " -ar " << audio_rate.value();
     if ( audio_bitrate_k )
@@ -233,7 +233,7 @@ void mt::FFMPEGSection::display()
         {
             if ( has_video_bitrate_m )
                 codec.video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
-            else if ( !codec.video_codec || !codec.video_codec->uses_gpu() )
+            else
                 codec.video_bitrate_m.reset();
         }
         if ( codec.video_bitrate_m )
@@ -253,8 +253,6 @@ void mt::FFMPEGSection::display()
         }
         if ( has_video_codec )
         {
-            if ( codec.video_codec->uses_gpu() && !codec.video_bitrate_m )
-                codec.video_bitrate_m = DEFAULT_VIDEO_BITRATE_M;
             im::Text( "\t" );
             im::SameLine();
             codec.video_codec->edit();
