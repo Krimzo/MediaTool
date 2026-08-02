@@ -65,7 +65,7 @@ void mt::YTDLPSection::display()
     im::Checkbox( QNAME( "Audio Only" ), &audio_only );
 
     std::string custom_input = kl::convert_string( custom_commands );
-    if ( im::InputTextMultiline( QNAME( "##Custom" ), &custom_input, { -1.0f, 0.0f } ) )
+    if ( im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_input, { -1.0f, 0.0f } ) )
     {
         mt::clean_string( custom_input );
         custom_commands = kl::convert_string( custom_input );

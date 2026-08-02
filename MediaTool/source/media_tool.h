@@ -12,6 +12,8 @@ namespace mt
 {
 struct MediaTool
 {
+    static constexpr kl::Int2 START_WINDOW_SIZE = { 800, 1000 };
+
     kl::Window window{ "Media Tool" };
     kl::GPU gpu{ window.ptr() };
     ImGuiContext* imgui_context = nullptr;

@@ -24,7 +24,7 @@ mt::MediaTool::MediaTool()
             gpu.resize_internal( size );
             gpu.set_viewport_size( size );
         } );
-    window.resize( { 700, 740 } );
+    window.resize( START_WINDOW_SIZE );
 
     const kl::Int2 screen_work_size = kl::SCREEN_SIZE - kl::Int2{ 0, get_taskbar_height() };
     const kl::Int2 total_app_size = window.size();

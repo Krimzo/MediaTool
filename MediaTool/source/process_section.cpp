@@ -29,7 +29,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *image_output_ext );
-        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_image_dimension, ",iw)':min'(", max_image_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
+        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_image_dimension, ",iw)':min'(", max_image_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\" ", image_custom_commands );
         ffmpeg.codec.emplace<DefaultCodec>();
         out_media_type = MediaType::IMAGE;
         if ( outout_file )
@@ -41,6 +41,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *audio_output_ext );
+        ffmpeg.custom_commands = audio_custom_commands;
         ffmpeg.codec.emplace<DefaultCodec>();
         out_media_type = MediaType::AUDIO;
         if ( outout_file )
@@ -53,7 +54,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
         ffmpeg.use_hardware_decoding = use_hardware_decoding;
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *video_output_ext );
-        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\"" );
+        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\" ", video_custom_commands );
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
         codec.video_bitrate_m = video_bitrate_m;
         codec.video_codec = video_codec;
@@ -179,6 +180,27 @@ void mt::ProcessSection::display()
     im::Text( "\t" );
     im::SameLine();
     video_codec.edit();
+
+    std::string image_custom_input = kl::convert_string( image_custom_commands );
+    if ( im::InputTextMultilineHint( QNAME( "##CustomImage" ), "Image Custom Commands", &image_custom_input, { -1.0f, 0.0f } ) )
+    {
+        mt::clean_string( image_custom_input );
+        image_custom_commands = kl::convert_string( image_custom_input );
+    }
+
+    std::string audio_custom_input = kl::convert_string( audio_custom_commands );
+    if ( im::InputTextMultilineHint( QNAME( "##CustomAudio" ), "Audio Custom Commands", &audio_custom_input, { -1.0f, 0.0f } ) )
+    {
+        mt::clean_string( audio_custom_input );
+        audio_custom_commands = kl::convert_string( audio_custom_input );
+    }
+
+    std::string video_custom_input = kl::convert_string( video_custom_commands );
+    if ( im::InputTextMultilineHint( QNAME( "##CustomVideo" ), "Video Custom Commands", &video_custom_input, { -1.0f, 0.0f } ) )
+    {
+        mt::clean_string( video_custom_input );
+        video_custom_commands = kl::convert_string( video_custom_input );
+    }
 
     const ImVec2 error_box_tl = { imgui_context->Style.WindowPadding.x, im::GetItemRectMax().y };
     const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };

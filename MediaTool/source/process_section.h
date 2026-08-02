@@ -30,7 +30,7 @@ struct ProcessSection : Displayable
     std::wstring input_dir;
     std::wstring output_dir;
     bool recursive_search = true;
-    bool retain_folder_structure = true;
+    bool retain_folder_structure = false;
     std::optional<std::string> image_output_ext{ DEFAULT_IMAGE_OUTPUT_EXTENSION };
     std::optional<std::string> audio_output_ext{ DEFAULT_AUDIO_OUTPUT_EXTENSION };
     std::optional<std::string> video_output_ext{ DEFAULT_VIDEO_OUTPUT_EXTENSION };
@@ -39,6 +39,9 @@ struct ProcessSection : Displayable
     int max_video_framerate = 30;
     std::optional<float> video_bitrate_m;
     VideoCodec video_codec;
+    std::wstring image_custom_commands;
+    std::wstring audio_custom_commands;
+    std::wstring video_custom_commands;
 
     ProcessSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )
