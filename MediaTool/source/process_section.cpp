@@ -246,7 +246,8 @@ std::string mt::ProcessSection::process() const
 
     if ( !fs::exists( input_dir ) )
         return "Input directory does not exist.";
-    std::vector<Input> inputs;
+    std::vector<Input> video_inputs;
+    std::vector<Input> image_audio_inputs;
     const auto search_func = [&]( fs::directory_entry const& entry )
         {
             if ( entry.is_directory() )
@@ -258,7 +259,8 @@ std::string mt::ProcessSection::process() const
                 return;
             if ( output_file.has_parent_path() )
                 fs::create_directories( output_file.parent_path() );
-            inputs.emplace_back( fs::path{ entry }.generic_wstring(), media_type, command );
+            ( ( media_type == MediaType::VIDEO ) ? video_inputs : image_audio_inputs )
+                .emplace_back( fs::path{ entry }.generic_wstring(), media_type, command );
         };
     if ( recursive_search )
         for ( auto& entry : fs::recursive_directory_iterator( input_dir ) )
@@ -266,10 +268,15 @@ std::string mt::ProcessSection::process() const
     else
         for ( auto& entry : fs::directory_iterator( input_dir ) )
             search_func( entry );
-    if ( inputs.empty() )
+    if ( video_inputs.empty() && image_audio_inputs.empty() )
         return "No files to process.";
 
-    ProgressWindow progress_window{ (int) inputs.size() };
+    std::sort( video_inputs.begin(), video_inputs.end(), []( Input const& left, Input const& right )
+        {
+            return fs::file_size( left.input_file ) > fs::file_size( right.input_file );
+        } );
+
+    ProgressWindow progress_window{ (int) video_inputs.size() + (int) image_audio_inputs.size() };
     std::jthread progress_thread{ [&]() {
         progress_window.run( "Process Progress" );
         } };
@@ -278,23 +285,25 @@ std::string mt::ProcessSection::process() const
 
     int counter = 0;
     std::stringstream stream;
-    std::mutex stream_out_mutex;
-    std::mutex video_proc_mutex;
-    std::for_each( std::execution::par, inputs.begin(), inputs.end(), [&]( Input const& input )
+    std::mutex stream_mutex;
+    const auto process_func = [&]( Input const& input )
         {
             if ( !progress_window.is_open() )
                 return;
-            if ( input.media_type == MediaType::VIDEO )
-                video_proc_mutex.lock();
             if ( ::_wsystem( input.command.data() ) != 0 )
             {
-                std::lock_guard stream_out_lock{ stream_out_mutex };
+                std::lock_guard stream_lock{ stream_mutex };
                 stream << "Failed: " << ( ++counter ) << ". " << kl::convert_string( input.input_file ) << "\n";
             }
-            if ( input.media_type == MediaType::VIDEO )
-                video_proc_mutex.unlock();
             progress_window.increment();
-        } );
+        };
+
+    progress_window.progress_color = VIDEO_PROGRESS_COLOR;
+    std::for_each( video_inputs.begin(), video_inputs.end(), process_func );
+
+    progress_window.progress_color = IMAGE_AUDIO_PROGRESS_COLOR;
+    std::for_each( std::execution::par, image_audio_inputs.begin(), image_audio_inputs.end(), process_func );
+
     progress_window.close();
     return stream.str();
 }

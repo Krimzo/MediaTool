@@ -7,6 +7,8 @@ namespace mt
 {
 struct ProgressWindow
 {
+    kl::RGB progress_color = { 21, 191, 103 };
+
     ProgressWindow( int count );
 
     void run( std::string_view const& title );

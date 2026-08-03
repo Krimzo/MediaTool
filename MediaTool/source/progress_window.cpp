@@ -62,7 +62,7 @@ void mt::ProgressWindow::run( std::string_view const& title )
 
         CB cb{};
         cb.X_OFFSET = ( -1.0f + float( progress ) / m_count ) * 2.0f;
-        cb.PROGRESS_COLOR = kl::RGB{ 21, 191, 103 };
+        cb.PROGRESS_COLOR = this->progress_color;
         shaders.upload( cb );
         progress_text.data = kl::wformat( progress, "/", m_count );
 
