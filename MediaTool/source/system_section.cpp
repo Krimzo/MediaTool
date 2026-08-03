@@ -87,5 +87,41 @@ void mt::SystemSection::display()
         }
     }
 
-    im::PopStyleVar( 1 );
+    im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING );
+
+    im::PushStyleVar( ImGuiStyleVar_ChildRounding, 5.0f );
+    im::PushStyleVar( ImGuiStyleVar_ChildBorderSize, 2.0f );
+
+    const int unseen_count = Logger::last_log_index() - last_log_index;
+
+    if ( im::BeginChild( "System Log View", {}, ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar ) )
+    {
+        last_log_index = Logger::last_log_index();
+
+        int log_index = 0;
+        for ( auto const& log_info : Logger::logs() )
+        {
+            im::TextColored( { 1.0f, 1.0f, 1.0f, 1.0f }, kl::format( std::setfill( '0' ), std::setw( 3 ), log_index + 1, "." ).c_str() );
+            im::SameLine();
+
+            im::TextColored( log_info.color, kl::format( "[", log_info.date, "]:" ).c_str() );
+            im::SameLine();
+
+            im::TextColored( { 0.95f, 0.95f, 0.90f, 1.0f }, log_info.message.c_str() );
+            ++log_index;
+        }
+
+        if ( im::BeginPopupContextWindow() )
+        {
+            if ( im::MenuItem( "Clear All" ) )
+                Logger::clear();
+            im::EndPopup();
+        }
+
+        if ( unseen_count > 0 )
+            ImGui::SetScrollHereY( 1.0f );
+    }
+    im::EndChild();
+
+    im::PopStyleVar( 3 );
 }

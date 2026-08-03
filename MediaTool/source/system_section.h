@@ -1,6 +1,6 @@
 #pragma once
 
-#include "general.h"
+#include "logger.h"
 
 
 namespace mt
@@ -12,6 +12,8 @@ struct SystemSection : Displayable
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
+
+    int last_log_index = 0;
 
     SystemSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )

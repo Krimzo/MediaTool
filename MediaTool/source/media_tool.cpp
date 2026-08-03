@@ -59,6 +59,9 @@ bool mt::MediaTool::update()
     im::SetNextWindowSize( viewport->WorkSize );
     im::SetNextWindowViewport( viewport->ID );
 
+    const int system_unseen_count = Logger::last_log_index() - system_section->last_log_index;
+    const std::string system_title_extension = system_unseen_count > 0 ? kl::format( " [", system_unseen_count, "]###" ) : "###";
+
     im::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
     im::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{} );
     if ( im::Begin( QNAME( "Main Window" ), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking ) )
@@ -66,7 +69,7 @@ bool mt::MediaTool::update()
         im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
         im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{} );
         const ImVec2 button_size = { im::GetContentRegionAvail().x / TABS_COUNT, 25 };
-        if ( tab_button( current_section.is<SystemSection>(), "System", button_size, SystemSection::COLOR ) )
+        if ( tab_button( current_section.is<SystemSection>(), kl::format( "System", system_title_extension ).data(), button_size, SystemSection::COLOR ) )
             current_section = system_section;
         im::SameLine();
         if ( tab_button( current_section.is<YTDLPSection>(), "YT-DLP", button_size, YTDLPSection::COLOR ) )

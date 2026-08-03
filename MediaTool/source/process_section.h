@@ -55,9 +55,6 @@ struct ProcessSection : Displayable
 
     std::wstring produce( fs::path const& input_file, MediaType& out_media_type, fs::path* outout_file = nullptr ) const;
     void display() override;
-    std::string process() const;
-
-private:
-    std::string m_last_error;
+    void process() const;
 };
 }
