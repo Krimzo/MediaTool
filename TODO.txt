@@ -1,3 +1,2 @@
 add auto window resizing depending on the current tab
 add new screenshots
-at command display display * instead of "some_file..."

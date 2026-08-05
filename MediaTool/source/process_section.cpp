@@ -29,7 +29,9 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
         FFMPEGSection ffmpeg{ window, imgui_context };
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *image_output_ext );
-        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_image_dimension, ",iw)':min'(", max_image_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\" ", image_custom_commands );
+        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_image_dimension, ",iw)':min'(", max_image_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2\"" );
+        if ( !image_custom_commands.empty() )
+            ffmpeg.custom_commands += L" " + image_custom_commands;
         ffmpeg.codec.emplace<DefaultCodec>();
         out_media_type = MediaType::IMAGE;
         if ( outout_file )
@@ -54,7 +56,9 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
         ffmpeg.use_hardware_decoding = use_hardware_decoding;
         ffmpeg.input_file = input_file;
         ffmpeg.output_file = get_output_file( *video_output_ext );
-        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\" ", video_custom_commands );
+        ffmpeg.custom_commands = kl::wformat( "-vf \"scale='min(", max_video_dimension, ",iw)':min'(", max_video_dimension, ",ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,fps=fps='min(", max_video_framerate, ",source_fps)'\"" );
+        if ( !video_custom_commands.empty() )
+            ffmpeg.custom_commands += L" " + video_custom_commands;
         auto& codec = ffmpeg.codec.emplace<DefaultCodec>();
         codec.video_bitrate_m = video_bitrate_m;
         codec.video_codec = video_codec;
@@ -206,9 +210,9 @@ void mt::ProcessSection::display()
 
     MediaType _med_typ{};
     const std::wstring full_command =
-        L"Image: " + produce( "./some_image_dir/some_file.png", _med_typ ) + L"\n\n" +
-        L"Audio: " + produce( "./some_audio_dir/some_file.wav", _med_typ ) + L"\n\n" +
-        L"Video: " + produce( "./some_video_dir/some_file.mkv", _med_typ );
+        L"Image: " + produce( "*.png", _med_typ ) + L"\n\n" +
+        L"Audio: " + produce( "*.wav", _med_typ ) + L"\n\n" +
+        L"Video: " + produce( "*.mkv", _med_typ );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
     im::SetCursorPos( ImVec2{
         im::GetWindowWidth() * .5f - text_size.x * .5f,
