@@ -33,13 +33,13 @@ kl::GPU::GPU( HWND window, bool debug, bool video_support )
         return;
 
     ComRef<IDXGIDevice> dxgi_device;
-    m_device.as( dxgi_device );
+    m_device.as( dxgi_device ) >> verify_result;
 
     ComRef<IDXGIAdapter> adapter;
-    dxgi_device->GetAdapter( &adapter );
+    dxgi_device->GetAdapter( &adapter ) >> verify_result;
 
     ComRef<IDXGIFactory2> factory;
-    adapter->GetParent( IID_PPV_ARGS( &factory ) );
+    adapter->GetParent( IID_PPV_ARGS( &factory ) ) >> verify_result;
 
     RECT client_area{};
     GetClientRect( window, &client_area );
