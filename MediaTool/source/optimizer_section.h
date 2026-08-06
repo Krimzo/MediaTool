@@ -21,7 +21,7 @@ struct OptimizerSection : Displayable
     std::optional<VideoCodec> video_codec;
     kl::Float2 size_limits_mb = { 9.0f, 10.0f };
     int max_repeat_count = 10;
-    std::wstring custom_commands;
+    std::string custom_commands;
 
     OptimizerSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )

@@ -29,7 +29,8 @@ std::string qname( void const* ptr, Args&&... args )
 
 #define QNAME(...) (qname(this, __VA_ARGS__).c_str())
 
-void clean_string( std::string& data );
+std::wstring clean_string( std::string const& source );
+bool provide_clean_string( std::wstringstream& stream, std::string const& source );
 bool execute( HWND window, std::wstring_view const& command, bool pause = true );
 void auto_adjust_window_height( kl::Window const& window );
 }

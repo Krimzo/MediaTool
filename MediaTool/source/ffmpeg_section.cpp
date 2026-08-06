@@ -70,8 +70,7 @@ std::wstring mt::FFMPEGSection::produce( bool display_info ) const
         stream << default_codec->produce();
     else if ( auto* copy_codec = std::get_if<CopyCodec>( &codec ) )
         stream << copy_codec->produce();
-    if ( !custom_commands.empty() )
-        stream << " " << custom_commands;
+    provide_clean_string( stream, custom_commands );
     stream << " \"" << output_file << "\"";
     return stream.str();
 }
@@ -311,12 +310,7 @@ void mt::FFMPEGSection::display()
         }
     }
 
-    std::string custom_input = kl::convert_string( custom_commands );
-    if ( im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_input, { -1.0f, 0.0f } ) )
-    {
-        mt::clean_string( custom_input );
-        custom_commands = kl::convert_string( custom_input );
-    }
+    im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
 
     const std::wstring full_command = produce( true );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );

@@ -69,9 +69,7 @@ std::wstring mt::ConcatSection::produce() const
     std::wstringstream stream;
     stream << "ffmpeg -hide_banner -y";
     stream << " -f concat -safe 0 -i \"" << vids_list_file << "\"";
-    if ( !custom_commands.empty() )
-        stream << " " << custom_commands;
-    else if ( use_copy_codec )
+    if ( !provide_clean_string( stream, custom_commands ) && use_copy_codec )
         stream << " -c copy";
     stream << " \"" << output_file << "\"";
     return stream.str();
@@ -148,12 +146,7 @@ void mt::ConcatSection::display()
 
     im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING );
 
-    std::string custom_input = kl::convert_string( custom_commands );
-    if ( im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_input, { -1.0f, 0.0f } ) )
-    {
-        mt::clean_string( custom_input );
-        custom_commands = kl::convert_string( custom_input );
-    }
+    im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
 
     auto& draw_list = *im::GetWindowDrawList();
     for ( auto& box : boxes_to_cross )

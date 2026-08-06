@@ -1,16 +1,17 @@
 #include "general.h"
 
 
-void mt::clean_string( std::string& data )
+std::wstring mt::clean_string( std::string const& source )
 {
-    kl::replace_all( data, "\n", " " );
-    while ( data.contains( "  " ) )
-        kl::replace_all( data, "  ", " " );
+    std::wstring data = kl::convert_string( source );
+    kl::replace_all( data, L"\n", L" " );
+    while ( data.contains( L"  " ) )
+        kl::replace_all( data, L"  ", L" " );
     if ( data.empty() )
-        return;
+        return data;
     for ( int i = 0; i < (int) data.size(); i++ )
     {
-        if ( !std::isspace( data[i] ) )
+        if ( !std::iswspace( data[i] ) )
         {
             data = data.substr( size_t( i ) );
             break;
@@ -18,17 +19,27 @@ void mt::clean_string( std::string& data )
         else if ( i == (int) data.size() - 1 )
         {
             data = {};
-            return;
+            return data;
         }
     }
     for ( int i = (int) data.size() - 1; i >= 0; i-- )
     {
-        if ( !std::isspace( data[i] ) )
+        if ( !std::iswspace( data[i] ) )
         {
             data = data.substr( 0, size_t( i + 1 ) );
             break;
         }
     }
+    return data;
+}
+
+bool mt::provide_clean_string( std::wstringstream& stream, std::string const& source )
+{
+    const std::wstring clean_string = mt::clean_string( source );
+    if ( clean_string.empty() )
+        return false;
+    stream << ' ' << clean_string;
+    return true;
 }
 
 bool mt::execute( HWND window, std::wstring_view const& command, bool pause )

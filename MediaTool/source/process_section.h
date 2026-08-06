@@ -42,9 +42,9 @@ struct ProcessSection : Displayable
     int max_video_framerate = 30;
     std::optional<float> video_bitrate_m;
     VideoCodec video_codec;
-    std::wstring image_custom_commands;
-    std::wstring audio_custom_commands;
-    std::wstring video_custom_commands;
+    std::string image_custom_commands;
+    std::string audio_custom_commands;
+    std::string video_custom_commands;
 
     ProcessSection( kl::Window const& window, ImGuiContext* const& imgui_context )
         : window( window )
