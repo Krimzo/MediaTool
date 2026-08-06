@@ -66,7 +66,7 @@ void mt::ProgressWindow::run( std::string_view const& title )
         shaders.upload( cb );
         progress_text.data = kl::wformat( progress, "/", m_count );
 
-        gpu.clear_internal( kl::colors::GRAY );
+        gpu.clear_internal( MAIN_BACKGROUND_COLOR );
         gpu.draw( screen_mesh );
         gpu.draw_text_batch();
         gpu.swap_buffers( true );

@@ -1,2 +1,1 @@
-add auto window resizing depending on the current tab
 add new screenshots

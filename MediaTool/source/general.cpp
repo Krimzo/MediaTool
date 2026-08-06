@@ -55,3 +55,15 @@ bool mt::execute( HWND window, std::wstring_view const& command, bool pause )
 
     return ( result == 0 );
 }
+
+void mt::auto_adjust_window_height( kl::Window const& window )
+{
+    static constexpr float MAX_SCREEN_HEIGHT_PERC = .8f;
+
+    if ( window.maximized() )
+        return;
+
+    const int final_cursor_y = kl::min( (int) ImGui::GetCursorScreenPos().y, int( kl::SCREEN_SIZE.x * MAX_SCREEN_HEIGHT_PERC ) );
+    if ( final_cursor_y != window.height() )
+        QUEUED_WINDOW_HEIGHT.emplace( final_cursor_y );
+}

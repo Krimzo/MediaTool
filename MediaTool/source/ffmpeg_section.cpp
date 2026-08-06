@@ -318,21 +318,18 @@ void mt::FFMPEGSection::display()
         custom_commands = kl::convert_string( custom_input );
     }
 
-    const ImVec2 main_button_size = { im::GetContentRegionAvail().x, 30.0f };
-
     const std::wstring full_command = produce( true );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
-    im::SetCursorPos( ImVec2{
-        im::GetWindowWidth() * .5f - text_size.x * .5f,
-        im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y - imgui_context->Style.ItemSpacing.y - text_size.y,
-        } );
+    im::SetCursorPosX( im::GetWindowWidth() * .5f - text_size.x * .5f );
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
 
-    im::SetCursorPosY( im::GetWindowHeight() - imgui_context->Style.WindowPadding.y - main_button_size.y );
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
     im::BeginDisabled( input_file.empty() || output_file.empty() || ( start_time && end_time && start_time->total_seconds() >= end_time->total_seconds() ) );
-    if ( im::Button( QNAME( "Produce" ), main_button_size ) )
+    if ( im::Button( QNAME( "Produce" ), { im::GetContentRegionAvail().x, 30.0f } ) )
         execute( window.ptr(), full_command );
     im::EndDisabled();
+
     im::PopStyleVar( 2 );
+
+    auto_adjust_window_height( window );
 }

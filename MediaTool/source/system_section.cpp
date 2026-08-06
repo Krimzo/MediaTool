@@ -94,7 +94,7 @@ void mt::SystemSection::display()
 
     const int unseen_count = Logger::last_log_index() - last_log_index;
 
-    if ( im::BeginChild( "System Log View", {}, ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar ) )
+    if ( im::BeginChild( "System Log View", { -1.0f, 400.0f }, ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar ) )
     {
         last_log_index = Logger::last_log_index();
 
@@ -124,4 +124,6 @@ void mt::SystemSection::display()
     im::EndChild();
 
     im::PopStyleVar( 3 );
+
+    auto_adjust_window_height( window );
 }
