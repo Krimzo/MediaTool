@@ -207,11 +207,18 @@ void mt::ProcessSection::display()
     }
 
     MediaType _med_typ{};
-    const std::wstring full_command =
-        L"Image: " + produce( "*.png", _med_typ ) + L"\n\n" +
-        L"Audio: " + produce( "*.wav", _med_typ ) + L"\n\n" +
-        L"Video: " + produce( "*.mkv", _med_typ );
-    const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
+    std::wstring full_command = produce( "*.png", _med_typ );
+    ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
+    im::SetCursorPosX( im::GetWindowWidth() * .5f - text_size.x * .5f );
+    im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
+
+    full_command = produce( "*.wav", _med_typ );
+    text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
+    im::SetCursorPosX( im::GetWindowWidth() * .5f - text_size.x * .5f );
+    im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
+
+    full_command = produce( "*.mkv", _med_typ );
+    text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );
     im::SetCursorPosX( im::GetWindowWidth() * .5f - text_size.x * .5f );
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
 
