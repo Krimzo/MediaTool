@@ -58,11 +58,10 @@ void mt::preview_timestamp( fs::path const& path, Timestamp& timestamp )
 
     while ( window.process() )
     {
-        gpu.clear_internal( kl::colors::GRAY );
+        gpu.clear_internal( MAIN_BACKGROUND_COLOR );
         ImGui_ImplWin32_NewFrame();
         ImGui_ImplDX11_NewFrame();
         im::NewFrame();
-        ImGuizmo::BeginFrame();
         im::DockSpaceOverViewport( 0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode );
 
         ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -165,11 +164,10 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
 
     while ( window.process() )
     {
-        gpu.clear_internal( kl::colors::GRAY );
+        gpu.clear_internal( MAIN_BACKGROUND_COLOR );
         ImGui_ImplWin32_NewFrame();
         ImGui_ImplDX11_NewFrame();
         im::NewFrame();
-        ImGuizmo::BeginFrame();
         im::DockSpaceOverViewport( 0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode );
 
         ImGuiViewport* viewport = ImGui::GetMainViewport();

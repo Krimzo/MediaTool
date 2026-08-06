@@ -1,6 +1,6 @@
 #pragma once
 
-#include "general.h"
+#include "logger.h"
 
 
 namespace mt

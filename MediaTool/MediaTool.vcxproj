@@ -111,6 +111,7 @@
     <ClInclude Include="source\ffmpeg_section.h" />
     <ClInclude Include="source\general.h" />
     <ClInclude Include="source\codec.h" />
+    <ClInclude Include="source\logger.h" />
     <ClInclude Include="source\media_tool.h" />
     <ClInclude Include="source\optimizer_section.h" />
     <ClInclude Include="source\process_section.h" />

@@ -32,11 +32,9 @@ struct OptimizerSection : Displayable
 
     std::wstring produce( float bitrate_m ) const;
     void display() override;
-    std::string optimize() const;
+    void optimize() const;
 
 private:
-    std::string m_last_error;
-
     float start_bitrate() const;
 };
 }

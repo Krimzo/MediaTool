@@ -5,7 +5,8 @@ static constexpr int TABS_COUNT = 6;
 
 mt::MediaTool::MediaTool()
 {
-    kl::console::set_enabled( false );
+    if constexpr ( !kl::IS_DEBUG )
+        kl::console::set_enabled( false );
     imgui_context = im::CreateContext();
     im::SetCurrentContext( imgui_context );
 
@@ -19,10 +20,11 @@ mt::MediaTool::MediaTool()
     load_theme();
 
     window.set_dark_mode( true );
-    window.on_resize.emplace_back( [&]( kl::Int2 size )
+    window.on_resize.emplace_back( [this]( kl::Int2 size )
         {
             gpu.resize_internal( size );
             gpu.set_viewport_size( size );
+            this->update();
         } );
     window.resize( START_WINDOW_SIZE );
 
@@ -47,11 +49,17 @@ mt::MediaTool::~MediaTool()
 
 bool mt::MediaTool::update()
 {
-    gpu.clear_internal( kl::colors::GRAY );
+    if ( QUEUED_WINDOW_HEIGHT )
+    {
+        const int window_height = *QUEUED_WINDOW_HEIGHT;
+        QUEUED_WINDOW_HEIGHT.reset();
+        window.set_height( window_height );
+    }
+
+    gpu.clear_internal( MAIN_BACKGROUND_COLOR );
     ImGui_ImplWin32_NewFrame();
     ImGui_ImplDX11_NewFrame();
     im::NewFrame();
-    ImGuizmo::BeginFrame();
     im::DockSpaceOverViewport( 0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode );
 
     ImGuiViewport* viewport = im::GetMainViewport();
@@ -59,14 +67,17 @@ bool mt::MediaTool::update()
     im::SetNextWindowSize( viewport->WorkSize );
     im::SetNextWindowViewport( viewport->ID );
 
+    const int system_unseen_count = Logger::last_log_index() - system_section->last_log_index;
+    const std::string system_title_extension = system_unseen_count > 0 ? kl::format( " [", system_unseen_count, "]###SystemTitle" ) : "###SystemTitle";
+
     im::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
     im::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{} );
-    if ( im::Begin( QNAME( "Main Window" ), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking ) )
+    if ( im::Begin( QNAME( "Main Window" ), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoScrollbar ) )
     {
         im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
         im::PushStyleVar( ImGuiStyleVar_ItemSpacing, ImVec2{} );
         const ImVec2 button_size = { im::GetContentRegionAvail().x / TABS_COUNT, 25 };
-        if ( tab_button( current_section.is<SystemSection>(), "System", button_size, SystemSection::COLOR ) )
+        if ( tab_button( current_section.is<SystemSection>(), kl::format( "System", system_title_extension ).data(), button_size, SystemSection::COLOR ) )
             current_section = system_section;
         im::SameLine();
         if ( tab_button( current_section.is<YTDLPSection>(), "YT-DLP", button_size, YTDLPSection::COLOR ) )
@@ -85,7 +96,7 @@ bool mt::MediaTool::update()
             current_section = process_section;
         im::PopStyleVar( 2 );
         im::PushStyleVar( ImGuiStyleVar_WindowPadding, ImVec2{ 8, 8 } );
-        if ( im::BeginChild( "Section Child", {}, ImGuiChildFlags_AlwaysUseWindowPadding ) )
+        if ( im::BeginChild( "Section Child", {}, ImGuiChildFlags_AlwaysUseWindowPadding, ImGuiWindowFlags_NoScrollbar ) )
             current_section->display();
         im::EndChild();
         im::PopStyleVar( 1 );
@@ -132,6 +143,7 @@ void mt::MediaTool::load_theme()
     style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4( 0.51f, 0.51f, 0.51f, 1.00f );
 
     style.Colors[ImGuiCol_CheckMark] = (ImVec4&) special_color;
+    style.Colors[ImGuiCol_CheckboxSelectedBg] = ImVec4( 0.0f, 0.0f, 0.0f, 0.0f );
 
     style.Colors[ImGuiCol_SliderGrab] = (ImVec4&) special_color;
     style.Colors[ImGuiCol_SliderGrabActive] = (ImVec4&) special_color;

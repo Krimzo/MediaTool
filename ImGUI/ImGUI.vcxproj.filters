@@ -15,34 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\context_wrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\crude_json.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\GraphEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\imconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\ImCurveEdit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ImGradient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\imgui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\imgui_bezier_math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\imgui_canvas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\imgui_extra_math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\imgui_impl_dx11.h">
@@ -54,24 +30,6 @@
     <ClInclude Include="source\imgui_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\imgui_memory_editor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\imgui_stdlib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\imgui_text_editor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ImGuizmo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ImNodeFlow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ImSequencer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\imstb_rectpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,27 +39,12 @@
     <ClInclude Include="source\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\ImZoomSlider.h">
+    <ClInclude Include="source\imgui_stdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\crude_json.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GraphEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ImCurveEdit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ImGradient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\imgui_canvas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\imgui_demo.cpp">
@@ -116,40 +59,14 @@
     <ClCompile Include="source\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\imgui_stdlib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\imgui_tables.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\imgui_text_editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\ImGuizmo.cpp">
+    <ClCompile Include="source\imgui_stdlib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\ImNodeFlow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ImSequencer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\LanguageDefinitions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="source\imgui_bezier_math.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="source\imgui_extra_math.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="source\ImNodeFlow.inl">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

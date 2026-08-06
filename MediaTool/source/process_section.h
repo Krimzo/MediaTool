@@ -23,6 +23,9 @@ struct ProcessSection : Displayable
     static const kl::Float4 COLOR;
     static constexpr std::string_view DESCRIPTION = "Bulk media processing.";
 
+    static constexpr kl::RGB VIDEO_PROGRESS_COLOR = { 151, 245, 100 };
+    static constexpr kl::RGB IMAGE_AUDIO_PROGRESS_COLOR = { 247, 231, 106 };
+
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
 
@@ -52,9 +55,6 @@ struct ProcessSection : Displayable
 
     std::wstring produce( fs::path const& input_file, MediaType& out_media_type, fs::path* outout_file = nullptr ) const;
     void display() override;
-    std::string process() const;
-
-private:
-    std::string m_last_error;
+    void process() const;
 };
 }
