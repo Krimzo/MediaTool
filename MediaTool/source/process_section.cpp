@@ -65,7 +65,7 @@ std::wstring mt::ProcessSection::produce( fs::path const& input_file, MediaType&
         out_media_type = MediaType::VIDEO;
         if ( outout_file )
             *outout_file = ffmpeg.output_file;
-        return ffmpeg.produce( false );
+        return ffmpeg.produce( true );
     }
     else
     {
@@ -273,20 +273,25 @@ void mt::ProcessSection::process() const
     for ( int i = 0; i < SLEEP_ITERATIONS && !progress_window.is_open(); i++ )
         Sleep( SLEEP_ITERATION_TIME );
 
-    const auto process_func = [&]( Input const& input )
+    progress_window.progress_color = VIDEO_PROGRESS_COLOR;
+    for ( Input const& input : video_inputs )
+    {
+        if ( !progress_window.is_open() )
+            break;
+        if ( !execute( window.ptr(), input.command.data(), false ) )
+            Logger::log( COLOR, "Video process failed at file: ", kl::convert_string( input.input_file ) );
+        progress_window.increment();
+    }
+
+    progress_window.progress_color = IMAGE_AUDIO_PROGRESS_COLOR;
+    std::for_each( std::execution::par, image_audio_inputs.begin(), image_audio_inputs.end(), [&]( Input const& input )
         {
             if ( !progress_window.is_open() )
                 return;
             if ( ::_wsystem( input.command.data() ) != 0 )
-                Logger::log( COLOR, "Process failed at file: ", kl::convert_string( input.input_file ) );
+                Logger::log( COLOR, "Image/Audio process failed at file: ", kl::convert_string( input.input_file ) );
             progress_window.increment();
-        };
-
-    progress_window.progress_color = VIDEO_PROGRESS_COLOR;
-    std::for_each( video_inputs.begin(), video_inputs.end(), process_func );
-
-    progress_window.progress_color = IMAGE_AUDIO_PROGRESS_COLOR;
-    std::for_each( std::execution::par, image_audio_inputs.begin(), image_audio_inputs.end(), process_func );
+        } );
 
     progress_window.close();
 }
