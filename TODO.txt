@@ -1,1 +1,0 @@
-"select folder" should open at parent folder, not inside the last selected folder
