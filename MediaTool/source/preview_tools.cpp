@@ -223,9 +223,9 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
                 const ImVec2 video_pos = mouse_pos / content_ratio;
                 const kl::Int2 crop_pos = { int( video_pos.x ), int( video_pos.y ) };
 
-                if ( im::IsMouseDown( ImGuiPopupFlags_MouseButtonLeft ) )
+                if ( im::IsMouseDown( ImGuiMouseButton_Left ) )
                     crop.top_left = crop_pos + kl::Int2{ 1 };
-                else if ( im::IsMouseDown( ImGuiPopupFlags_MouseButtonRight ) )
+                else if ( im::IsMouseDown( ImGuiMouseButton_Right ) )
                     crop.bottom_right = crop_pos + kl::Int2{ 1 };
 
                 crop.top_left = kl::clamp( crop.top_left, kl::Int2{ 0 }, texture_size - kl::Int2{ 1 } );
