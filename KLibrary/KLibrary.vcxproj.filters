@@ -15,420 +15,420 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\apis\apis.h">
+    <ClInclude Include="klibrary\klibrary\source\apis\apis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\apis\kl_cpp.h">
+    <ClInclude Include="klibrary\klibrary\source\apis\kl_cpp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\apis\kl_directx.h">
+    <ClInclude Include="klibrary\klibrary\source\apis\kl_directx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\apis\kl_imgui.h">
+    <ClInclude Include="klibrary\klibrary\source\apis\kl_imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\apis\kl_windows.h">
+    <ClInclude Include="klibrary\klibrary\source\apis\kl_windows.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\gpu\context_holder.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\gpu\context_holder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\gpu\device_holder.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\gpu\device_holder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\gpu\gpu.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\gpu\gpu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\gpu_12\gpu_12.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\gpu_12\gpu_12_commands.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12_commands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\gpu_12\gpu_12_fence.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12_fence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\gpu_12\gpu_12_queue.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12_queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\shaders\shader_compiler.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\shaders\shader_compiler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\shaders\shaders.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\shaders\shaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\text\text_raster.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\text\text_raster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\graphics\graphics.h">
+    <ClInclude Include="klibrary\klibrary\source\graphics\graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\json\container\array.h">
+    <ClInclude Include="klibrary\klibrary\source\json\container\array.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\json\container\container.h">
+    <ClInclude Include="klibrary\klibrary\source\json\container\container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\json\container\literal.h">
+    <ClInclude Include="klibrary\klibrary\source\json\container\literal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\json\container\object.h">
+    <ClInclude Include="klibrary\klibrary\source\json\container\object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\json\language\lexer.h">
+    <ClInclude Include="klibrary\klibrary\source\json\language\lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\json\language\standard.h">
+    <ClInclude Include="klibrary\klibrary\source\json\language\standard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\json\json.h">
+    <ClInclude Include="klibrary\klibrary\source\json\json.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\basic\basic.h">
+    <ClInclude Include="klibrary\klibrary\source\math\basic\basic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\imaginary\complex.h">
+    <ClInclude Include="klibrary\klibrary\source\math\imaginary\complex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\imaginary\quaternion.h">
+    <ClInclude Include="klibrary\klibrary\source\math\imaginary\quaternion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\matrix\matrix2x2.h">
+    <ClInclude Include="klibrary\klibrary\source\math\matrix\matrix2x2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\matrix\matrix3x3.h">
+    <ClInclude Include="klibrary\klibrary\source\math\matrix\matrix3x3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\matrix\matrix4x4.h">
+    <ClInclude Include="klibrary\klibrary\source\math\matrix\matrix4x4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\raytracing\aabb.h">
+    <ClInclude Include="klibrary\klibrary\source\math\raytracing\aabb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\raytracing\plane.h">
+    <ClInclude Include="klibrary\klibrary\source\math\raytracing\plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\raytracing\ray.h">
+    <ClInclude Include="klibrary\klibrary\source\math\raytracing\ray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\raytracing\sphere.h">
+    <ClInclude Include="klibrary\klibrary\source\math\raytracing\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\triangle\triangle.h">
+    <ClInclude Include="klibrary\klibrary\source\math\triangle\triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\triangle\vertex.h">
+    <ClInclude Include="klibrary\klibrary\source\math\triangle\vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\vector\vector2.h">
+    <ClInclude Include="klibrary\klibrary\source\math\vector\vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\vector\vector3.h">
+    <ClInclude Include="klibrary\klibrary\source\math\vector\vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\vector\vector4.h">
+    <ClInclude Include="klibrary\klibrary\source\math\vector\vector4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\math\math.h">
+    <ClInclude Include="klibrary\klibrary\source\math\math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\media\audio\audio.h">
+    <ClInclude Include="klibrary\klibrary\source\media\audio\audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\media\audio\audio_device.h">
+    <ClInclude Include="klibrary\klibrary\source\media\audio\audio_device.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\media\image\color.h">
+    <ClInclude Include="klibrary\klibrary\source\media\image\color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\media\image\image.h">
+    <ClInclude Include="klibrary\klibrary\source\media\image\image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\media\video\video_reader.h">
+    <ClInclude Include="klibrary\klibrary\source\media\video\video_reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\media\video\video_writer.h">
+    <ClInclude Include="klibrary\klibrary\source\media\video\video_writer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\media\media.h">
+    <ClInclude Include="klibrary\klibrary\source\media\media.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\memory\files\dll.h">
+    <ClInclude Include="klibrary\klibrary\source\memory\files\dll.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\memory\files\file.h">
+    <ClInclude Include="klibrary\klibrary\source\memory\files\file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\memory\safety\com_ref.h">
+    <ClInclude Include="klibrary\klibrary\source\memory\safety\com_ref.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\memory\safety\ref.h">
+    <ClInclude Include="klibrary\klibrary\source\memory\safety\ref.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\memory\memory.h">
+    <ClInclude Include="klibrary\klibrary\source\memory\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\components\material.h">
+    <ClInclude Include="klibrary\klibrary\source\render\components\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\components\mesh.h">
+    <ClInclude Include="klibrary\klibrary\source\render\components\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\components\texture.h">
+    <ClInclude Include="klibrary\klibrary\source\render\components\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\light\ambient_light.h">
+    <ClInclude Include="klibrary\klibrary\source\render\light\ambient_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\light\directional_light.h">
+    <ClInclude Include="klibrary\klibrary\source\render\light\directional_light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\scene\camera.h">
+    <ClInclude Include="klibrary\klibrary\source\render\scene\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\scene\entity.h">
+    <ClInclude Include="klibrary\klibrary\source\render\scene\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\scene\scene.h">
+    <ClInclude Include="klibrary\klibrary\source\render\scene\scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\render\render.h">
+    <ClInclude Include="klibrary\klibrary\source\render\render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\time\date\date.h">
+    <ClInclude Include="klibrary\klibrary\source\time\date\date.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\time\timer\timer.h">
+    <ClInclude Include="klibrary\klibrary\source\time\timer\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\time\time.h">
+    <ClInclude Include="klibrary\klibrary\source\time\time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\async\async.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\async\async.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\data\encryptor.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\data\encryptor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\data\random.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\data\random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\format\console.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\format\console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\format\strings.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\format\strings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\hash\hash_t.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\hash\hash_t.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\hash\sha256.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\hash\sha256.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\utility\utility.h">
+    <ClInclude Include="klibrary\klibrary\source\utility\utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\html\html.h">
+    <ClInclude Include="klibrary\klibrary\source\web\html\html.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\http\http_app.h">
+    <ClInclude Include="klibrary\klibrary\source\web\http\http_app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\http\http_query.h">
+    <ClInclude Include="klibrary\klibrary\source\web\http\http_query.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\http\http_request.h">
+    <ClInclude Include="klibrary\klibrary\source\web\http\http_request.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\http\http_response.h">
+    <ClInclude Include="klibrary\klibrary\source\web\http\http_response.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\http\http_server.h">
+    <ClInclude Include="klibrary\klibrary\source\web\http\http_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\socket\socket.h">
+    <ClInclude Include="klibrary\klibrary\source\web\socket\socket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\web\web.h">
+    <ClInclude Include="klibrary\klibrary\source\web\web.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\window\hooks\keyboard_hook.h">
+    <ClInclude Include="klibrary\klibrary\source\window\hooks\keyboard_hook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\window\hooks\mouse_hook.h">
+    <ClInclude Include="klibrary\klibrary\source\window\hooks\mouse_hook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\window\input\key.h">
+    <ClInclude Include="klibrary\klibrary\source\window\input\key.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\window\input\keyboard.h">
+    <ClInclude Include="klibrary\klibrary\source\window\input\keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\window\input\mouse.h">
+    <ClInclude Include="klibrary\klibrary\source\window\input\mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\window\window.h">
+    <ClInclude Include="klibrary\klibrary\source\window\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\klibrary.h">
+    <ClInclude Include="klibrary\klibrary\source\klibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\graphics\gpu\context_holder.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\gpu\context_holder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\gpu\device_holder.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\gpu\device_holder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\gpu\gpu.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\gpu\gpu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\gpu_12\gpu_12.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\gpu_12\gpu_12_commands.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12_commands.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\gpu_12\gpu_12_fence.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12_fence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\gpu_12\gpu_12_queue.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\gpu_12\gpu_12_queue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\shaders\shader_compiler.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\shaders\shader_compiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\shaders\shaders.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\shaders\shaders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\graphics\text\text_raster.cpp">
+    <ClCompile Include="klibrary\klibrary\source\graphics\text\text_raster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\json\container\array.cpp">
+    <ClCompile Include="klibrary\klibrary\source\json\container\array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\json\container\literal.cpp">
+    <ClCompile Include="klibrary\klibrary\source\json\container\literal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\json\container\object.cpp">
+    <ClCompile Include="klibrary\klibrary\source\json\container\object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\json\language\lexer.cpp">
+    <ClCompile Include="klibrary\klibrary\source\json\language\lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\media\audio\audio.cpp">
+    <ClCompile Include="klibrary\klibrary\source\media\audio\audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\media\audio\audio_device.cpp">
+    <ClCompile Include="klibrary\klibrary\source\media\audio\audio_device.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\media\image\color.cpp">
+    <ClCompile Include="klibrary\klibrary\source\media\image\color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\media\image\image.cpp">
+    <ClCompile Include="klibrary\klibrary\source\media\image\image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\media\video\video_reader.cpp">
+    <ClCompile Include="klibrary\klibrary\source\media\video\video_reader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\media\video\video_writer.cpp">
+    <ClCompile Include="klibrary\klibrary\source\media\video\video_writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\memory\files\dll.cpp">
+    <ClCompile Include="klibrary\klibrary\source\memory\files\dll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\memory\files\file.cpp">
+    <ClCompile Include="klibrary\klibrary\source\memory\files\file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\render\components\mesh.cpp">
+    <ClCompile Include="klibrary\klibrary\source\render\components\mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\render\components\texture.cpp">
+    <ClCompile Include="klibrary\klibrary\source\render\components\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\render\light\directional_light.cpp">
+    <ClCompile Include="klibrary\klibrary\source\render\light\directional_light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\render\scene\camera.cpp">
+    <ClCompile Include="klibrary\klibrary\source\render\scene\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\render\scene\entity.cpp">
+    <ClCompile Include="klibrary\klibrary\source\render\scene\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\render\scene\scene.cpp">
+    <ClCompile Include="klibrary\klibrary\source\render\scene\scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\time\date\date.cpp">
+    <ClCompile Include="klibrary\klibrary\source\time\date\date.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\time\timer\timer.cpp">
+    <ClCompile Include="klibrary\klibrary\source\time\timer\timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\time\time.cpp">
+    <ClCompile Include="klibrary\klibrary\source\time\time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\utility\data\encryptor.cpp">
+    <ClCompile Include="klibrary\klibrary\source\utility\data\encryptor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\utility\data\random.cpp">
+    <ClCompile Include="klibrary\klibrary\source\utility\data\random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\utility\format\console.cpp">
+    <ClCompile Include="klibrary\klibrary\source\utility\format\console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\utility\format\strings.cpp">
+    <ClCompile Include="klibrary\klibrary\source\utility\format\strings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\utility\hash\hash_t.cpp">
+    <ClCompile Include="klibrary\klibrary\source\utility\hash\hash_t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\utility\hash\sha256.cpp">
+    <ClCompile Include="klibrary\klibrary\source\utility\hash\sha256.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\html\html.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\html\html.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\http\http_app.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\http\http_app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\http\http_query.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\http\http_query.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\http\http_request.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\http\http_request.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\http\http_response.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\http\http_response.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\http\http_server.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\http\http_server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\socket\socket.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\socket\socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\web\web.cpp">
+    <ClCompile Include="klibrary\klibrary\source\web\web.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\hooks\keyboard_hook.cpp">
+    <ClCompile Include="klibrary\klibrary\source\window\hooks\keyboard_hook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\hooks\mouse_hook.cpp">
+    <ClCompile Include="klibrary\klibrary\source\window\hooks\mouse_hook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\input\key.cpp">
+    <ClCompile Include="klibrary\klibrary\source\window\input\key.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\input\keyboard.cpp">
+    <ClCompile Include="klibrary\klibrary\source\window\input\keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\input\mouse.cpp">
+    <ClCompile Include="klibrary\klibrary\source\window\input\mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\window\window.cpp">
+    <ClCompile Include="klibrary\klibrary\source\window\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\klibrary.cpp">
+    <ClCompile Include="klibrary\klibrary\source\klibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
