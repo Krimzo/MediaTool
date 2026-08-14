@@ -135,7 +135,7 @@ void mt::OptimizerSection::display()
     im::DragInt( QNAME( "##MaxRepeat" ), &max_repeat_count, 0.1f, 1, 1'000, "%d", ImGuiSliderFlags_AlwaysClamp );
     im::PopStyleVar( 1 );
 
-    im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
+    input_text_multiline_hint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
 
     const std::wstring full_command = produce( start_bitrate() );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );

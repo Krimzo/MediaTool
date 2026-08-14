@@ -185,9 +185,9 @@ void mt::ProcessSection::display()
     im::SameLine();
     video_codec.edit();
 
-    im::InputTextMultilineHint( QNAME( "##CustomImage" ), "Image Custom Commands", &image_custom_commands, { -1.0f, 0.0f } );
-    im::InputTextMultilineHint( QNAME( "##CustomAudio" ), "Audio Custom Commands", &audio_custom_commands, { -1.0f, 0.0f } );
-    im::InputTextMultilineHint( QNAME( "##CustomVideo" ), "Video Custom Commands", &video_custom_commands, { -1.0f, 0.0f } );
+    input_text_multiline_hint( QNAME( "##CustomImage" ), "Image Custom Commands", &image_custom_commands, { -1.0f, 0.0f } );
+    input_text_multiline_hint( QNAME( "##CustomAudio" ), "Audio Custom Commands", &audio_custom_commands, { -1.0f, 0.0f } );
+    input_text_multiline_hint( QNAME( "##CustomVideo" ), "Video Custom Commands", &video_custom_commands, { -1.0f, 0.0f } );
 
     MediaType _med_typ{};
     std::wstring full_command = produce( "*.png", _med_typ );

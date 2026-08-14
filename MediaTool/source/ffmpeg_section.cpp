@@ -310,7 +310,7 @@ void mt::FFMPEGSection::display()
         }
     }
 
-    im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
+    input_text_multiline_hint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
 
     const std::wstring full_command = produce( true );
     const ImVec2 text_size = im::CalcTextSize( kl::convert_string( full_command ).c_str(), nullptr, false, im::GetContentRegionAvail().x );

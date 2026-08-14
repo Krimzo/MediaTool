@@ -146,7 +146,7 @@ void mt::ConcatSection::display()
 
     im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING );
 
-    im::InputTextMultilineHint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
+    input_text_multiline_hint( QNAME( "##Custom" ), "Custom Commands", &custom_commands, { -1.0f, 0.0f } );
 
     auto& draw_list = *im::GetWindowDrawList();
     for ( auto& box : boxes_to_cross )
