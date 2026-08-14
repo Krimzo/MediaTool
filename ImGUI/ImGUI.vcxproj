@@ -11,25 +11,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\imconfig.h" />
-    <ClInclude Include="source\imgui.h" />
-    <ClInclude Include="source\imgui_impl_dx11.h" />
-    <ClInclude Include="source\imgui_impl_win32.h" />
-    <ClInclude Include="source\imgui_internal.h" />
-    <ClInclude Include="source\imgui_stdlib.h" />
-    <ClInclude Include="source\imstb_rectpack.h" />
-    <ClInclude Include="source\imstb_textedit.h" />
-    <ClInclude Include="source\imstb_truetype.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\imgui.cpp" />
-    <ClCompile Include="source\imgui_demo.cpp" />
-    <ClCompile Include="source\imgui_draw.cpp" />
-    <ClCompile Include="source\imgui_impl_dx11.cpp" />
-    <ClCompile Include="source\imgui_impl_win32.cpp" />
-    <ClCompile Include="source\imgui_stdlib.cpp" />
-    <ClCompile Include="source\imgui_tables.cpp" />
-    <ClCompile Include="source\imgui_widgets.cpp" />
+    <ClCompile Include="imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_demo.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
@@ -71,7 +71,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);KL_USING_IMGUI;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)imgui/source/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)imgui/imgui/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
     </ClCompile>
@@ -92,7 +92,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);KL_USING_IMGUI;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)imgui/source/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)imgui/imgui/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
     </ClCompile>

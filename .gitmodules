@@ -1,3 +1,7 @@
 [submodule "KLibrary/klibrary"]
 	path = KLibrary/klibrary
 	url = https://github.com/Krimzo/klibrary
+[submodule "ImGUI/imgui"]
+	path = ImGUI/imgui
+	url = https://github.com/ocornut/imgui
+	branch = docking
