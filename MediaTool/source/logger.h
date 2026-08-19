@@ -19,7 +19,7 @@ struct LogInfo
     {}
 
     template<typename... Args>
-    LogInfo( kl::Float4 const& color, Args&&... objects )
+    LogInfo( float4 const& color, Args&&... objects )
         : color( reinterpret_cast<ImVec4 const&>( color ) )
         , message( kl::format( objects... ) )
     {}
@@ -30,7 +30,7 @@ struct Logger
     static constexpr int MAX_SIZE = 250;
 
     template<typename... Args>
-    static void log( kl::Float4 const& color, Args&&... objects )
+    static void log( float4 const& color, Args&&... objects )
     {
         std::lock_guard logs_lock{ C_LOGS_MUTEX };
         C_LOGS.emplace_back( color, objects... );

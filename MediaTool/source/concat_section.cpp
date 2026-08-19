@@ -1,7 +1,7 @@
 #include "concat_section.h"
 #include "preview_tools.h"
 
-const kl::Float4 mt::ConcatSection::COLOR = kl::RGB{ 218, 162, 255 };
+const float4 mt::ConcatSection::COLOR = kl::RGB{ 218, 162, 255 };
 
 bool mt::ConcatFileInfo::load( fs::path const& path )
 {

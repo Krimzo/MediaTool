@@ -26,7 +26,7 @@ void mt::ProgressWindow::run( std::string_view const& title )
     kl::GPU gpu{ window.ptr() };
     progress_hwnd = window.ptr();
 
-    window.on_resize.emplace_back( [&]( kl::Int2 size )
+    window.on_resize.emplace_back( [&]( int2 size )
         {
             gpu.resize_internal( size );
             gpu.set_viewport_size( size );
@@ -39,12 +39,13 @@ void mt::ProgressWindow::run( std::string_view const& title )
         SendMessage( window.ptr(), WM_SETICON, ICON_SMALL, (LPARAM) icon );
     }
 
-    auto& progress_text = gpu.text_batch.emplace_back();
-    progress_text.format = gpu.create_text_format( L"roboto", DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, 25.0f );
-    progress_text.position = { -1.0f, 1.0f };
-    progress_text.rect_size = { 2.0f, 2.0f };
-    progress_text.hor_center = true;
-    progress_text.ver_center = true;
+    kl::Ref<kl::RasterText> progress_text = new kl::RasterText();
+    progress_text->format = gpu.create_text_format( L"roboto", DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, 25.0f );
+    progress_text->box_top_left = { -1.0f, 1.0f };
+    progress_text->box_bottom_right = { 1.0f, -1.0f };
+    progress_text->h_align = kl::HAlign::DWRITE_TEXT_ALIGNMENT_CENTER;
+    progress_text->v_align = kl::VAlign::DWRITE_PARAGRAPH_ALIGNMENT_CENTER;
+    gpu.raster_batch.push_back( progress_text );
 
     kl::dx::Buffer screen_mesh = gpu.create_screen_mesh();
     kl::Shaders shaders = gpu.create_shaders( SHADERS_SOURCE );
@@ -57,18 +58,18 @@ void mt::ProgressWindow::run( std::string_view const& title )
         struct CB
         {
             float X_OFFSET{};
-            kl::Float3 PROGRESS_COLOR{};
+            float3 PROGRESS_COLOR{};
         };
 
         CB cb{};
         cb.X_OFFSET = ( -1.0f + float( progress ) / m_count ) * 2.0f;
         cb.PROGRESS_COLOR = this->progress_color;
         shaders.upload( cb );
-        progress_text.data = kl::wformat( progress, "/", m_count );
+        progress_text->data = kl::wformat( progress, "/", m_count );
 
         gpu.clear_internal( MAIN_BACKGROUND_COLOR );
         gpu.draw( screen_mesh );
-        gpu.draw_text_batch();
+        gpu.draw_raster_batch();
         gpu.swap_buffers( true );
     }
     progress_hwnd = nullptr;

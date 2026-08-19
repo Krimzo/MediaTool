@@ -7,7 +7,7 @@ namespace mt
 {
 struct YTDLPSection : Displayable
 {
-    static const kl::Float4 COLOR;
+    static const float4 COLOR;
     static constexpr std::string_view DESCRIPTION = "Media download.";
 
     kl::Window const& window;

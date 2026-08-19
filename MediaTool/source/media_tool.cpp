@@ -20,7 +20,7 @@ mt::MediaTool::MediaTool()
     load_theme();
 
     window.set_dark_mode( true );
-    window.on_resize.emplace_back( [this]( kl::Int2 size )
+    window.on_resize.emplace_back( [this]( int2 size )
         {
             gpu.resize_internal( size );
             gpu.set_viewport_size( size );
@@ -28,8 +28,8 @@ mt::MediaTool::MediaTool()
         } );
     window.resize( START_WINDOW_SIZE );
 
-    const kl::Int2 screen_work_size = kl::SCREEN_SIZE - kl::Int2{ 0, get_taskbar_height() };
-    const kl::Int2 total_app_size = window.size();
+    const int2 screen_work_size = kl::SCREEN_SIZE - int2{ 0, get_taskbar_height() };
+    const int2 total_app_size = window.size();
     window.set_position( ( screen_work_size - total_app_size ) / 2 );
 
     if ( HICON icon = LoadIcon( GetModuleHandleA( nullptr ), MAKEINTRESOURCE( IDI_ICON1 ) ) )
@@ -113,8 +113,8 @@ bool mt::MediaTool::update()
 
 void mt::MediaTool::load_theme()
 {
-    const kl::Float4 special_color = kl::colors::WHITE;
-    const kl::Float4 alternate_color = kl::colors::BLACK;
+    const float4 special_color = kl::colors::WHITE;
+    const float4 alternate_color = kl::colors::BLACK;
     ImGuiStyle& style = im::GetStyle();
 
     style.Colors[ImGuiCol_Text] = ImVec4( 1.00f, 1.00f, 1.00f, 1.00f );
@@ -224,7 +224,7 @@ int mt::MediaTool::get_taskbar_height()
     return ( work_height < screen_height ) ? screen_height - work_height : 0;
 }
 
-bool mt::tab_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color )
+bool mt::tab_button( bool is_pressed, char const* label, ImVec2 const& size_arg, float4 const& color )
 {
     if ( is_pressed )
     {

@@ -13,7 +13,7 @@ struct BoundingBox
 
 struct ConcatFileInfo
 {
-    kl::Int2 video_resolution;
+    int2 video_resolution;
     int frame_rate = 0;
     int audio_rate = 0;
 
@@ -26,7 +26,7 @@ struct ConcatFileInfo
 struct ConcatInput
 {
     std::wstring path;
-    kl::Float4 color;
+    float4 color;
     ConcatFileInfo info;
 
     ConcatInput();
@@ -40,7 +40,7 @@ private:
 
 struct ConcatSection : Displayable
 {
-    static const kl::Float4 COLOR;
+    static const float4 COLOR;
     static constexpr std::string_view DESCRIPTION = "Media concatenation.";
 
     kl::Window const& window;

@@ -12,7 +12,7 @@ namespace mt
 {
 struct MediaTool
 {
-    static constexpr kl::Int2 START_WINDOW_SIZE = { 800, 1000 };
+    static constexpr int2 START_WINDOW_SIZE = { 800, 1000 };
 
     kl::Window window{ "Media Tool" };
     kl::GPU gpu{ window.ptr() };
@@ -35,5 +35,5 @@ struct MediaTool
     static int get_taskbar_height();
 };
 
-bool tab_button( bool is_pressed, char const* label, ImVec2 const& size_arg, kl::Float4 const& color );
+bool tab_button( bool is_pressed, char const* label, ImVec2 const& size_arg, float4 const& color );
 }

@@ -1,7 +1,7 @@
 #include "process_section.h"
 #include "progress_window.h"
 
-const kl::Float4 mt::ProcessSection::COLOR = kl::RGB{ 255, 149, 170 };
+const float4 mt::ProcessSection::COLOR = kl::RGB{ 255, 149, 170 };
 static constexpr float EXTENSION_INPUT_WIDTH = 50.0f;
 static constexpr int SLEEP_ITERATIONS = 100;
 static constexpr int SLEEP_ITERATION_TIME = 100;

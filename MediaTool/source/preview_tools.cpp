@@ -41,7 +41,7 @@ void mt::preview_timestamp( fs::path const& path, Timestamp& timestamp )
     reload_texture();
 
     window.set_dark_mode( true );
-    window.on_resize.emplace_back( [&]( kl::Int2 size )
+    window.on_resize.emplace_back( [&]( int2 size )
         {
             gpu.resize_internal( size );
             gpu.set_viewport_size( size );
@@ -79,7 +79,7 @@ void mt::preview_timestamp( fs::path const& path, Timestamp& timestamp )
                 timestamp.load( time_value );
                 reload_texture();
             }
-            const kl::Int2 texture_size = gpu.texture_size( preview_texture );
+            const int2 texture_size = gpu.texture_size( preview_texture );
             const ImVec2 view_size = im::GetContentRegionAvail();
             ImVec2 image_size{};
             if ( view_size.x / view_size.y > texture_size.x / (float) texture_size.y )
@@ -146,12 +146,12 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
     reload_texture();
 
     window.set_dark_mode( true );
-    window.on_resize.emplace_back( [&]( kl::Int2 size )
+    window.on_resize.emplace_back( [&]( int2 size )
         {
             gpu.resize_internal( size );
             gpu.set_viewport_size( size );
         } );
-    const kl::Int2 texture_size = gpu.texture_size( preview_texture );
+    const int2 texture_size = gpu.texture_size( preview_texture );
     window.resize( texture_size );
     window.set_position( kl::SCREEN_SIZE / 2 - window.size() / 2 );
     window.maximize();
@@ -178,7 +178,7 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
         ImGui::PushStyleVar( ImGuiStyleVar_WindowRounding, 0.0f );
         if ( ImGui::Begin( "Main Window", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking ) )
         {
-            static constexpr auto convert_coords = []( kl::Int2 pos ) -> ImVec2
+            static constexpr auto convert_coords = []( int2 pos ) -> ImVec2
                 {
                     return ImVec2{ (float) pos.x, (float) pos.y };
                 };
@@ -192,7 +192,7 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
             }
             const bool is_slider_active = im::IsItemActive();
 
-            const kl::Int2 texture_size = gpu.texture_size( preview_texture );
+            const int2 texture_size = gpu.texture_size( preview_texture );
             const ImVec2 view_size = im::GetContentRegionAvail();
             ImVec2 image_size{};
             if ( view_size.x / view_size.y > texture_size.x / (float) texture_size.y )
@@ -221,15 +221,15 @@ void mt::preview_crop( fs::path const& path, Timestamp timestamp, VideoCrop& cro
             {
                 const ImVec2 mouse_pos = imgui_context->Style.WindowPadding - min_content + im::WindowPosAbsToRel( im::GetCurrentWindow(), im::GetMousePos() );
                 const ImVec2 video_pos = mouse_pos / content_ratio;
-                const kl::Int2 crop_pos = { int( video_pos.x ), int( video_pos.y ) };
+                const int2 crop_pos = { int( video_pos.x ), int( video_pos.y ) };
 
                 if ( im::IsMouseDown( ImGuiMouseButton_Left ) )
-                    crop.top_left = crop_pos + kl::Int2{ 1 };
+                    crop.top_left = crop_pos + int2{ 1 };
                 else if ( im::IsMouseDown( ImGuiMouseButton_Right ) )
-                    crop.bottom_right = crop_pos + kl::Int2{ 1 };
+                    crop.bottom_right = crop_pos + int2{ 1 };
 
-                crop.top_left = kl::clamp( crop.top_left, kl::Int2{ 0 }, texture_size - kl::Int2{ 1 } );
-                crop.bottom_right = kl::clamp( crop.bottom_right, crop.top_left + kl::Int2{ 1 }, texture_size );
+                crop.top_left = kl::clamp( crop.top_left, int2{ 0 }, texture_size - int2{ 1 } );
+                crop.bottom_right = kl::clamp( crop.bottom_right, crop.top_left + int2{ 1 }, texture_size );
             }
         }
         ImGui::End();

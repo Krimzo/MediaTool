@@ -1,7 +1,7 @@
 #include "ffmpeg_section.h"
 #include "preview_tools.h"
 
-const kl::Float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 210 };
+const float4 mt::FFMPEGSection::COLOR = kl::RGB{ 151, 255, 210 };
 
 void mt::Timestamp::load( float seconds_value )
 {
@@ -21,7 +21,7 @@ std::wstring mt::VideoScale::produce() const
 
 std::wstring mt::VideoCrop::produce() const
 {
-    const kl::Int2 size = bottom_right - top_left;
+    const int2 size = bottom_right - top_left;
     return kl::wformat( " -vf \"crop=", size.x, ":", size.y, ":", top_left.x, ":", top_left.y, "\"" );
 }
 

@@ -7,7 +7,7 @@ namespace mt
 {
 struct OptimizerSection : Displayable
 {
-    static const kl::Float4 COLOR;
+    static const float4 COLOR;
     static constexpr std::string_view DESCRIPTION = "Media file size optimization.";
 
     kl::Window const& window;
@@ -19,7 +19,7 @@ struct OptimizerSection : Displayable
     std::optional<Timestamp> start_time;
     std::optional<Timestamp> end_time;
     std::optional<VideoCodec> video_codec;
-    kl::Float2 size_limits_mb = { 9.0f, 10.0f };
+    float2 size_limits_mb = { 9.0f, 10.0f };
     int max_repeat_count = 10;
     std::string custom_commands;
 

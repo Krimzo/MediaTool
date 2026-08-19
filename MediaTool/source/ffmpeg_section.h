@@ -16,15 +16,15 @@ struct Timestamp
 
 struct VideoScale
 {
-    kl::Int2 scale;
+    int2 scale;
 
     std::wstring produce() const;
 };
 
 struct VideoCrop
 {
-    kl::Int2 top_left{ 0 };
-    kl::Int2 bottom_right{ 1 };
+    int2 top_left{ 0 };
+    int2 bottom_right{ 1 };
 
     std::wstring produce() const;
 };
@@ -49,13 +49,13 @@ struct CopyCodec
 
 struct FFMPEGSection : Displayable
 {
-    static constexpr kl::Int2 DEFAULT_SCALE = { 1920, 1080 };
+    static constexpr int2 DEFAULT_SCALE = { 1920, 1080 };
     static constexpr float DEFAULT_FRAME_RATE = 30.0f;
     static constexpr float DEFAULT_VIDEO_BITRATE_M = 5.0f;
     static constexpr int DEFAULT_AUDIO_RATE = 48000;
     static constexpr float DEFAULT_AUDIO_BITRATE_K = 192.0f;
 
-    static const kl::Float4 COLOR;
+    static const float4 COLOR;
     static constexpr std::string_view DESCRIPTION = "Media editing.";
 
     kl::Window const& window;

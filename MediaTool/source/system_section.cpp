@@ -2,15 +2,15 @@
 #include "ytdlp_section.h"
 #include "ffmpeg_section.h"
 
-const kl::Float4 mt::SystemSection::COLOR = kl::RGB{ 160, 219, 255 };
+const float4 mt::SystemSection::COLOR = kl::RGB{ 160, 219, 255 };
 
 void mt::SystemSection::display()
 {
     static constexpr float VERTICAL_SPACING = 25.0f;
     static constexpr float FFPROBE_ADDITIONAL_SPACING = 10.0f;
 
-    static const kl::Float4 PYTHON_COLOR = kl::RGB{ 178, 255, 178 };
-    static const kl::Float4 DENO_COLOR = kl::RGB{ 125, 240, 255 };
+    static const float4 PYTHON_COLOR = kl::RGB{ 178, 255, 178 };
+    static const float4 DENO_COLOR = kl::RGB{ 125, 240, 255 };
 
     static constexpr std::string_view PYTHON_INSTALL_TEXT = "Install/Upgrade PYTHON (yt-dlp requirement)";
     static constexpr std::string_view DENO_INSTALL_TEXT = "Install/Upgrade DENO (yt-dlp requirement)";

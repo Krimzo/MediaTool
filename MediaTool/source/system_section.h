@@ -7,7 +7,7 @@ namespace mt
 {
 struct SystemSection : Displayable
 {
-    static const kl::Float4 COLOR;
+    static const float4 COLOR;
     static constexpr std::string_view DESCRIPTION = "Dependency installation, media inspection and logs.";
 
     kl::Window const& window;

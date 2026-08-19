@@ -20,7 +20,7 @@ struct ProcessSection : Displayable
     static constexpr std::string_view DEFAULT_VIDEO_OUTPUT_EXTENSION = ".mp4";
     static constexpr float DEFAULT_VIDEO_BITRATE_M = 3.0f;
 
-    static const kl::Float4 COLOR;
+    static const float4 COLOR;
     static constexpr std::string_view DESCRIPTION = "Bulk media processing.";
 
     static constexpr kl::RGB VIDEO_PROGRESS_COLOR = { 151, 245, 100 };
