@@ -19,7 +19,7 @@ struct OptimizerSection : Displayable
     std::optional<Timestamp> start_time;
     std::optional<Timestamp> end_time;
     std::optional<VideoCodec> video_codec;
-    float2 size_limits_mb = { 9.0f, 10.0f };
+    float2 size_limits_mb = { 19.0f, 20.0f };
     int max_repeat_count = 10;
     std::string custom_commands;
 
