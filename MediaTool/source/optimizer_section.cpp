@@ -143,7 +143,7 @@ void mt::OptimizerSection::display()
     im::TextWrapped( "%s", kl::convert_string( full_command ).c_str() );
 
     im::PushStyleVar( ImGuiStyleVar_FrameRounding, 0.0f );
-    im::BeginDisabled( input_file.empty() || output_file.empty() || size_limits_mb.x >= size_limits_mb.y );
+    im::BeginDisabled( input_file.empty() || output_file.empty() || size_limits_mb.x >= size_limits_mb.y || file_size_mb( input_file ) < size_limits_mb.y );
     if ( im::Button( QNAME( "Optimize" ), { im::GetContentRegionAvail().x, 30.0f } ) )
         this->optimize();
     im::EndDisabled();
@@ -164,7 +164,7 @@ void mt::OptimizerSection::optimize() const
             Logger::log( COLOR, "Optimize command failed." );
             return;
         }
-        const float file_size_mb = float( fs::file_size( output_file ) / ( 1024.0 * 1024.0 ) );
+        const float file_size_mb = this->file_size_mb( output_file );
         if ( file_size_mb < size_limits_mb.x )
         {
             bitrate_m *= ( size_limits_mb.x / file_size_mb ) / BIAS;
@@ -193,4 +193,9 @@ float mt::OptimizerSection::start_bitrate() const
         result = ( size_limits_mb.y * 8 ) / duration;
     }
     return result;
+}
+
+float mt::OptimizerSection::file_size_mb( std::wstring_view const& path ) const
+{
+    return float( fs::file_size( path ) / ( 1024.0 * 1024.0 ) );
 }

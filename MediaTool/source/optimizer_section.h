@@ -36,5 +36,6 @@ struct OptimizerSection : Displayable
 
 private:
     float start_bitrate() const;
+    float file_size_mb( std::wstring_view const& path ) const;
 };
 }
