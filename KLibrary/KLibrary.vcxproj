@@ -53,6 +53,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)imgui/imgui/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>klibrary.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -74,6 +76,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)imgui/imgui/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>klibrary.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -192,7 +196,10 @@
     <ClCompile Include="klibrary\klibrary\source\json\container\literal.cpp" />
     <ClCompile Include="klibrary\klibrary\source\json\container\object.cpp" />
     <ClCompile Include="klibrary\klibrary\source\json\language\lexer.cpp" />
-    <ClCompile Include="klibrary\klibrary\source\klibrary.cpp" />
+    <ClCompile Include="klibrary\klibrary\source\klibrary.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="klibrary\klibrary\source\media\audio\audio.cpp" />
     <ClCompile Include="klibrary\klibrary\source\media\audio\audio_device.cpp" />
     <ClCompile Include="klibrary\klibrary\source\media\image\color.cpp" />
