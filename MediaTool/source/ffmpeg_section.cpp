@@ -88,14 +88,14 @@ void mt::FFMPEGSection::display()
 
     if ( im::Button( QNAME( "Input File: ", kl::convert_string( input_file ), "##Input" ) ) )
     {
-        if ( auto opt_path = kl::wchoose_file( false ) )
+        if ( auto opt_path = kl::wchoose_file( false, input_file ) )
             input_file = fs::absolute( *opt_path ).wstring();
     }
     DRAG_DROP_PACKAGE.dragdrop_to_imgui_file( input_file );
 
     if ( im::Button( QNAME( "Output File: ", kl::convert_string( output_file ), "##OutputFile" ) ) )
     {
-        if ( auto opt_path = kl::wchoose_file( true ) )
+        if ( auto opt_path = kl::wchoose_file( true, output_file ) )
             output_file = fs::absolute( *opt_path ).wstring();
     }
     DRAG_DROP_PACKAGE.dragdrop_to_imgui_file( output_file );

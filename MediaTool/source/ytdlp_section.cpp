@@ -55,7 +55,7 @@ void mt::YTDLPSection::display()
         im::PushStyleVar( ImGuiStyleVar_FramePadding, ImVec2{ 5, 5 } );
         if ( im::Button( QNAME( "Output File: ", kl::convert_string( *output_file ), "##OutputFile" ) ) )
         {
-            if ( auto opt_path = kl::wchoose_file( true ) )
+            if ( auto opt_path = kl::wchoose_file( true, *output_file ) )
                 output_file = fs::absolute( *opt_path ).wstring();
         }
         DRAG_DROP_PACKAGE.dragdrop_to_imgui_file( *output_file );

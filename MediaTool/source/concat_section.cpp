@@ -98,7 +98,7 @@ void mt::ConcatSection::display()
 
         if ( im::Button( QNAME( "Input File ", i + 1, ": ", kl::convert_string( input.path ), "##Input", i ) ) )
         {
-            if ( auto opt_path = kl::wchoose_file( false ) )
+            if ( auto opt_path = kl::wchoose_file( false, input.path ) )
                 input.set_path( fs::absolute( *opt_path ).wstring() );
         }
         std::wstring p;
@@ -140,7 +140,7 @@ void mt::ConcatSection::display()
 
     if ( im::Button( QNAME( "Output File: ", kl::convert_string( output_file ), "##Output" ) ) )
     {
-        if ( auto opt_path = kl::wchoose_file( true ) )
+        if ( auto opt_path = kl::wchoose_file( true, output_file ) )
             output_file = fs::absolute( *opt_path ).wstring();
     }
     std::wstring p;
