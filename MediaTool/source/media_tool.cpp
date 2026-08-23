@@ -28,6 +28,11 @@ mt::MediaTool::MediaTool()
         } );
     window.resize( START_WINDOW_SIZE );
 
+    window.on_drag_drop = [this]( int2 pos, std::vector<std::wstring> const& paths )
+        {
+            DRAG_DROP_PACKAGE.load( pos, paths );
+        };
+
     const int2 screen_work_size = kl::SCREEN_SIZE - int2{ 0, get_taskbar_height() };
     const int2 total_app_size = window.size();
     window.set_position( ( screen_work_size - total_app_size ) / 2 );

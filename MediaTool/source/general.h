@@ -1,13 +1,10 @@
 #pragma once
 
-#include "klibrary.h"
+#include "drag_drop.h"
 
 
 namespace mt
 {
-namespace fs = std::filesystem;
-namespace im = ImGui;
-
 struct None
 {};
 

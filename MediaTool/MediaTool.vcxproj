@@ -47,7 +47,6 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);KL_USING_IMGUI;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)imgui/imgui/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -68,7 +67,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);KL_USING_IMGUI;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)imgui/imgui/;$(SolutionDir)klibrary/klibrary/klibrary/source/;$(SolutionDir)mediatool/source/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -85,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\concat_section.cpp" />
+    <ClCompile Include="source\drag_drop.cpp" />
     <ClCompile Include="source\ffmpeg_section.cpp" />
     <ClCompile Include="source\general.cpp" />
     <ClCompile Include="source\codec.cpp" />
@@ -108,6 +107,7 @@
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="source\concat_section.h" />
+    <ClInclude Include="source\drag_drop.h" />
     <ClInclude Include="source\ffmpeg_section.h" />
     <ClInclude Include="source\general.h" />
     <ClInclude Include="source\codec.h" />

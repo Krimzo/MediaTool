@@ -73,6 +73,13 @@ void mt::SystemSection::display()
 
     im::PopStyleColor( 4 );
 
+    const auto run_ffprobe_command = [&]( std::wstring_view path )
+        {
+            std::wstring full_command = kl::convert_string( FFPROBE_COMMAND );
+            kl::replace_all( full_command, L"...", fs::absolute( path ).wstring() );
+            execute( window.ptr(), full_command );
+        };
+
     im::SetCursorPosX( im::GetContentRegionAvail().x * .5f - im::CalcTextSize( FFPROBE_TEXT.data() ).x * .5f );
     im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING + FFPROBE_ADDITIONAL_SPACING );
     im::Text( FFPROBE_TEXT.data() );
@@ -80,12 +87,12 @@ void mt::SystemSection::display()
     if ( im::Button( QNAME( FFPROBE_COMMAND ), default_button_size ) )
     {
         if ( auto opt_path = kl::wchoose_file( false ) )
-        {
-            std::wstring full_command = kl::convert_string( FFPROBE_COMMAND );
-            kl::replace_all( full_command, L"...", fs::absolute( *opt_path ).wstring() );
-            execute( window.ptr(), full_command );
-        }
+            run_ffprobe_command( *opt_path );
     }
+    std::wstring ffprobe_path;
+    DRAG_DROP_PACKAGE.dragdrop_to_imgui_file( ffprobe_path );
+    if ( !ffprobe_path.empty() )
+        run_ffprobe_command( ffprobe_path );
 
     im::SetCursorPosY( im::GetCursorPosY() + VERTICAL_SPACING );
 

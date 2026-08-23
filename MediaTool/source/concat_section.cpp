@@ -101,6 +101,10 @@ void mt::ConcatSection::display()
             if ( auto opt_path = kl::wchoose_file( false ) )
                 input.set_path( fs::absolute( *opt_path ).wstring() );
         }
+        std::wstring p;
+        DRAG_DROP_PACKAGE.dragdrop_to_imgui_file( p );
+        if ( !p.empty() )
+            input.set_path( fs::absolute( p ).wstring() );
         im::SameLine();
         if ( im::Button( QNAME( "Remove##Input", i ) ) )
             to_remove = i;
@@ -125,6 +129,10 @@ void mt::ConcatSection::display()
         if ( auto opt_path = kl::wchoose_file( false ) )
             inputs.emplace_back().set_path( fs::absolute( *opt_path ).wstring() );
     }
+    DRAG_DROP_PACKAGE.dragdrop_to_imgui( [&]( std::wstring const& path )
+        {
+            inputs.emplace_back().set_path( fs::absolute( path ).wstring() );
+        } );
     if ( to_remove )
         inputs.erase( inputs.begin() + *to_remove );
 
@@ -135,6 +143,10 @@ void mt::ConcatSection::display()
         if ( auto opt_path = kl::wchoose_file( true ) )
             output_file = fs::absolute( *opt_path ).wstring();
     }
+    std::wstring p;
+    DRAG_DROP_PACKAGE.dragdrop_to_imgui_file( p );
+    if ( !p.empty() )
+        output_file = fs::absolute( p ).wstring();
 
     im::PopStyleVar( 1 );
 

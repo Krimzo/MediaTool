@@ -90,12 +90,14 @@ void mt::ProcessSection::display()
         if ( auto opt_dir = kl::wchoose_dir() )
             input_dir = fs::absolute( *opt_dir ).wstring();
     }
+    DRAG_DROP_PACKAGE.dragdrop_to_imgui_dir( input_dir );
 
     if ( im::Button( QNAME( "Output Directory: ", kl::convert_string( output_dir ), "##Output" ) ) )
     {
         if ( auto opt_dir = kl::wchoose_dir() )
             output_dir = fs::absolute( *opt_dir ).wstring();
     }
+    DRAG_DROP_PACKAGE.dragdrop_to_imgui_dir( output_dir );
 
     im::PopStyleVar( 1 );
 
@@ -267,8 +269,9 @@ void mt::ProcessSection::process() const
         } );
 
     ProgressWindow progress_window{ (int) video_inputs.size() + (int) image_audio_inputs.size() };
-    std::jthread progress_thread{ [&]() {
-        progress_window.run( "Process Progress" );
+    std::jthread progress_thread{ [&]()
+        {
+            progress_window.run( "Process Progress" );
         } };
     for ( int i = 0; i < SLEEP_ITERATIONS && !progress_window.is_open(); i++ )
         Sleep( SLEEP_ITERATION_TIME );

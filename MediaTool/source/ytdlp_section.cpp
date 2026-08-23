@@ -58,6 +58,7 @@ void mt::YTDLPSection::display()
             if ( auto opt_path = kl::wchoose_file( true ) )
                 output_file = fs::absolute( *opt_path ).wstring();
         }
+        DRAG_DROP_PACKAGE.dragdrop_to_imgui_file( *output_file );
         im::PopStyleVar( 1 );
     }
 
