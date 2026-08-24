@@ -1,6 +1,6 @@
 [submodule "klibrary"]
 	path = klibrary
-	url = https://github.com/Krimzo/klibrary
+	url = https://github.com/Krimzo/KLibrary
 [submodule "imgui"]
 	path = imgui
 	url = https://github.com/ocornut/imgui
