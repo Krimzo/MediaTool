@@ -14,11 +14,10 @@ add_library(imguilib
 target_include_directories(imguilib PUBLIC imgui)
 
 add_subdirectory(klibrary)
-target_include_directories(klibrarylib PUBLIC imgui)
+target_link_libraries(klibrarylib PUBLIC imguilib)
 
 file(GLOB_RECURSE mediatool_sources CONFIGURE_DEPENDS source/*.cpp)
 add_executable(mediatool ${mediatool_sources})
-target_link_libraries(mediatool PUBLIC imguilib)
 target_link_libraries(mediatool PUBLIC klibrarylib)
 target_include_directories(mediatool PUBLIC source)
 set_target_properties(mediatool PROPERTIES
