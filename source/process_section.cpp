@@ -190,10 +190,20 @@ void mt::ProcessSection::display()
         im::DragFloat(QNAME("##VideoBitrate"), &*video_bitrate_m, 0.01f, 0.0f, 1e6f);
     }
 
-    im::Text(kl::format("Video Codec (", kl::convert_string(GPU_ADAPTER_NAME), ")").c_str());
-    im::Text("\t");
-    im::SameLine();
-    video_codec.edit();
+    bool has_video_codec = video_codec.has_value();
+    if (im::Checkbox(QNAME("Video Codec (", kl::convert_string(GPU_ADAPTER_NAME), ")"), &has_video_codec))
+    {
+        if (has_video_codec)
+            video_codec.emplace();
+        else
+            video_codec.reset();
+    }
+    if (has_video_codec)
+    {
+        im::Text("\t");
+        im::SameLine();
+        video_codec->edit();
+    }
 
     input_text_multiline_hint(QNAME("##CustomImage"), "Image Custom Commands", &image_custom_commands, {-1.0f, 0.0f});
     input_text_multiline_hint(QNAME("##CustomAudio"), "Audio Custom Commands", &audio_custom_commands, {-1.0f, 0.0f});

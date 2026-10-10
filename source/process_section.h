@@ -32,7 +32,7 @@ struct ProcessSection : Displayable
     std::wstring input_dir;
     std::wstring output_dir;
     bool recursive_search = true;
-    bool retain_folder_structure = false;
+    bool retain_folder_structure = true;
     std::optional<std::string> image_output_ext{DEFAULT_IMAGE_OUTPUT_EXTENSION};
     std::optional<std::string> audio_output_ext{DEFAULT_AUDIO_OUTPUT_EXTENSION};
     std::optional<std::string> video_output_ext{DEFAULT_VIDEO_OUTPUT_EXTENSION};
@@ -40,7 +40,7 @@ struct ProcessSection : Displayable
     int max_video_dimension = 1920;
     int max_video_framerate = 30;
     std::optional<float> video_bitrate_m;
-    VideoCodec video_codec;
+    std::optional<VideoCodec> video_codec;
     std::string image_custom_commands;
     std::string audio_custom_commands;
     std::string video_custom_commands;
@@ -48,7 +48,6 @@ struct ProcessSection : Displayable
     ProcessSection(kl::Window const& window, ImGuiContext* const& imgui_context)
         : window(window), imgui_context(imgui_context)
     {
-        video_codec.codec_type = VideoCodecType::HEVC;
     }
 
     std::wstring produce(fs::path const& input_file, MediaType& out_media_type, fs::path* outout_file = nullptr) const;
