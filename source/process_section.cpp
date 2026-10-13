@@ -70,7 +70,7 @@ std::wstring mt::ProcessSection::produce(fs::path const& input_file, MediaType& 
         out_media_type = MediaType::VIDEO;
         if (outout_file)
             *outout_file = ffmpeg.output_file;
-        return ffmpeg.produce(true);
+        return ffmpeg.produce(false);
     }
     else
     {
@@ -109,6 +109,12 @@ void mt::ProcessSection::display()
     im::Checkbox(QNAME("Recursive Search"), &recursive_search);
     if (recursive_search)
         im::Checkbox(QNAME("Retain Folder Structure"), &retain_folder_structure);
+
+    im::Text("Video Worker Count");
+    im::SameLine();
+    im::SetNextItemWidth(100.0f);
+    im::DragInt(QNAME("##VideoWorkerCount"), &video_worker_count, 0.1f, 1, 1'000'000, "%d",
+                ImGuiSliderFlags_AlwaysClamp);
 
     bool image_output = image_output_ext.has_value();
     if (im::Checkbox(QNAME("Image Output Extension"), &image_output))
@@ -295,14 +301,21 @@ void mt::ProcessSection::process() const
         Sleep(SLEEP_ITERATION_TIME);
 
     progress_window.progress_color = VIDEO_PROGRESS_COLOR;
-    for (Input const& input : video_inputs)
-    {
-        if (!progress_window.is_open())
-            break;
-        if (!execute(window.ptr(), input.command.data(), false))
-            Logger::log(COLOR, "Video process failed at file: ", kl::convert_string(input.input_file));
-        progress_window.increment();
-    }
+    std::vector<std::jthread> workers;
+    workers.reserve(video_worker_count);
+    for (int i = 0; i < video_worker_count; i++)
+        workers.emplace_back([&, i] {
+            for (int j = i; j < (int)video_inputs.size(); j += video_worker_count)
+            {
+                auto& input = video_inputs[j];
+                if (!progress_window.is_open())
+                    break;
+                if (::_wsystem(input.command.data()) != 0)
+                    Logger::log(COLOR, "Video process failed at file: ", kl::convert_string(input.input_file));
+                progress_window.increment();
+            }
+        });
+    workers.clear();
 
     progress_window.progress_color = IMAGE_AUDIO_PROGRESS_COLOR;
     std::for_each(std::execution::par, image_audio_inputs.begin(), image_audio_inputs.end(), [&](Input const& input) {

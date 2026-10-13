@@ -41,6 +41,7 @@ struct ProcessSection : Displayable
     int max_video_framerate = 30;
     std::optional<float> video_bitrate_m;
     std::optional<VideoCodec> video_codec;
+    int video_worker_count = 3;
     std::string image_custom_commands;
     std::string audio_custom_commands;
     std::string video_custom_commands;
