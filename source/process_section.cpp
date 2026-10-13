@@ -264,7 +264,8 @@ void mt::ProcessSection::process() const
     }
 
     std::vector<Input> video_inputs;
-    std::vector<Input> image_audio_inputs;
+    std::vector<Input> image_inputs;
+    std::vector<Input> audio_inputs;
     const auto search_func = [&](fs::directory_entry const& entry) {
         if (entry.is_directory())
             return;
@@ -275,8 +276,18 @@ void mt::ProcessSection::process() const
             return;
         if (output_file.has_parent_path())
             fs::create_directories(output_file.parent_path());
-        ((media_type == MediaType::VIDEO) ? video_inputs : image_audio_inputs)
-            .emplace_back(fs::path{entry}.generic_wstring(), media_type, command);
+        switch (media_type)
+        {
+        case MediaType::VIDEO:
+            video_inputs.emplace_back(fs::path{entry}.generic_wstring(), media_type, command);
+            break;
+        case MediaType::IMAGE:
+            image_inputs.emplace_back(fs::path{entry}.generic_wstring(), media_type, command);
+            break;
+        case MediaType::AUDIO:
+            audio_inputs.emplace_back(fs::path{entry}.generic_wstring(), media_type, command);
+            break;
+        }
     };
     if (recursive_search)
         for (auto& entry : fs::recursive_directory_iterator(input_dir))
@@ -285,7 +296,7 @@ void mt::ProcessSection::process() const
         for (auto& entry : fs::directory_iterator(input_dir))
             search_func(entry);
 
-    if (video_inputs.empty() && image_audio_inputs.empty())
+    if (video_inputs.empty() && image_inputs.empty() && audio_inputs.empty())
     {
         Logger::log(COLOR, "No files to process.");
         return;
@@ -295,12 +306,24 @@ void mt::ProcessSection::process() const
         return fs::file_size(left.input_file) > fs::file_size(right.input_file);
     });
 
-    ProgressWindow progress_window{(int)video_inputs.size() + (int)image_audio_inputs.size()};
+    ProgressWindow progress_window;
+    progress_window.sectors.push_back(ProgressSector{
+        .color = VIDEO_PROGRESS_COLOR,
+        .total_count = (int)video_inputs.size(),
+    });
+    progress_window.sectors.push_back(ProgressSector{
+        .color = IMAGE_PROGRESS_COLOR,
+        .total_count = (int)image_inputs.size(),
+    });
+    progress_window.sectors.push_back(ProgressSector{
+        .color = AUDIO_PROGRESS_COLOR,
+        .total_count = (int)audio_inputs.size(),
+    });
+
     std::jthread progress_thread{[&]() { progress_window.run("Process Progress"); }};
     for (int i = 0; i < SLEEP_ITERATIONS && !progress_window.is_open(); i++)
         Sleep(SLEEP_ITERATION_TIME);
 
-    progress_window.progress_color = VIDEO_PROGRESS_COLOR;
     std::vector<std::jthread> workers;
     workers.reserve(video_worker_count);
     for (int i = 0; i < video_worker_count; i++)
@@ -317,12 +340,19 @@ void mt::ProcessSection::process() const
         });
     workers.clear();
 
-    progress_window.progress_color = IMAGE_AUDIO_PROGRESS_COLOR;
-    std::for_each(std::execution::par, image_audio_inputs.begin(), image_audio_inputs.end(), [&](Input const& input) {
+    std::for_each(std::execution::par, image_inputs.begin(), image_inputs.end(), [&](Input const& input) {
         if (!progress_window.is_open())
             return;
         if (::_wsystem(input.command.data()) != 0)
-            Logger::log(COLOR, "Image/Audio process failed at file: ", kl::convert_string(input.input_file));
+            Logger::log(COLOR, "Image process failed at file: ", kl::convert_string(input.input_file));
+        progress_window.increment();
+    });
+
+    std::for_each(std::execution::par, audio_inputs.begin(), audio_inputs.end(), [&](Input const& input) {
+        if (!progress_window.is_open())
+            return;
+        if (::_wsystem(input.command.data()) != 0)
+            Logger::log(COLOR, "Audio process failed at file: ", kl::convert_string(input.input_file));
         progress_window.increment();
     });
 

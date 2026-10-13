@@ -4,11 +4,19 @@
 
 namespace mt
 {
+struct ProgressSector
+{
+    kl::RGB color;
+    int total_count = 0;
+    int counter = 0;
+
+    bool increment();
+};
+
 struct ProgressWindow
 {
-    kl::RGB progress_color = {21, 191, 103};
-
-    ProgressWindow(int count);
+    std::vector<ProgressSector> sectors;
+    float progress_color_dim = 0.5f;
 
     void run(std::string_view const& title);
     void increment();
@@ -17,8 +25,7 @@ struct ProgressWindow
     bool is_open() const;
 
   private:
-    const int m_count;
-    std::atomic_int m_counter;
+    std::mutex m_mutex;
     HWND progress_hwnd = nullptr;
 };
 } // namespace mt

@@ -23,7 +23,8 @@ struct ProcessSection : Displayable
     static constexpr std::string_view DESCRIPTION = "Bulk media processing.";
 
     static constexpr kl::RGB VIDEO_PROGRESS_COLOR = {151, 245, 100};
-    static constexpr kl::RGB IMAGE_AUDIO_PROGRESS_COLOR = {247, 231, 106};
+    static constexpr kl::RGB IMAGE_PROGRESS_COLOR = {247, 231, 106};
+    static constexpr kl::RGB AUDIO_PROGRESS_COLOR = {106, 209, 247};
 
     kl::Window const& window;
     ImGuiContext* const& imgui_context;
@@ -33,6 +34,7 @@ struct ProcessSection : Displayable
     std::wstring output_dir;
     bool recursive_search = true;
     bool retain_folder_structure = true;
+    int video_worker_count = 2;
     std::optional<std::string> image_output_ext{DEFAULT_IMAGE_OUTPUT_EXTENSION};
     std::optional<std::string> audio_output_ext{DEFAULT_AUDIO_OUTPUT_EXTENSION};
     std::optional<std::string> video_output_ext{DEFAULT_VIDEO_OUTPUT_EXTENSION};
@@ -41,7 +43,6 @@ struct ProcessSection : Displayable
     int max_video_framerate = 30;
     std::optional<float> video_bitrate_m;
     std::optional<VideoCodec> video_codec;
-    int video_worker_count = 3;
     std::string image_custom_commands;
     std::string audio_custom_commands;
     std::string video_custom_commands;
