@@ -3,11 +3,11 @@
 
 const float4 mt::ConcatSection::COLOR = kl::RGB{218, 162, 255};
 
-bool mt::ConcatFileInfo::load(fs::path const& path)
+bool mt::ConcatFileInfo::load(std::wstring_view path)
 {
     if (!kl::probe_content_type(path).value_or({}).starts_with("video"))
         return false;
-    kl::VideoReader reader{path.generic_wstring(), {}, false};
+    kl::VideoReader reader{path, {}, false};
     video_resolution = reader.frame_size();
     frame_rate = (int)std::lround(reader.fps());
     audio_rate = reader.audio_rate();

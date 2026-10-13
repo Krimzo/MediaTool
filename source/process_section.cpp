@@ -9,7 +9,7 @@ static constexpr int SLEEP_ITERATION_TIME = 100;
 std::wstring mt::ProcessSection::produce(fs::path const& input_file, MediaType& out_media_type,
                                          fs::path* outout_file) const
 {
-    const auto opt_content_type = kl::probe_content_type(input_file);
+    const auto opt_content_type = kl::probe_content_type(input_file.wstring());
     if (!opt_content_type)
         return {};
 

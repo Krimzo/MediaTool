@@ -16,7 +16,7 @@ struct ConcatFileInfo
     int frame_rate = 0;
     int audio_rate = 0;
 
-    bool load(fs::path const& path);
+    bool load(std::wstring_view path);
     bool match(ConcatFileInfo const& other) const;
 
     void display(ConcatFileInfo const* to_compare, std::vector<BoundingBox>& out_boxes);
